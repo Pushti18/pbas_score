@@ -1,0 +1,187 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.header_container {
+    width: 100%;
+    display: flex;
+}
+
+.mulogo_header {
+    width: 13%;
+    align-content: left;
+}
+
+.title {
+    margin-left: 27.5%;
+}
+
+.ictlogo_header {
+    width: 15%;
+    float: right;
+    padding-top: 0.5%;
+    padding-right: 1%;
+    margin-left: 27.5%;
+}
+
+
+.container button {
+    background-color: #21c8de;
+    border-color: #21c8de;
+    margin-top: 1%;
+    margin-left: 85%;
+    margin-bottom: 1%;
+    width: 10%;
+    height: 35px;
+    border-radius: 10px;
+}
+
+.form_container {
+    background-color: #c9e9f4;
+    align-items: flex-start;
+    padding: 10px;
+    position: center;
+    width: 90%;
+    height: 85%;
+    border: 1px solid;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-left: 5%;
+    font-size: 17px;
+}
+
+.dd_field {
+    margin: 5px;
+    width: 358px;
+    height: 40px;
+}
+
+.t_field {
+    margin: 5px;
+    width: 350px;
+    height: 35px;
+}
+
+.form_table {
+    margin-left: 5%;
+    margin-right: 4%;
+}
+
+.form_table td {
+    width: 15%;
+}
+
+.form_table th {
+    width: 15%;
+    text-align: left;
+}
+
+.submit_btn {
+    margin-left: 50%;
+    width: 100px;
+    height: 40px;
+    background-color: #21c8de;
+    border-color: #21c8de;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-bottom: 1%;
+}
+
+.back_btn {
+    background-color: #21c8de;
+    border-color: #21c8de;
+    width: 7%;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-left: 5%;
+    margin-bottom: 1%;
+}
+
+input,
+select,
+textarea {
+    border-radius: 10px;
+    border-color: white;
+}
+
+div.dataTables_wrapper {
+    margin-bottom: 3em;
+}
+
+.form_container {
+    background-color: #c9e9f4;
+    align-items: flex-start;
+    padding: 10px;
+    position: center;
+    width: 90%;
+    height: 85%;
+    border: 1px solid;
+    box-sizing: border-box;
+    border-radius: 5px;
+    margin-left: 5%;
+    font-size: 17px;
+}
+
+.dd_field {
+    margin: 5px;
+    width: 358px;
+    height: 40px;
+}
+
+.t_field {
+    margin: 5px;
+    width: 350px;
+    height: 35px;
+}
+
+.form_table {
+    margin-left: 5%;
+    margin-right: 4%;
+}
+
+.form_table td {
+    width: 15%;
+}
+
+.form_table th {
+    width: 15%;
+    text-align: left;
+}
+
+.submit_btn {
+    margin-left: 50%;
+    width: 100px;
+    height: 40px;
+    background-color: #21c8de;
+    border-color: #21c8de;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-bottom: 1%;
+}
+
+.back_btn {
+    background-color: #21c8de;
+    border-color: #21c8de;
+    width: 7%;
+    height: 30px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 5px;
+    margin-left: 5%;
+    margin-bottom: 1%;
+}
+
+input,
+select,
+textarea {
+    border-radius: 10px;
+    border-color: white;
+}

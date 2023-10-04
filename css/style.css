@@ -1,0 +1,112 @@
+:root {
+    --primary: #8BA2FD;
+    --light: #DAE2FB;
+    --white: #FFFFFF;
+    --dark: #2D3748;
+    --off_white: #F6F8FA;
+
+}
+
+body {
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    background-color: #F6F8FA;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+header {
+    background-color: #FFFFFF;
+}
+
+.mulogo_header {
+    width: 13%;
+    align-content: left;
+}
+
+.ictlogo_header {
+    width: 15%;
+    float: right;
+    padding-top: 0.5%;
+    padding-right: 1%;
+}
+
+.container {
+    padding-left: 3%;
+    margin-bottom: 4%;
+}
+
+.container .title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 250%;
+    padding-top: 2%;
+    color: #2D3748;
+}
+
+.container .ch_menubar {
+    display: flex;
+    width: 34%;
+}
+
+.container .ch_menubar a {
+    padding-top: 3%;
+    margin-right: 5%;
+    font-size: 100%;
+    color: #2D3748;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+}
+
+.dashboard_container {
+    width: 95%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 3%;
+    row-gap: 3%;
+    padding-left: 1%;
+    padding-bottom: 5%;
+}
+
+.dashboard_container a {
+    text-decoration: none;
+}
+
+.dashboard_container .dashboard_img {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px 0 #bebebe;
+    cursor: pointer;
+}
+
+.dashboard_container .dashboard_img:hover {
+    box-shadow: 0 8px 16px 0 #bebebe;
+}
+
+.dashboard_container .dashboard_img a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.dashboard_container .dashboard_img h2 {
+    padding-top: 4%;
+    font-size: 22px;
+    margin-left: 18px;
+    padding-bottom: 5px;
+    font-family: 'Inter', sans-serif;
+    color: #2D3748;
+}
+
+@media only screen and (max-width: 1080px) {
+    .dashboard_container .dashboard_img h2 {
+        font-size: 20px;
+    }
+}

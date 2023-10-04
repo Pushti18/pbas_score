@@ -1,0 +1,371 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.header_container {
+    width: 100%;
+    display: flex;
+}
+
+.mulogo_header {
+    width: 13%;
+    align-content: left;
+}
+
+.title {
+    margin-left: 27.5%;
+}
+
+.ictlogo_header {
+    width: 15%;
+    float: right;
+    padding-top: 0.5%;
+    padding-right: 1%;
+    margin-left: 27.5%;
+}
+
+ .main_div {
+     width: 95%;
+     margin-left: 2.5%;
+ }
+
+ .dataTables_filter {
+     margin-bottom: 1%;
+ }
+
+ button {
+     background-color: #21c8de;
+     border-color: #21c8de;
+     height: 30px;
+     text-align: center;
+     text-decoration: none;
+     font-size: 15px;
+     border-radius: 5px;
+ }
+
+ /* input {
+     width: 250px;
+     background-color: #a6e9f2;
+     border-color: #a6e9f2;
+     border-radius: 5px;
+ } */
+
+ .container1 {
+     display: flex;
+ }
+
+ .container1 form {
+     display: flex;
+     margin-left: 64%;
+ }
+
+ .container1_btn {
+     margin-left: 35%;
+     background-color: #21c8de;
+     border-color: #21c8de;
+     width: 100%;
+     height: 30px;
+     color: white;
+     text-align: center;
+     text-decoration: none;
+     font-size: 15px;
+     border-radius: 5px;
+ }
+
+ .container1 .btn {
+     background-color: #21c8de;
+     border-color: #21c8de;
+     width: 15%;
+     height: 30px;
+     color: white;
+     text-align: center;
+     text-decoration: none;
+     font-size: 15px;
+     border-radius: 5px;
+ }
+
+ .dd_field {
+     width: 100px;
+     margin-right: 1%;
+     border-radius: 5px;
+ }
+
+ .container2 {
+     display: flex;
+ }
+
+ .container2 form {
+     display: flex;
+     margin-left: 60%;
+ }
+
+ .container2_btn {
+     margin-left: 24%;
+     background-color: #21c8de;
+     border-color: #21c8de;
+     width: 100%;
+     height: 30px;
+     color: white;
+     text-align: center;
+     text-decoration: none;
+     font-size: 15px;
+     border-radius: 5px;
+ }
+
+ .container2 .btn {
+     background-color: #21c8de;
+     border-color: #21c8de;
+     width: 20%;
+     height: 30px;
+     color: white;
+     text-align: center;
+     text-decoration: none;
+     font-size: 15px;
+     border-radius: 5px;
+ }
+
+ .exporttoexcel {
+     margin-left: 47%;
+     background-color: #21c8de;
+     border-color: #21c8de;
+     height: 30px;
+     color: white;
+     text-align: center;
+     text-decoration: none;
+     font-size: 15px;
+     border-radius: 5px;
+ }
+
+ .rp_author {
+     width: 95%;
+     margin-left: 2.5%;
+     background-color: #c9e1f4;
+     padding: 30px;
+     border: 1px solid;
+     box-sizing: border-box;
+     border-radius: 5px;
+     font-size: 20px;
+ }
+
+ .rp_author table {
+     /* width:100%; */
+     border: 1px solid black;
+     border-collapse: collapse;
+     background-color: white;
+     text-align: center;
+ }
+
+ .rp_author td {
+     border: 1px solid black;
+     border-collapse: collapse;
+     background-color: white;
+     text-align: center;
+ }
+
+ .rp_author th {
+     width: 15%;
+     border: 1px solid black;
+     border-collapse: collapse;
+     text-align: center;
+ }
+
+ .rp_div button {
+     margin-top: 0.5%;
+     width: 50px;
+     height: 35px;
+ }
+
+ .hideContent {
+     overflow: hidden;
+     line-height: 1em;
+     height: 2em;
+ }
+
+ .showContent {
+     line-height: 1em;
+     height: auto;
+ }
+
+ .showContent {
+     height: auto;
+ }
+
+ .show-more {
+     padding: 10px 0;
+     text-align: center;
+ }
+
+ @media only screen and (max-width: 1920px) {
+     .header_container {
+         width: 100%;
+         display: flex;
+     }
+
+     .mulogo_header {
+         width: 13%;
+         align-content: left;
+     }
+
+     .title {
+         margin-left: 30%;
+         text-align: center;
+     }
+
+     .ictlogo_header {
+         width: 15%;
+         float: right;
+         margin-left: 30%;
+     }
+
+     .main_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+
+     .author_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+ }
+
+ @media only screen and (max-width: 1536px) {
+     .header_container {
+         width: 100%;
+         display: flex;
+     }
+
+     .mulogo_header {
+         width: 13%;
+         align-content: left;
+     }
+
+     .title {
+         margin-left: 28%;
+         text-align: center;
+     }
+
+     .ictlogo_header {
+         width: 15%;
+         float: right;
+         margin-left: 28%;
+     }
+
+     .main_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+
+     .author_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+ }
+
+ @media only screen and (max-width: 1280px) {
+     .header_container {
+         width: 100%;
+         display: flex;
+     }
+
+     .mulogo_header {
+         width: 13%;
+         align-content: left;
+     }
+
+     .title {
+         margin-left: 26%;
+         text-align: center;
+     }
+
+     .ictlogo_header {
+         width: 15%;
+         float: right;
+         margin-left: 26%;
+     }
+
+     .main_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+
+     .author_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+ }
+
+ @media only screen and (max-width: 1080px) {
+     .header_container {
+         width: 100%;
+         display: flex;
+     }
+
+     .mulogo_header {
+         width: 13%;
+         align-content: left;
+     }
+
+     .title {
+         margin-left: 24%;
+         text-align: center;
+     }
+
+     .ictlogo_header {
+         width: 15%;
+         float: right;
+         margin-left: 24%;
+     }
+
+     .main_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+
+     .author_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+ }
+
+ @media only screen and (max-width: 990) {
+     .header_container {
+         width: 100%;
+         display: flex;
+     }
+
+     .mulogo_header {
+         width: 13%;
+         align-content: left;
+     }
+
+     .title {
+         margin-left: 25%;
+         text-align: center;
+     }
+
+     .ictlogo_header {
+         width: 15%;
+         float: right;
+         margin-left: 25%;
+     }
+
+     .main_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+
+     .author_div {
+         width: 95%;
+         margin-left: 2.5%;
+         overflow-x: auto;
+     }
+ }
