@@ -1,5 +1,21 @@
 <?php
     session_start();
+    include("db_connect.php");
+    global $conn;
+    if (isset($_GET['employee_id'])) {
+        $employee_id = $_GET['employee_id'];
+        // Update the database table with the employee_id
+        $query = "UPDATE `cat1` SET `employee_id` = $employee_id ";
+    
+        if (mysqli_query($conn, $query)) {
+            echo "Employee ID updated successfully in the database.";
+        } else {
+            echo "Error updating record: " . mysqli_error($conn);
+        }
+    
+        $_SESSION['employee_id'] = $employee_id;
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -96,11 +112,11 @@
 </head>
 
 <body>
-    <header class="header_container">
+    <!-- <header class="header_container">
         <img class="mulogo_header" src="images/mu-logo-2.png" alt="MU logo">
         <h1 class="title">Faculty Details</h1>
         <img class="ictlogo_header" src="images/ICT_logo_text.png" alt="MU logo">
-    </header>
+    </header> -->
 
     <div class="nav_div" style="background-color: lightblue; text-align: center;">
         <h2>PBAS(Performance Based Appraisal System)</h2>
@@ -112,14 +128,23 @@
 
         <div class="category">
             <div class="tick-circle-icon"></div>
-            <strong>Category : I-A - Direct Teaching (Learning / Tutorial / Practical / Project Supervision /
-                Field Work) - To give Semesterwise / Termwise details wherever necessary </strong>
+            <a href="direct_teaching.php?category_id=Category I-A&category_title=Direct Teaching (Learning / Tutorial / Practical / Project Supervision /
+                    Field Work) - To give Semesterwise / Termwise details wherever necessary">
+                <strong>Category : I-A - Direct Teaching (Learning / Tutorial / Practical / Project Supervision /
+                    Field Work) - To give Semesterwise / Termwise details wherever necessary </strong>
+
+            </a>
         </div>
+
         <div class="category">
             <div class="tick-circle-icon"></div>
-            <strong>Category : II-B - Examination duties (Invigilation, question
-                paper setting, evaluation/assessment of
-                answer scripts) as per allotment </strong>
+            <a href="exam_duties.php?category_id=Category II-B&category_title=Examination duties (Invigilation, question
+                    paper setting, evaluation/assessment of
+                    answer scripts) as per allotment">
+                <strong>Category : II-B - Examination duties (Invigilation, question
+                    paper setting, evaluation/assessment of
+                    answer scripts) as per allotment </strong>
+            </a>
         </div>
         <div class="category">
             <div class="tick-circle-icon"></div>
@@ -128,15 +153,26 @@
         </div>
         <div class="subcategory">
             <div class="tick-circle-icon"></div>
-            Category I-C(i) - Innovation Teaching - Learning methodologies
+            <a
+                href="learning_methodologies.php?category_id=Category III-C&category_title=Innovative Teaching - Learning methodologies, Updating of subject
+                contents / courses, meentoring etc&subcategory_id=Category I-C(i)&subcategory_title=Innovation Teaching - Learning methodologies">
+                Category I-C(i) - Innovation Teaching - Learning methodologies
+            </a>
         </div>
         <div class="subcategory">
             <div class="tick-circle-icon"></div>
-            Category I-C(ii) - Updating of subject contents /courses
+            <a
+                href="courses.php?category_id=Category III-C&category_title=Innovative Teaching - Learning methodologies, Updating of subject
+                contents / courses, meentoring etc&subcategory_id=Category I-C(ii)&subcategory_title=Updating of subject contents /courses">
+                Category I-C(ii) - Updating of subject contents /courses
+            </a>
         </div>
         <div class="subcategory">
             <div class="tick-circle-icon"></div>
-            Category I-C(iii) - Mentoring
+            <a href="mentoring.php?category_id=Category III-C&category_title=Innovative Teaching - Learning methodologies, Updating of subject
+                contents / courses, meentoring etc&subcategory_id=Category I-C(iii)&subcategory_title=Mentoring">
+                Category I-C(iii) - Mentoring
+            </a>
         </div>
     </div>
 </body>

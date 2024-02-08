@@ -37,11 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 VALUES ('$category_id', '$employee_id','$region', '$type', '$title', '$author', '$role', '$publication_group', 
                 '$journalTitle', '$coAuthor', '$month', '$year', '$publisher', '$pubDate', '$volume', '$page', '$frontImage', '$current_status_of_work', '$pbasScore')";
 
-        mysqli_query($conn, $sql);
-
-        if (mysqli_error($conn)) {
-            echo json_encode(['error' => "Error: " . mysqli_error($conn)]);
-        } else {
+        if (mysqli_query($conn, $sql)) {
             // After insertion, fetch the details
             $fetchDetailsSql = "SELECT * FROM publication WHERE employee_id = '$employee_id' AND title = '$title'";
             $detailsResult = mysqli_query($conn, $fetchDetailsSql);
@@ -61,6 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 echo json_encode(['error' => "Details not found."]);
             }
+        } else {
+            echo json_encode(['error' => "Error: " . mysqli_error($conn)]);
         }
     } else {
         echo "Category ID not found.";

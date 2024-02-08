@@ -8,6 +8,14 @@ $subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_titl
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 // Connect to the database
+// Fetch data from the database
+$sql = "SELECT * FROM publication WHERE employee_id = '{$_SESSION['employee_id']}'";
+$result = mysqli_query($conn, $sql);
+
+// Check for errors
+if (!$result) {
+    die("Error: " . mysqli_error($conn));
+}
 
 
 // Store the category and subcategory in the cat3 table
@@ -357,7 +365,20 @@ mysqli_close($conn);
                 </tr>
             </thead>
             <tbody>
-
+                <?php
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$row['title']}</td>";
+                        echo "<td>{$row['year_of_publication']}</td>";
+                        echo "<td>{$row['type']}</td>";
+                        echo "<td>{$row['region']}</td>";
+                       
+                        
+                        // echo "<td>{$row['approval_status']}</td>";
+                        // echo "<td><a href='edit_research.php?id={$row['id']}'>Edit</a> | <a href='delete_research.php?id={$row['id']}'>Delete</a></td>";
+                        echo "</tr>";
+                    }
+                ?>
             </tbody>
         </table>
 
@@ -405,44 +426,57 @@ mysqli_close($conn);
         //     });
         // });
         $(document).ready(function() {
+            $("#myForm").submit(function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    type: "POST",
+                    url: "cat3_publication_insert.php",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        try {
+                            var data = JSON.parse(response);
+                            // Add a new row to the DataTable with the retrieved values
+                            var table = $('#details_table').DataTable();
+
+                            table.row.add([
+                                data.title,
+                                data.academic_year,
+                                data.status,
+                                data.type,
+                                data.region,
+                                data.approval_status,
+                                '<button onclick="showDetails(\'' + data.title +
+                                '\', \'' + data.current_status_of_work + '\', \'' +
+                                data.type + '\', \'' + data.region + '\', \'' + data
+                                .pbas_score + '\')">Show Details</button>'
+                            ]).draw();
+
+                            // Clear the form
+                            $("#myForm")[0].reset();
+                        } catch (error) {
+                            console.error("Error parsing JSON response: " + error);
+                        }
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.error("AJAX request failed: " + errorThrown);
+                    }
+                });
+            });
+        });
+        </script>
+        <script type="text/javascript">
+        $(document).ready(function() {
             $('#details_table').DataTable({
                 dom: 'Bfrtip',
                 lengthMenu: [
                     [5, 10, 25, 50],
                     ['5 Files', '10 Files', '25 Files', '50 Files']
                 ],
-                ajax: {
-                    url: 'cat3_publication_insert.php',
-                    dataSrc: ''
-                },
-                columns: [{
-                        data: 'title'
-                    },
-                    {
-                        data: 'academic_year'
-                    },
-                    {
-                        data: 'status'
-                    },
-                    {
-                        data: 'type'
-                    },
-                    {
-                        data: 'region'
-                    },
-                    {
-                        data: 'approval_status'
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, row) {
-                            return '<button onclick="showDetails(\'' + row.title +
-                                '\', \'' + row.current_status_of_work + '\', \'' +
-                                row.type + '\', \'' + row.region + '\', \'' + row.pbas_score +
-                                '\')">Show Details</button>';
-                        }
-                    }
-                ]
+
             });
         });
         </script>

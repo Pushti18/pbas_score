@@ -69,7 +69,7 @@ $data = array(
         <h2>PBAS(Performance Based Appraisal System)</h2>
     </div>
 
-    <a href="dashboard.php" class="dashboard-button">Dashboard</a>
+    <!-- <a href="dashboard.php" class="dashboard-button">Dashboard</a> -->
 
     <div class="main_div">
         <table id="details_table" class="display" cellspacing="0">

@@ -10,6 +10,7 @@ $funding_agency = isset($_POST['fundingAgency']) ? $_POST['fundingAgency'] : '';
 $grant_amount = isset($_POST['grantAmount']) ? $_POST['grantAmount'] : '';
 $approval_copy = isset($_FILES['approvalCopy']['name']) ? $_FILES['approvalCopy']['name'] : '';
 $title = isset($_POST['title']) ? $_POST['title'] : '';
+$employee_id = $_POST['employee_id'];   
 global $conn;
 
 $pbasScore = 0;
@@ -32,8 +33,8 @@ if ($project_for == 'Consultancy') {
     }
 }
 
-$sql = "INSERT INTO research (project_category, project_for, pbas_year, project_duration,title, funding_agency, grant_amount, approval_copy_path, pbas_score) 
-        VALUES ('$project_category', '$project_for', '$pbas_year', '$project_duration', '$title','$funding_agency', '$grant_amount', '$approval_copy', '$pbasScore')";
+$sql = "INSERT INTO research (employee_id,project_category, project_for, pbas_year, project_duration,title, funding_agency, grant_amount, approval_copy_path, pbas_score) 
+        VALUES ('$employee_id','$project_category', '$project_for', '$pbas_year', '$project_duration', '$title','$funding_agency', '$grant_amount', '$approval_copy', '$pbasScore')";
 mysqli_query($conn, $sql);
 
 if (mysqli_error($conn)) {

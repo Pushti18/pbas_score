@@ -7,32 +7,25 @@ $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 $subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
-// Connect to the database
-// Fetch data from the database
-$sql = "SELECT * FROM research WHERE employee_id = '{$_SESSION['employee_id']}'";
+
+$sql = "SELECT * FROM othercocurricular WHERE employee_id = '{$_SESSION['employee_id']}'";
 $result = mysqli_query($conn, $sql);
 
 // Check for errors
 if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
-
-// Store the category and subcategory in the cat3 table
-$sql = "INSERT INTO cat3 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
+$sql = "INSERT INTO cat2 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
 mysqli_query($conn, $sql);
-// $stmt = $conn->prepare($sql);
 
-// Handle potential errors
 if (mysqli_error($conn)) {
     echo "Error: " . mysqli_error($conn);
 } else {
     echo "Category and subcategory stored successfully.";
 }
 
-mysqli_close($conn);
-
-// ... rest of your PHP code for the page
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -43,6 +36,10 @@ mysqli_close($conn);
     </style>
     <title>PBAS(Performance Based Appraisal System)</title>
     <!-- Bootstrap CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
@@ -60,6 +57,11 @@ mysqli_close($conn);
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,100&display=swap"
         rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Include jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style>
     /* Add this CSS in your <style> tag or in a separate CSS file */
 
@@ -135,18 +137,18 @@ mysqli_close($conn);
     </header>
 
     <div class="nav_div" style="background-color: lightblue;">
-        <h2 style="margin-left: 42%;">Publication</h2>
+        <h2 style="margin-left: 42%;">Professional Development Detail</h2>
     </div>
     <br>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-        Add Detail
+        Professional Development Detail
     </button>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Research Projects Detail</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Professional Development Detail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -155,86 +157,114 @@ mysqli_close($conn);
                 <!-- ... previous HTML code ... -->
                 <div class="modal-body">
                     <!-- Form fields go here -->
-                    <form id="myForm" action="cat3_research_insert.php" method="POST">
+                    <form id="myForm" action="cat2_othercocurricular_insert.php" method="POST">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
 
-                        <!-- ... existing HTML code ... -->
-                        <!-- ... existing HTML code ... -->
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="projectCategory">Project Category:</label>
-                                <select class="form-control" id="projectCategory" name="projectCategory">
-                                    <option value="Select Category">Select Category</option>
-                                    <option value="Above 30 Lakhs">Above 30 Lakhs</option>
-                                    <option value="5-30 Lakhs">5-30 Lakhs</option>
-                                    <option value="1-5 Lakhs">1-5 Lakhs</option>
-                                    <option value="Less than 1 Lakhs">Less than 1 Lakhs</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="projectFor">Project For:</label>
-                                <select class="form-control" id="projectFor" name="projectFor">
-                                    <option value="Select Project For">Select Project For</option>
-                                    <option value="Research Project">Research Project</option>
-                                    <option value="Consultancy">Consultancy</option>
-                                    <option value="Testing">Testing</option>
-                                    <option value="Training">Training</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- ... existing HTML code ... -->
-
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
+                        <div class="form-group col-md-6">
                                 <label for="pbasYear">PBAS Year:</label>
-                                <select class="form-control" id="year" name="year">
+                                <select class="form-control" id="pbasYear" name="pbasYear">
                                     <?php
-                                    $startYear = 1990;
-                                    $endYear = 2050;
+                                        $startYear = 1990;
+                                        $endYear = 2050;
 
-                                    for ($i = $startYear; $i <= $endYear; $i++) {
-                                        echo "<option value='{$i}'>{$i}</option>";
-                                    }
-                                    ?>
+                                        for ($i = $startYear; $i <= $endYear; $i++) {
+                                            echo "<option value='{$i}'>{$i}</option>";
+                                        }
+                                        ?>
                                 </select>
                             </div>
+
                             <div class="form-group col-md-6">
-                                <label for="title">Title:</label>
-                                <input type="text" class="form-control" id="title" name="title">
+                                <label for="mainActivity">Main Activity:</label>
+                                <select class="form-control" id="mainActivity" name="mainActivity">
+                                    <!-- Options for main activities -->
+                                    <option value="other_co_curricular_activities">Other
+                                        Co-curricular Activities</option>
+                                    <!-- Add more options as needed -->
+                                </select>
                             </div>
+
+
+
                         </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="subActivity">Sub Activity:</label>
+                                <select class="form-control" id="subActivity" name="subActivity">
+                                    <option value="select_sub_activity">Select Sub Activity</option>
+                                    <option value="Co-conducting/co-ordinating of NSS activities">Co-conducting/co-ordinating of NSS activities</option>
+                                    <option value="Co-conductination of NCC activities">Co-conductination of NCC activities</option>
+                                    <option value="Arranging/Co-ordinating sports competitions">Arranging/Co-ordinating sports competitions</option>
+                                    <option value="Arranging/Co-ordinating skits/drama/plays">Arranging/Co-ordinating skits/drama/plays</option>
+                                    <option value="Arranging/Co-ordinating/Preparing students (for) Cultural Events in MU">Arranging/Co-ordinating/Preparing students (for) Cultural Events in MU</option>
+                                    <option value="Preparing/Accompanying Students for External Cultural Events">Preparing/Accompanying Students for External Cultural Events</option>
+                                    <option value="Arranging/Accompanying Students for External Cultural Events">Arranging/Accompanying Students for External Cultural Events</option>
+                                    <option value="Arranging/co-ordinating/accompaying treking exceptional/fun excurions">Arranging/co-ordinating/accompaying treking exceptional/fun excurions</option>
+                                    <option value="Conducting/arranging like skills related/events Eg. First aid, Tailoring, Cooking, etc">Conducting/arranging like skills related/events Eg. First aid, Tailoring, Cooking, etc</option>
+                                    <option value="Preparing/Accompanying Students for/in national/international competitions/events">Preparing/Accompanying Students for/in national/international competitions/events</option>
+                                    <option value="Expert Lectures/Seminars/Workshops for Students">Expert Lectures/Seminars/Workshops for Students</option>
+                                    <option value="Tech Fest/Project Fair">Tech Fest/Project Fair</option>
+                                    <option value="Celebrations Related to Special Subject/Discipline-related Days">Celebrations Related to Special Subject/Discipline-related Days</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+
+                            </div>
+
+
+
+                            <div class="form-group col-md-6">
+                                <label for="activityTitle">Activity Title:</label>
+                                <input type="text" class="form-control" id="activityTitle" name="activityTitle">
+                            </div>
+
+
+                        </div>
+
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="fundingAgency">Funding Agency:</label>
-                                <input type="text" class="form-control" id="fundingAgency" name="fundingAgency">
+                                <label for="briefRole">Brief Role/No of Students:</label>
+                                <input type="text" class="form-control" id="briefRole" name="briefRole">
                             </div>
+
                             <div class="form-group col-md-6">
-                                <label for="projectDuration">Project Duration:</label>
-                                <input type="text" class="form-control" id="projectDuration" name="projectDuration">
+                                <label for="semester">Semester:</label>
+                                <select class="form-control" id="semester" name="semester">
+                                    <?php
+                                        for ($i = 1; $i <= 8; $i++) {
+                                            echo "<option value='Sem {$i}'>Sem {$i}</option>";
+                                        }
+                                        ?>
+                                </select>
                             </div>
                         </div>
-
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="grantAmount">Grant Amount:</label>
-                                <input type="text" class="form-control" id="grantAmount" name="grantAmount">
+                                <label for="hoursSpentAnswerBook">Hours Spent:</label>
+                                <input type="number" class="form-control" id="hoursSpentAnswerBook"
+                                    name="hoursSpentAnswerBook" min="0">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="approvalCopy">Approval Copy:</label>
-                                <input type="file" class="form-control" id="approvalCopy" name="approvalCopy"
-                                    accept=".pdf">
+                                <label for="attachment">Attachment (if available):</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment"
+                                    accept=".pdf, .doc, .docx">
                             </div>
+
 
                         </div>
 
+
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                        </div>
 
 
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
-
+                <!-- ... remaining HTML code ... -->
 
             </div>
         </div>
@@ -242,20 +272,20 @@ mysqli_close($conn);
         <script>
         $(document).ready(function() {
             $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',
+                format: 'yyyy-mm-dd', // You can customize the date format
                 autoclose: true
             });
         });
         </script>
 
-        <script>
+<script>
         $(document).ready(function() {
             $("#myForm").submit(function(e) {
                 e.preventDefault();
                 var formData = $(this).serialize();
                 $.ajax({
                     type: "POST",
-                    url: "cat3_researh_insert.php",
+                    url: "cat2_othercocurricular_insert.php",
                     data: formData,
                     success: function(response) {
                         alert(response);
@@ -270,40 +300,39 @@ mysqli_close($conn);
 
 
     <div class="main_div">
-        <table id="details_table" class="display" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>TITLE</th>
-                    <th>PROJECT FOR</th>
-                    <th>FUNDING AGENCY</th>
-                    <th>PBAS YEAR</th>
-                    <th>DURATION</th>
-                    <th>AMOUNT(Rs. LAKH)</th>
-                    <th>APPROVAL STATUS</th>
-                    <th>ACTION</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td>{$row['title']}</td>";
-                        echo "<td>{$row['project_for']}</td>";
-                        echo "<td>{$row['funding_agency']}</td>";
-                        echo "<td>{$row['pbas_year']}</td>";
-                        echo "<td>{$row['project_duration']}</td>";
-                        echo "<td>{$row['grant_amount']}</td>";
-                        // echo "<td>{$row['approval_status']}</td>";
-                        // echo "<td><a href='edit_research.php?id={$row['id']}'>Edit</a> | <a href='delete_research.php?id={$row['id']}'>Delete</a></td>";
-                        echo "</tr>";
-                    }
-                ?>
-            </tbody>
-        </table>
+    <table id="details_table" class="display" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Sub Activity</th>
+                <th>pbasYear</th>
+                <th>activityTitle</th>
+                <th>briefRole</th>
+                <th>semester</th>
+                <th>hoursSpentAnswerBook</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            while ($row = mysqli_fetch_assoc($result)) {
+                echo "<tr>";
+                echo "<td>{$row['subActivity']}</td>";
+                echo "<td>{$row['pbasYear']}</td>";
+                echo "<td>{$row['activityTitle']}</td>";
+                echo "<td>{$row['briefRole']}</td>";
+                echo "<td>{$row['semester']}</td>";
+                echo "<td>{$row['hoursSpentAnswerBook']}</td>";
+                // echo "<td>{$row['action']}</td>";
+                echo "</tr>";
+            }
+            ?>
+        </tbody>
+    </table>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
         <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js" charset="utf8" type="text/javascript">
         </script>
+
         <script type="text/javascript">
         $(document).ready(function() {
             $('#details_table').DataTable({

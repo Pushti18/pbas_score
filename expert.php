@@ -9,6 +9,15 @@ $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 // Connect to the database
 
+// Fetch data from the database
+$sql = "SELECT * FROM expert WHERE employee_id = '{$_SESSION['employee_id']}'";
+$result = mysqli_query($conn, $sql);
+
+// Check for errors
+if (!$result) {
+    die("Error: " . mysqli_error($conn));
+}
+
 
 // Store the category and subcategory in the cat3 table
 $sql = "INSERT INTO cat3 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
@@ -148,6 +157,7 @@ mysqli_close($conn);
                 <div class="modal-body">
 
                     <form id="myForm" action="cat3_expert_insert.php" method="POST">
+                        <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="topic">Topic:</label>
@@ -276,18 +286,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <table id="details_table" class="display" cellspacing="0">
             <thead>
                 <tr>
-                    <th>TITLE</th>
-                    <th>PROJECT FOR</th>
-                    <th>FUNDING AGENCY</th>
+                    <th>TOPIC</th>
+                    <th>LECTURE DETAIL</th>
+                    <th>INSTITUTE NAME</th>
                     <th>PBAS YEAR</th>
-                    <th>DURATION</th>
-                    <th>AMOUNT(Rs. LAKH)</th>
+                    <th>TYPE</th>
+                    <th>TALK LEVEL</th>
                     <th>APPROVAL STATUS</th>
                     <th>ACTION</th>
                 </tr>
             </thead>
             <tbody>
-
+                <?php
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$row['topic']}</td>";
+                        echo "<td>{$row['lecture_detail']}</td>";
+                        echo "<td>{$row['institute_name']}</td>";
+                        echo "<td>{$row['pbas_year']}</td>";
+                        echo "<td>{$row['type']}</td>";
+                        echo "<td>{$row['talk_level']}</td>";
+                        
+                        // echo "<td>{$row['approval_status']}</td>";
+                        // echo "<td><a href='edit_research.php?id={$row['id']}'>Edit</a> | <a href='delete_research.php?id={$row['id']}'>Delete</a></td>";
+                        echo "</tr>";
+                    }
+                ?>
             </tbody>
         </table>
 

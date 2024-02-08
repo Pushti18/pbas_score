@@ -279,11 +279,11 @@
 </head>
 
 <body>
-    <header class="header_container">
+    <!-- <header class="header_container">
         <img class="mulogo_header" src="images/mu-logo-2.png" alt="MU logo">
         <h1 class="title">Faculty Details</h1>
         <img class="ictlogo_header" src="images/ICT_logo_text.png" alt="MU logo">
-    </header>
+    </header> -->
 
     <div class="nav_div" style="background-color: lightblue; text-align: center;">
         <h2>PBAS(Performance Based Appraisal System)</h2>
