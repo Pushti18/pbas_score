@@ -8,9 +8,9 @@
         $query = "UPDATE `cat1` SET `employee_id` = $employee_id ";
     
         if (mysqli_query($conn, $query)) {
-            echo "Employee ID updated successfully in the database.";
+            // echo "Employee ID updated successfully in the database.";
         } else {
-            echo "Error updating record: " . mysqli_error($conn);
+            // echo "Error updating record: " . mysqli_error($conn);
         }
     
         $_SESSION['employee_id'] = $employee_id;

@@ -24,7 +24,7 @@ mysqli_query($conn, $sql);
 if (mysqli_error($conn)) {
     echo "Error: " . mysqli_error($conn);
 } else {
-    echo "Category and subcategory stored successfully.";
+    // echo "Category and subcategory stored successfully.";
 }
 
 ?>
@@ -133,11 +133,11 @@ if (mysqli_error($conn)) {
 </head>
 
 <body>
-    <header class="header_container">
+    <!-- <header class="header_container">
         <img class="mulogo_header" src="images/mu-logo-2.png" alt="MU logo">
         <h1 class="title">PBAS</h1>
         <img class="ictlogo_header" src="images/ICT_logo_text.png" alt="MU logo">
-    </header>
+    </header> -->
 
     <div class="nav_div" style="background-color: lightblue;">
         <h2 style="margin-left: 42%;">Examination Duties</h2>
@@ -162,21 +162,19 @@ if (mysqli_error($conn)) {
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
 
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="pbas_year">PBAS Year:</label>
-                                <select class="form-control" id="year" name="year">
-                                    <?php
-                                        $startYear = 1990;
-                                        $endYear = 2050;
+                        <div class="form-group col-md-6">
+                                    <label for="pbasYear">PBAS Year:</label>
+                                    <select class="form-control" id="pbasYear" name="pbasYear">
+                                        <?php
+                                            $startYear = 1990;
+                                            $endYear = 2050;
 
-                                        for ($i = $startYear; $i <= $endYear; $i++) {
-                                            echo "<option value='{$i}'>{$i}</option>";
-                                        }
-                                        ?>
-                                </select>
-
-                            </div>
-
+                                            for ($i = $startYear; $i <= $endYear; $i++) {
+                                                echo "<option value='{$i}'>{$i}</option>";
+                                            }
+                                            ?>
+                                    </select>
+                                </div>
 
                             <div class="form-group col-md-6">
                                 <label for="semester">Semester:</label>

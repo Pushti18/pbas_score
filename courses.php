@@ -8,13 +8,21 @@ $subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_titl
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
+
+$sql = "SELECT * FROM courses WHERE employee_id = '{$_SESSION['employee_id']}'";
+$result = mysqli_query($conn, $sql);
+
+// Check for errors
+if (!$result) {
+    die("Error: " . mysqli_error($conn));
+}
 $sql = "INSERT INTO cat1 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
 mysqli_query($conn, $sql);
 
 if (mysqli_error($conn)) {
     echo "Error: " . mysqli_error($conn);
 } else {
-    echo "Category and subcategory stored successfully.";
+    // echo "Category and subcategory stored successfully.";
 }
 
 ?>
@@ -123,11 +131,11 @@ if (mysqli_error($conn)) {
 </head>
 
 <body>
-    <header class="header_container">
+    <!-- <header class="header_container">
         <img class="mulogo_header" src="images/mu-logo-2.png" alt="MU logo">
         <h1 class="title">PBAS</h1>
         <img class="ictlogo_header" src="images/ICT_logo_text.png" alt="MU logo">
-    </header>
+    </header> -->
 
     <div class="nav_div" style="background-color: lightblue;">
         <h2 style="margin-left: 42%;">Subject Contents/Courses</h2>
@@ -150,20 +158,23 @@ if (mysqli_error($conn)) {
                 <!-- ... previous HTML code ... -->
                 <div class="modal-body">
                     <!-- Form fields go here -->
-                    <form id="myForm">
+                    <form id="myForm" action="cat1_courses_insert.php" method="POST">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
 
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="pbasYear">PBAS Year:</label>
-                                <select class="form-control" id="pbasYear" name="pbasYear">
-                                    <?php
-                                        for ($i = $startYear; $i <= $endYear; $i++) {
-                                            echo "<option value='{$i}'>{$i}</option>";
-                                        }
-                                        ?>
-                                </select>
-                            </div>
+                        <div class="form-group col-md-6">
+                                    <label for="pbasYear">PBAS Year:</label>
+                                    <select class="form-control" id="pbasYear" name="pbasYear">
+                                        <?php
+                                            $startYear = 1990;
+                                            $endYear = 2050;
+
+                                            for ($i = $startYear; $i <= $endYear; $i++) {
+                                                echo "<option value='{$i}'>{$i}</option>";
+                                            }
+                                            ?>
+                                    </select>
+                                </div>
 
 
 
@@ -231,6 +242,22 @@ if (mysqli_error($conn)) {
             $('.datepicker').datepicker({
                 format: 'yyyy-mm-dd', // You can customize the date format
                 autoclose: true
+            });
+        });
+        </script>
+        <script>
+        $(document).ready(function() {
+            $("#myForm").submit(function(e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_courses_insert.php",
+                    data: formData,
+                    success: function(response) {
+                        alert(response);
+                    }
+                });
             });
         });
         </script>
