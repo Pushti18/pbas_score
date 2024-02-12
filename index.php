@@ -1,11 +1,8 @@
 <?php
 session_start();
-
-// Sample data (replace this with your data)
 $data = array(
     array("1", "2021", "A", "90", '<a href="dashboard.php?employee_id=1">Go to Dashboard</a>'),
     array("2", "2022", "B", "85", '<a href="dashboard.php?employee_id=2">Go to Dashboard</a>'),
-    // Add more rows as needed
 );
 ?>
 
@@ -13,77 +10,43 @@ $data = array(
 <html>
 
 <head>
-    <style>
-    <?php include 'css/ipr_output.css';
-    ?>
-    </style>
     <title>Faculty Details</title>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;1,100&display=swap"
-        rel="stylesheet">
+    <link rel="stylesheet" href="./css/common.css" />
     <style>
-    /* Add custom styles for table borders */
-    #details_table {
-        border-collapse: collapse;
-        width: 100%;
+    .dataTables_filter input[type="search"] {
+        width: 300px;
+        padding: 8px 15px;
+        box-shadow: none;
+        margin-bottom: 10px;
     }
 
-    #details_table th,
-    #details_table td {
-        border: 1px solid #dddddd;
-        text-align: left;
-        padding: 8px;
-    }
-
-    #details_table th {
-        background-color: #21c8de;
-        color: white;
-    }
-
-    .dashboard-button {
-        padding: 10px 20px;
-        background-color: #4CAF50;
-        color: white;
-        text-decoration: none;
-        display: inline-block;
-        border-radius: 5px;
-        margin-top: 10px;
-        /* Adjust margin as needed */
-    }
-
-    .dashboard-button:hover {
-        background-color: #45a049;
+    .dataTables_filter label {
+        margin-right: 15px;
     }
     </style>
 </head>
 
 <body>
-    <header class="header_container">
-        <img class="mulogo_header" src="images/mu-logo-2.png" alt="MU logo">
-        <h1 class="title">Faculty Details</h1>
-        <img class="ictlogo_header" src="images/ICT_logo_text.png" alt="MU logo">
-    </header>
-
-    <div class="nav_div" style="background-color: lightblue; text-align: center;">
-        <h2>PBAS(Performance Based Appraisal System)</h2>
+    <?php require "./components/header.php" ?>
+    <div class="main_div center ">
+        <h2>PBAS Score List</h2>
     </div>
 
-    <!-- <a href="dashboard.php" class="dashboard-button">Dashboard</a> -->
-
-    <div class="main_div">
-        <table id="details_table" class="display" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Sr No.</th>
-                    <th>Year</th>
-                    <th>PBAS</th>
-                    <th>Score</th>
-                    <th>Dashboard</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
+    <div class="parent-container">
+        <div class="child-container">
+            <table id="details_table" class="display" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Sr No.</th>
+                        <th>Year</th>
+                        <th>PBAS</th>
+                        <th>Score</th>
+                        <th>Dashboard</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
                     foreach ($data as $row) {
                         echo "<tr>";
                         foreach ($row as $cell) {
@@ -91,9 +54,11 @@ $data = array(
                         }
                         echo "</tr>";
                     }
-                ?>
-            </tbody>
-        </table>
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
         <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js" charset="utf8" type="text/javascript">
@@ -119,21 +84,14 @@ $data = array(
     </div>
 
     <script>
-    // JavaScript to handle click events on the dashboard links
     $(document).ready(function() {
         $('a.dashboard-link').click(function(event) {
             event.preventDefault();
             var employeeId = $(this).data('employee-id');
-
-            // Perform any necessary actions with the employeeId
-            // For example, you can make an AJAX request to add data to the database
-
-            // After processing, you can redirect to the dashboard page
             window.location.href = 'dashboard.php?employee_id=' + employeeId;
         });
     });
     </script>
-
 </body>
 
 </html>

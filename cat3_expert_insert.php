@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 
 $topic = isset($_POST['topic']) ? $_POST['topic'] : '';
 $lecture_detail = isset($_POST['lectureDetail']) ? $_POST['lectureDetail'] : '';
@@ -44,5 +44,4 @@ if ($stmt->execute()) {
 }
 
 mysqli_close($conn);
-
 ?>

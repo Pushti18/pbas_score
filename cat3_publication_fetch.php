@@ -1,5 +1,5 @@
 <?php
-include("db_connect.php");
+include("db_connection.php");
 $sql = "SELECT title, academic_year, status, type, region, approval_status, action FROM publication";
 $result = $conn->query($sql);
 
@@ -8,6 +8,5 @@ while ($row = $result->fetch_assoc()) {
     $data[] = $row;
 }
 echo json_encode(['data' => $data]);
-
 $conn->close();
 ?>

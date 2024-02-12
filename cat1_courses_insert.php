@@ -1,33 +1,46 @@
 <?php
-// Include your database connection file or establish a database connection here
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 
-// Retrieve session variable
-$employee_id = $_SESSION['employee_id'];
+// Handle form data
+$employee_id = $_POST['employee_id'];
+$pbasYear = $_POST['pbasYear'];
+$courseName = $_POST['courseName'];
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Prepare a SQL INSERT statement
-    $sql = "INSERT INTO cat1_courses (employee_id, pbasYear, courseName, detailofuploadedsubject, hoursSpentInnovation, documentInnovation, uploadexecutive) VALUES (?, ?, ?, ?, ?, ?, ?)";
+$detailofuploadedsubject = $_POST['detailofuploadedsubject'];
+$hoursSpentInnovation = $_POST['hoursSpentInnovation'];
 
-    // Prepare the statement
-    $stmt = $conn->prepare($sql);
+// Handle file uploads
+// $targetDirectory = "uploads/";
+// $documentInnovation = $_FILES['documentInnovation']['name'];
+// $documentInnovation_temp = $_FILES['documentInnovation']['tmp_name'];
+// $uploadexecutive = $_FILES['uploadexecutive']['name'];
+// $uploadexecutive_temp = $_FILES['uploadexecutive']['tmp_name'];
 
-    // Bind parameters and execute the statement
-    $stmt->bind_param("iisssss", $_POST['employee_id'], $_POST['pbasYear'], $_POST['courseName'], $_POST['detailofuploadedsubject'], $_POST['hoursSpentInnovation'], $_POST['documentInnovation'], $_POST['uploadexecutive']);
-    $stmt->execute();
+// $targetDocumentInnovation = $targetDirectory . basename($documentInnovation);
+// $targetUploadExecutive = $targetDirectory . basename($uploadexecutive);
 
-    // Check if the query was successful
-    if ($stmt->affected_rows > 0) {
-        echo "Data inserted successfully!";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    // Close the statement
-    $stmt->close();
+// // Move uploaded files to target directory
+// move_uploaded_file($documentInnovation_temp, $targetDocumentInnovation);
+// move_uploaded_file($uploadexecutive_temp, $targetUploadExecutive);
+$hours = intval($hoursSpentInnovation); // Convert hours to integer
+$points = 0; // Initialize points
+if ($hours >= 10) {
+    // Calculate points: 1 point for every 10 hours
+    $points = floor($hours / 10);
 }
 
-// Close the database connection
+// Insert data into the database
+$sql = "INSERT INTO courses (employee_id, pbasYear, courseName, detailofuploadedsubject, hoursSpentInnovation, documentInnovation, uploadexecutive,points) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("isissss", $employee_id, $pbasYear, $courseName, $detailofuploadedsubject, $hoursSpentInnovation, $targetDocumentInnovation, $targetUploadExecutive,$points);
+$stmt->execute();
+$stmt->close();
+
+// Close database connection
 $conn->close();
+
+// Return a response
+echo "Data inserted successfully.";
 ?>

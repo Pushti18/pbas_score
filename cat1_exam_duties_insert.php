@@ -1,17 +1,11 @@
 <?php
-// Include your database connection file or establish a database connection here
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 
-// Retrieve session variable
 $employee_id = $_SESSION['employee_id'];
-
-// Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
     $employee_id = $_POST['employee_id'];
-    $cat1_id = $_POST['cat1_id'];
-    $pbas_year = $_POST['pbas_year'];
+    $pbas_year = $_POST['pbasYear'];
     $semester = $_POST['semester'];
     $stream_name = $_POST['streamName'];
     $course_name = $_POST['courseName'];
@@ -22,27 +16,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $answer_book_count = $_POST['numAnswerBook'];
     $hours_spent_answer_book = $_POST['hoursSpentAnswerBook'];
 
-    // Prepare SQL INSERT statement
-    $sql = "INSERT INTO exam_duties (employee_id, cat1_id, pbas_year, semester, stream_name, course_name, question_paper_count, hours_spent_question, examinations_count, hours_spent_examinations, answer_book_count, hours_spent_answer_book) 
+    $hours_score = calculateScore($hours_spent_question, $hours_spent_examinations, $hours_spent_answer_book);
+
+    $sql = "INSERT INTO exam_duties (employee_id, pbas_year, semester, stream_name, course_name, question_paper_count, hours_spent_question, examinations_count, hours_spent_examinations, answer_book_count, hours_spent_answer_book, score) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    // Prepare and bind parameters to avoid SQL injection
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiisssiiiiii", $employee_id, $cat1_id, $pbas_year, $semester, $stream_name, $course_name, $question_paper_count, $hours_spent_question, $examinations_count, $hours_spent_examinations, $answer_book_count, $hours_spent_answer_book);
+    $stmt->bind_param("iisssiiiiiii", $employee_id, $pbas_year, $semester, $stream_name, $course_name, $question_paper_count, $hours_spent_question, $examinations_count, $hours_spent_examinations, $answer_book_count, $hours_spent_answer_book, $hours_score);
 
-    // Execute the statement
     if ($stmt->execute()) {
-        // Insertion successful
-        echo "Data inserted successfully.";
+        // echo "Data inserted successfully.";
     } else {
-        // Insertion failed
-        echo "Error: " . $stmt->error;
+        // echo "Error: " . $stmt->error;
     }
 
-    // Close statement
-    $stmt->close();
-    
-    // Close database connection
+    // $stmt->close();
     $conn->close();
+}
+function calculateScore($hours_spent_question, $hours_spent_examinations, $hours_spent_answer_book) {
+    $total_hours = $hours_spent_question + $hours_spent_examinations + $hours_spent_answer_book;
+    $score = ceil($total_hours / 10); // Calculate score based on 10 hours per point
+    return $score;
 }
 ?>

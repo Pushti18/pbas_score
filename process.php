@@ -1,5 +1,5 @@
 <?php
-include("db_connect.php");
+include("db_connection.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $year = $_POST['year'];

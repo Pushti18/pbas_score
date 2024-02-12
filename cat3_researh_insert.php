@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 
 $project_category = isset($_POST['projectCategory']) ? $_POST['projectCategory'] : '';
 $project_for = isset($_POST['projectFor']) ? $_POST['projectFor'] : '';
@@ -44,5 +44,4 @@ if (mysqli_error($conn)) {
 }
 
 mysqli_close($conn);
-
 ?>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 $cat2_id = $_SESSION['cat2_id']; 
 $employee_id = $_SESSION['employee_id']; 
 
@@ -16,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $attachment = $_POST['attachment'];
     $description = $_POST['description'];
 
-    // Insert data into the 'discipline' table
     $sql = "INSERT INTO othercocurricular (cat2_id, employee_id, pbasYear, mainActivity, subActivity, activityTitle, briefRole, semester, hoursSpentAnswerBook, attachment, description)
             VALUES ('$cat2_id', '$employee_id', '$pbasYear', '$mainActivity', '$subActivity', '$activityTitle', '$briefRole', '$semester', '$hoursSpentAnswerBook', '$attachment', '$description')";
 

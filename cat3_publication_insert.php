@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $region = $_POST['region'];
@@ -24,8 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     global $conn;
     $pbasScore = 0;
 
-    // ... Your existing code for calculating pbasScore ...
-
     $fetchCategoryIdSql = "SELECT category_id FROM cat3 WHERE category_id = '$category_id'";
     $result = mysqli_query($conn, $fetchCategoryIdSql);
 
@@ -38,18 +36,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 '$journalTitle', '$coAuthor', '$month', '$year', '$publisher', '$pubDate', '$volume', '$page', '$frontImage', '$current_status_of_work', '$pbasScore')";
 
         if (mysqli_query($conn, $sql)) {
-            // After insertion, fetch the details
             $fetchDetailsSql = "SELECT * FROM publication WHERE employee_id = '$employee_id' AND title = '$title'";
             $detailsResult = mysqli_query($conn, $fetchDetailsSql);
 
             if ($detailsRow = mysqli_fetch_assoc($detailsResult)) {
                 $publication_details = [
                     'title' => $detailsRow['title'],
-                    'academic_year' => $detailsRow['academic_year'], // replace with the actual academic year column
-                    'status' => $detailsRow['status'], // replace with the actual status column
+                    'academic_year' => $detailsRow['academic_year'],
+                    'status' => $detailsRow['status'],
                     'type' => $detailsRow['type'],
                     'region' => $detailsRow['region'],
-                    'approval_status' => $detailsRow['approval_status'], // replace with the actual approval status column
+                    'approval_status' => $detailsRow['approval_status'],
                     'pbas_score' => $detailsRow['pbas_score']
                 ];
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connect.php");
+include("db_connection.php");
 $cat3_id = $_SESSION['cat3_id']; 
 $employee_id = $_SESSION['employee_id']; 
 
@@ -33,5 +33,4 @@ if (mysqli_error($conn)) {
 }
 
 mysqli_close($conn);
-
 ?>
