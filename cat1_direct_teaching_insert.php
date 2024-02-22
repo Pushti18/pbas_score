@@ -1,59 +1,50 @@
 <?php
 session_start();
 include("db_connection.php");
-global $conn;
-$employee_id = $_SESSION['employee_id'];
 
-// $university = $_POST['university'];
-// $year = $_POST['year'];
-// $enroll = $_POST['enroll'];
-// $pbas_year = $_POST['pbasYear'];
-// $submisson_date = $_POST['submissionDate'];
-// $hours_spent = $_POST['hoursSpent'];
-// $degree = $_POST['degree'];
-// $student_name = $_POST['studentName'];
-// $project_title = $_POST['projectTitle'];
-// $project_type = $_POST['projectType'];
-// $status_of_work = $_POST['statusofwork'];
-// $attachment = $_FILES['attachment']['name'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $employee_id = $_SESSION['employee_id'];
+    $university = $_POST['university'];
+    $year = $_POST['year'];
+    $enroll = $_POST['enroll'];
+    $pbasYear = $_POST['pbasYear'];
+    $subDate = $_POST['submissionDate'];
+    $hoursSpent = $_POST['hoursSpent'];
+    $degree = $_POST['degree'];
+    $studentName = $_POST['studentName'];
+    $projectTitle = $_POST['projectTitle'];
+    $projectType = $_POST['projectType'];
+    $statusofwork = $_POST['statusofwork'];
+    $attachment = $_FILES['attachment'];
 
-// global $conn;
+    $points = 0;
+    if ($hoursSpent >= 10) {
+        $points = floor($hoursSpent / 10);
+    }
 
-// $sql = "INSERT INTO direct_teaching (cat1_id, employee_id, university, year, enroll, pbas_year, submission_date, hours_spent, degree, student_name, project_title, project_type, status_of_work, attachment) 
-//         VALUES ('$cat1_id', '$employee_id', '$university', '$year', '$enroll', '$pbas_year', '$submisson_date', '$hours_spent', '$degree', '$student_name', '$project_title', '$project_type', '$status_of_work', '$attachment')";
-// mysqli_query($conn, $sql);
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["attachment"]["name"]);
+    $uploadOk = true;
+    $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-// if (mysqli_error($conn)) {
-//     echo "Error: " . mysqli_error($conn);
-// } else {
-//     echo "Data stored successfully.";
-// }
+    if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
+        // File uploaded successfully
 
-// mysqli_close($conn);
+        // SQL query to insert data
+        $sql = "INSERT INTO direct_teaching (employee_id, university, year, enroll, pbasYear, submissionDate, hoursSpent, degree, studentName, projectTitle, projectType, statusofwork, points, attachment) 
+                VALUES ('$employee_id', '$university', '$year', '$enroll', '$pbasYear', '$subDate', '$hoursSpent', '$degree', '$studentName', '$projectTitle', '$projectType', '$statusofwork', '$points', '$target_file')";
 
-// $employee_id = $_POST['employee_id'];
-$university = $_POST['university'];
-$year = $_POST['year'];
-$enroll = $_POST['enroll'];
-$pbasYear = $_POST['pbasYear'];
-$subDate = $_POST['submissionDate'];
-$pbasYear = $_POST['pbasYear'];
-$hoursSpent = $_POST['hoursSpent'];
-$degree = $_POST['degree'];
-$studentName = $_POST['studentName'];
-$projectTitle = $_POST['projectTitle'];
-$projectType = $_POST['projectType'];
-$statusofwork = $_POST['statusofwork'];
+        if (mysqli_query($conn, $sql)) {
+            echo "Data inserted into direct_teaching table successfully.";
+        } else {
+            echo "Error: " . mysqli_error($conn);
+        }
+    } else {
+        echo "Sorry, there was an error uploading your file.";
+    }
 
-// SQL query to insert data
-$sql = "INSERT INTO direct_teaching (employee_id, university, year, enroll, pbasYear, submissionDate, pbasYear, hoursSpent, degree, studentName, projectTitle, projectType, statusofwork) 
-        VALUES ('$employee_id', '$university', '$year', '$enroll', '$pbasYear', '$subDate', '$pbasYear', '$hoursSpent', '$degree', '$studentName', '$projectTitle', '$projectType', '$statusofwork')";
-
-if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
+    mysqli_close($conn);
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    echo "Invalid request method.";
 }
-
-$conn->close();
 ?>

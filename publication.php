@@ -54,9 +54,9 @@ mysqli_close($conn);
                         <tr>
                             <th>TITLE</th>
                             <th>ACADEMIC YEAR</th>
-                            <th>STATUS</th>
+
                             <th>TYPE</th>
-                            <th>REGION</th>
+                            <th>journal_title</th>
                             <th>APPROVAL STATUS</th>
                             <th>ACTION</th>
 
@@ -69,7 +69,7 @@ mysqli_close($conn);
                             echo "<td>{$row['title']}</td>";
                             echo "<td>{$row['year_of_publication']}</td>";
                             echo "<td>{$row['type']}</td>";
-                            echo "<td>{$row['region']}</td>";
+                            echo "<td>{$row['journal_title']}</td>";
 
 
                             // echo "<td>{$row['approval_status']}</td>";
@@ -95,7 +95,7 @@ mysqli_close($conn);
                 </div>
 
                 <div class="modal-body">
-                    <form id="myForm" action="cat3_publication_insert.php" method="POST">
+                    <form id="myForm" action="cat3_publication_insert.php" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
 
                         <div class="form-row">
@@ -228,8 +228,8 @@ mysqli_close($conn);
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="frontImage">Publication Front Image:</label>
-                                <input type="file" class="form-control" id="frontImage" name="frontImage"
+                                <label for="attachment">Publication Front Image:</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment"
                                     accept=".jpg, .jpeg, .png, .gif">
                             </div>
                             <div class="form-group col-md-6">
@@ -251,7 +251,8 @@ mysqli_close($conn);
 
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+
                     </form>
                 </div>
             </div>
@@ -259,7 +260,35 @@ mysqli_close($conn);
     </div>
 
     <?php require "./components/category-table-top-script.php" ?>
+    <script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
+        const documentInput = document.getElementById('attachment');
+        const file = documentInput.files[0];
+
+        if (!file) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        // Create a FormData object to hold the file data
+        const formData = new FormData(this); // 'this' refers to the form element
+
+        // Send an AJAX request to the server using Fetch API
+        fetch('cat3_publication_insert.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Display server response (e.g., success message)
+            })
+            .catch(error => {
+                console.error(error); // Handle errors
+            });
+    });
+    </script>
     <script type="text/javascript">
     $(document).ready(function() {
         $("#myForm").submit(function(e) {

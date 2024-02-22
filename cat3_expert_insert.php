@@ -8,9 +8,10 @@ $institute_name = isset($_POST['instituteName']) ? $_POST['instituteName'] : '';
 $date_to_talk = isset($_POST['dateToTalk']) ? $_POST['dateToTalk'] : '';
 $talk_level = isset($_POST['talkLevel']) ? $_POST['talkLevel'] : '';
 $type = isset($_POST['type']) ? $_POST['type'] : '';
-$talk_proof = isset($_FILES['talkProof']['name']) ? $_FILES['talkProof']['name'] : '';
+$attachment = isset($_FILES['attachment']['name']) ? $_FILES['attachment']['name'] : '';
 $pbas_year = isset($_POST['pbasYear']) ? $_POST['pbasYear'] : '';
 
+// $attachment = $_FILES['attachment']['name'];
 global $conn;
 
 echo "Talk Level: $talk_level, Type: $type";
@@ -34,14 +35,23 @@ if ($talk_level === "International" && $type === "Lecture") {
 echo "Calculated PBAS Score: $pbasScore";
 
 print_r($pbasScore); 
+$target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["attachment"]["name"]);
+    $uploadOk = true;
+    $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+    if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
+        // File uploaded successfully
 
 $stmt = $conn->prepare("INSERT INTO expert (topic, lecture_detail, institute_name, date_to_talk, talk_level, type, talk_proof, pbas_year, pbas_score) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssssssi", $topic, $lecture_detail, $institute_name, $date_to_talk, $talk_level, $type, $talk_proof, $pbas_year, $pbasScore);
+$stmt->bind_param("ssssssssi", $topic, $lecture_detail, $institute_name, $date_to_talk, $talk_level, $type, $attachment, $pbas_year, $pbasScore);
 if ($stmt->execute()) {
     echo "Data stored successfully.";
 } else {
     echo "Error: " . $stmt->error;
 }
-
 mysqli_close($conn);
+} else {
+    echo "Invalid request method.";
+}
 ?>

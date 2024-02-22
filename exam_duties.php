@@ -59,16 +59,16 @@ if (mysqli_error($conn)) {
                         </tr>
                     </thead>
                     <tbody>
-                         <?php
+                        <?php
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td>{$row['pbas_year']}</td>";
                                     echo "<td>{$row['semester']}</td>";
                                     echo "<td>{$row['stream_name']}</td>";
                                     echo "<td>{$row['course_name']}</td>";
-                                    echo "<td>{$row['score']}</tr>";
+                                    echo "<td>{$row['points']}</tr>";
                                 }
-                                ?> 
+                                ?>
                     </tbody>
                 </table>
             </div>
@@ -224,34 +224,34 @@ if (mysqli_error($conn)) {
     });
     </script> -->
     <script>
-$(document).ready(function() {
-    $("#myForm").submit(function(e) {
-        e.preventDefault();
-        var formData = $(this).serialize();
-        $.ajax({
-            type: "POST",
-            url: "cat1_exam_duties_insert.php",
-            data: formData,
-            success: function(response) {
-                alert(response); // Show success message or handle response accordingly
-                $('#myModal').modal('hide'); // Close modal popup
-                refreshTable(); // Refresh table data
-            }
+    $(document).ready(function() {
+        $("#myForm").submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "cat1_exam_duties_insert.php",
+                data: formData,
+                success: function(response) {
+                    alert(response); // Show success message or handle response accordingly
+                    $('#myModal').modal('hide'); // Close modal popup
+                    refreshTable(); // Refresh table data
+                }
+            });
         });
+
+        // Function to refresh table data
+        function refreshTable() {
+            $.ajax({
+                type: "GET",
+                url: "cat1_exam_duties_insert.php", // Replace with actual URL to fetch table data
+                success: function(data) {
+                    $('#details_table tbody').html(data); // Update table body with new data
+                }
+            });
+        }
     });
-    
-    // Function to refresh table data
-    function refreshTable() {
-        $.ajax({
-            type: "GET",
-            url: "cat1_exam_duties_insert.php", // Replace with actual URL to fetch table data
-            success: function(data) {
-                $('#details_table tbody').html(data); // Update table body with new data
-            }
-        });
-    }
-});
-</script>
+    </script>
 
 </body>
 

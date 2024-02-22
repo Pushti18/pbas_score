@@ -95,7 +95,7 @@ mysqli_close($conn);
 
                 <div class="modal-body">
 
-                    <form id="myForm" action="cat3_expert_insert.php" method="POST">
+                    <form id="myForm" action="cat3_expert_insert.php" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -146,8 +146,8 @@ mysqli_close($conn);
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="talkProof">Talk Proof (if available):</label>
-                                <input type="file" class="form-control" id="talkProof" name="talkProof" accept=".pdf">
+                                <label for="attachment">Talk Proof (if available):</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment" accept=".pdf">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="pbasYear">PBAS Year:</label>
@@ -163,8 +163,7 @@ mysqli_close($conn);
                                 </select>
                             </div>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
                     </form>
                 </div>
             </div>
@@ -189,7 +188,35 @@ mysqli_close($conn);
     </div>
 
     <?php require "./components/category-table-top-script.php" ?>
+    <script>
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
+        const documentInput = document.getElementById('attachment');
+        const file = documentInput.files[0];
+
+        if (!file) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        // Create a FormData object to hold the file data
+        const formData = new FormData(this); // 'this' refers to the form element
+
+        // Send an AJAX request to the server using Fetch API
+        fetch('cat3_expert_insert.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Display server response (e.g., success message)
+            })
+            .catch(error => {
+                console.error(error); // Handle errors
+            });
+    });
+    </script>
     <script type="text/javascript">
     $(document).ready(function() {
         $('#details_table').DataTable({

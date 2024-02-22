@@ -2,8 +2,8 @@
 session_start();
 include("db_connection.php");
 $cat2_id = $_SESSION['cat2_id']; 
-$employee_id = $_SESSION['employee_id']; 
 
+$employee_id = $_SESSION['employee_id']; 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $pbasYear = $_POST['pbasYear'];
@@ -15,9 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hoursSpentAnswerBook = $_POST['hoursSpentAnswerBook'];
     $attachment = $_POST['attachment'];
     $description = $_POST['description'];
+    $attachment = $_FILES['attachment']['name'];
+    $points = 0;
+    if ($hoursSpentAnswerBook >= 10) {
+        $points = floor($hoursSpentAnswerBook / 10);
+    }
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["attachment"]["name"]);
+    $uploadOk = true;
+    $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    $sql = "INSERT INTO othercocurricular (cat2_id, employee_id, pbasYear, mainActivity, subActivity, activityTitle, briefRole, semester, hoursSpentAnswerBook, attachment, description)
-            VALUES ('$cat2_id', '$employee_id', '$pbasYear', '$mainActivity', '$subActivity', '$activityTitle', '$briefRole', '$semester', '$hoursSpentAnswerBook', '$attachment', '$description')";
+    if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
+        // File uploaded successfully
+
+    $sql = "INSERT INTO othercocurricular (cat2_id, employee_id, pbasYear, mainActivity, subActivity, activityTitle, briefRole, semester, hoursSpentAnswerBook, attachment, description,points)
+            VALUES ('$cat2_id', '$employee_id', '$pbasYear', '$mainActivity', '$subActivity', '$activityTitle', '$briefRole', '$semester', '$hoursSpentAnswerBook', '$attachment', '$description','$points')";
 
     mysqli_query($conn, $sql);
 
@@ -27,8 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Data inserted into discipline table successfully.";
     }
 } else {
-    echo "Invalid request method.";
+    echo "Sorry, there was an error uploading your file.";
 }
-mysqli_close($conn);
 
+mysqli_close($conn);
+} else {
+echo "Invalid request method.";
+}
 ?>

@@ -13,11 +13,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $briefRole = $_POST['briefRole'];
     $semester = $_POST['semester'];
     $hoursSpentAnswerBook = $_POST['hoursSpentAnswerBook'];
-    $attachment = $_POST['attachment'];
+    $attachment = $_FILES['attachment']['name'];
     $description = $_POST['description'];
+    $points = 0;
+    if ($hoursSpentAnswerBook >= 10) {
+        $points = floor($hoursSpentAnswerBook / 10);
+    }
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["attachment"]["name"]);
+    $uploadOk = true;
+    $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    $sql = "INSERT INTO development_activities (cat2_id, employee_id, pbasYear, mainActivity, subActivity, activityTitle, briefRole, semester, hoursSpentAnswerBook, attachment, description)
-            VALUES ('$cat2_id', '$employee_id', '$pbasYear', '$mainActivity', '$subActivity', '$activityTitle', '$briefRole', '$semester', '$hoursSpentAnswerBook', '$attachment', '$description')";
+    if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
+        // File uploaded successfully
+
+    $sql = "INSERT INTO development_activities (cat2_id, employee_id, pbasYear, mainActivity, subActivity, activityTitle, briefRole, semester, hoursSpentAnswerBook, attachment, description,points)
+            VALUES ('$cat2_id', '$employee_id', '$pbasYear', '$mainActivity', '$subActivity', '$activityTitle', '$briefRole', '$semester', '$hoursSpentAnswerBook', '$attachment', '$description','$points')";
 
     mysqli_query($conn, $sql);
 
@@ -27,7 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Data inserted into discipline table successfully.";
     }
 } else {
-    echo "Invalid request method.";
+    echo "Sorry, there was an error uploading your file.";
 }
+
 mysqli_close($conn);
+} else {
+echo "Invalid request method.";
+}
 ?>

@@ -41,7 +41,7 @@ if (isset($_GET['employee_id'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="discipline.php?category_id=Category II-A&category_title=Student related co-curricular, extension and field based activities&subcategory_id=Category II-A(i)&subcategory_title=Discipline related co-curricular activities (e.g. remedial classes, carrer counseling,study visimt, student seminar and other events)">
+                    href="discipline.php?category_id=1&category_title=Student related co-curricular, extension and field based activities&subcategory_id=1(i)&subcategory_title=Discipline related co-curricular activities (e.g. remedial classes, carrer counseling,study visimt, student seminar and other events)">
                     Category II-A(i) - Discipline related co-curricular activities (e.g. remedial classes, carrer
                     counseling, study visit, student seminar and other events)
                 </a>
@@ -50,7 +50,7 @@ if (isset($_GET['employee_id'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="othercocurricular.php?category_id=Category II-A&category_title=Student related co-curricular, extension and field based activities&subcategory_id=Category II-A(ii)&subcategory_title=Other co-curricular activities (Cultural, Sports, NSS, NCC etc. - please specify)">
+                    href="othercocurricular.php?category_id=1&category_title=Student related co-curricular, extension and field based activities&subcategory_id=1(ii)&subcategory_title=Other co-curricular activities (Cultural, Sports, NSS, NCC etc. - please specify)">
                     Category II-A(ii) - Other co-curricular activities (Cultural, Sports, NSS, NCC etc. - please
                     specify)
                 </a>
@@ -59,7 +59,7 @@ if (isset($_GET['employee_id'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="extension.php?category_id=Category II-A&category_title=Student related co-curricular, extension and field based activities&subcategory_id=Category II-A(iii)&subcategory_title=Extension and dissemination activities (public / popular lectures / talks / seminars etc)">
+                    href="extension.php?category_id=1&category_title=Student related co-curricular, extension and field based activities&subcategory_id=1(iii)&subcategory_title=Extension and dissemination activities (public / popular lectures / talks / seminars etc)">
                     Category II-A(iii) - Extension and dissemination activities (public / popular lectures / talks /
                     seminars etc)
                 </a>
@@ -77,7 +77,7 @@ if (isset($_GET['employee_id'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="administrative.php?category_id=Category II-B&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=Category II-B(i)&subcategory_title=Administrative responsibility (including as Dean/ Principal/ Chairperson /Convener/Teache-in-charge/ similar other duties that require regular office hrs of its discharge), please specify">
+                    href="administrative.php?category_id=2&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=2(i)&subcategory_title=Administrative responsibility (including as Dean/ Principal/ Chairperson /Convener/Teache-in-charge/ similar other duties that require regular office hrs of its discharge), please specify">
                     Category II-B(i) - Administrative responsibility (including as Dean/ Principal/ Chairperson
                     /Convener/ Teache-in-charge/ similar other duties that require regular office hrs of its discharge),
                     please specify
@@ -87,7 +87,7 @@ if (isset($_GET['employee_id'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="participation.php?category_id=Category II-B&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=Category II-B(ii)&subcategory_title=Participation in Board of Studies, Academic and Administrative Committees">
+                    href="participation.php?category_id=2&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=2(ii)&subcategory_title=Participation in Board of Studies, Academic and Administrative Committees">
                     Category II-B(ii) - Participation in Board of Studies, Academic and Administrative Committees
                 </a>
             </div>
@@ -95,7 +95,7 @@ if (isset($_GET['employee_id'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="others.php?category_id=Category II-B&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=Category II-B(iii)&subcategory_title=Others">
+                    href="others.php?category_id=2&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=2(iii)&subcategory_title=Others">
                     Category II-B(iii) - Others
                 </a>
             </div>
@@ -103,7 +103,7 @@ if (isset($_GET['employee_id'])) {
             <div class="category">
                 <div class="tick-circle-icon"></div>
                 <a
-                    href="developmentactivities.php?category_id=Category III-C&category_title=Professional Development activities (such as participation in seminars, conferences, short term,training courses,industrial experience, talks, lectures in refresher/ faculty development courses,dissemination and general articles and any other Contribution) please specify">
+                    href="developmentactivities.php?category_id=3&category_title=Professional Development activities (such as participation in seminars, conferences, short term,training courses,industrial experience, talks, lectures in refresher/ faculty development courses,dissemination and general articles and any other Contribution) please specify">
                     <strong>Category : III-C - Professional Development activities (such as participation in seminars,
                         conferences, short term,training courses,industrial experience, talks, lectures in refresher/
                         faculty development courses, dissemination and general articles and any other Contribution)

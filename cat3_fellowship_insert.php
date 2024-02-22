@@ -9,7 +9,7 @@ $associated_organization = isset($_POST['associatedOrganization']) ? $_POST['ass
 $fellowship_awards = isset($_POST['fellowshipAwards']) ? $_POST['fellowshipAwards'] : '';
 $pbas_year = isset($_POST['pbasYear']) ? $_POST['pbasYear'] : '';
 $award_fellowship_copy = isset($_FILES['awardFellowshipCopy']['name']) ? $_FILES['awardFellowshipCopy']['name'] : '';
-
+$attachment = $_FILES['attachment']['name'];
 global $conn;
 
 $pbasScore = 0;
@@ -21,9 +21,16 @@ if (strpos($fellowship_awards, 'International') !== false) {
 } elseif (strpos($fellowship_awards, 'StateUniversity') !== false) {
     $pbasScore = 5;
 }
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["attachment"]["name"]);
+$uploadOk = true;
+$fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
+    // File uploaded successfully
 
 $sql = "INSERT INTO fellowship (cat3_id, employee_id, title, associated_organization, fellowship_awards, pbas_year, award_fellowship_copy, pbas_score) 
-        VALUES ('$cat3_id', '$employee_id', '$title', '$associated_organization', '$fellowship_awards', '$pbas_year', '$award_fellowship_copy', '$pbasScore')";
+        VALUES ('$cat3_id', '$employee_id', '$title', '$associated_organization', '$fellowship_awards', '$pbas_year', '$attachment', '$pbasScore')";
 mysqli_query($conn, $sql);
 
 if (mysqli_error($conn)) {
@@ -31,6 +38,8 @@ if (mysqli_error($conn)) {
 } else {
     echo "Data stored successfully. PBAS Score: $pbasScore";
 }
-
+} else {
+    echo "Invalid request method.";
+}
 mysqli_close($conn);
 ?>
