@@ -8,18 +8,22 @@ $subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_titl
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
-
 $sql = "SELECT * FROM learning_methodologies WHERE employee_id = '{$_SESSION['employee_id']}'";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
-$sql = "INSERT INTO cat1 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
-mysqli_query($conn, $sql);
 
-if (mysqli_error($conn)) {
-    // echo "Error: " . mysqli_error($conn);
+$employee_id = $_SESSION['employee_id'];
+$category = $_SESSION['cat1'];
+
+$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+echo $query;
+if (mysqli_query($conn, $query)) {
+    // echo "Employee ID updated successfully in the database.";
+} else {
+    // echo "Error updating record: " . mysqli_error($conn);
 }
 ?>
 
@@ -32,7 +36,7 @@ if (mysqli_error($conn)) {
 </head>
 
 <body>
-    <?php require "./components/header.php" ?>
+    <!-- <?php require "./components/header.php" ?> -->
 
     <div class="main_div center">
         <h4>Learning Methodology</h4>
@@ -60,15 +64,15 @@ if (mysqli_error($conn)) {
                     </thead>
                     <tbody>
                         <?php
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<tr>";
-                                    echo "<td>{$row['pbasYear']}</td>";
-                                    echo "<td>{$row['courseName']}</td>";
-                                    echo "<td>{$row['natureOfInnovation']}</td>";
-                                    echo "<td>{$row['hoursSpentInnovation']}</td>";
-                                    echo "</tr>";
-                                }
-                                ?>
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>{$row['pbasYear']}</td>";
+                            echo "<td>{$row['courseName']}</td>";
+                            echo "<td>{$row['natureOfInnovation']}</td>";
+                            echo "<td>{$row['hoursSpentInnovation']}</td>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>

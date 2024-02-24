@@ -2,9 +2,12 @@
 session_start();
 include("db_connection.php");
 
+$category = $_SESSION['cat1'];
+$subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 // Handle form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_id = $_SESSION['employee_id'];
+
     $pbasYear = $_POST['pbasYear'];
     $courseName = $_POST['courseName'];
     $natureOfInnovation = $_POST['natureOfInnovation'];
@@ -27,8 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // File uploaded successfully
 
         // Insert data into the database
-        $sql = "INSERT INTO learning_methodologies (employee_id, pbasYear, courseName, natureOfInnovation, hoursSpentInnovation, attachment, points) 
-                VALUES ('$employee_id', '$pbasYear', '$courseName', '$natureOfInnovation', '$hoursSpentInnovation', '$attachment', '$points')";
+        $sql = "INSERT INTO learning_methodologies (cat1_id,subcat_1,employee_id, pbasYear, courseName, natureOfInnovation, hoursSpentInnovation, attachment, points) 
+                VALUES ('$category','$subcategory_id','$employee_id', '$pbasYear', '$courseName', '$natureOfInnovation', '$hoursSpentInnovation', '$attachment', '$points')";
+        echo $sql;
         if (mysqli_query($conn, $sql)) {
             echo "Data inserted into learning_methodologies table successfully.";
         } else {

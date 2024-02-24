@@ -3,11 +3,10 @@ session_start();
 include("db_connection.php");
 
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
-$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 $subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
+$category_id = $_SESSION['category_id'];
 global $conn;
-
 
 $sql = "SELECT * FROM direct_teaching WHERE employee_id = '{$_SESSION['employee_id']}'";
 $result = mysqli_query($conn, $sql);
@@ -16,12 +15,15 @@ if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
 
+$employee_id = $_SESSION['employee_id'];
+$category = $_SESSION['category_id'];
 
-$sql = "INSERT INTO cat1 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
-mysqli_query($conn, $sql);
-
-if (mysqli_error($conn)) {
-    // echo "Error: " . mysqli_error($conn);
+$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+echo $query;
+if (mysqli_query($conn, $query)) {
+    // echo "Employee ID updated successfully in the database.";
+} else {
+    // echo "Error updating record: " . mysqli_error($conn);
 }
 ?>
 
@@ -34,7 +36,7 @@ if (mysqli_error($conn)) {
 </head>
 
 <body>
-    <?php require "./components/header.php" ?>
+    <!-- <?php require "./components/header.php" ?> -->
 
     <div class="main_div center">
         <h4>Guidance To Student</h4>
@@ -67,7 +69,7 @@ if (mysqli_error($conn)) {
                             echo "<td>{$row['university']}</td>";
                             echo "<td>{$row['year']}</td>";
                             echo "<td>{$row['degree']}</td>";
-                            echo "<td>{$row['projectType']}</td>";
+                            // echo "<td>{$row['project_type']}</td>";
                             echo "</tr>";
                         }
                         ?>
@@ -225,30 +227,25 @@ if (mysqli_error($conn)) {
 
     <script>
     document.getElementById('myForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
+        event.preventDefault();
         const documentInput = document.getElementById('attachment');
         const file = documentInput.files[0];
-
         if (!file) {
             alert('Please select a file to upload.');
             return;
         }
 
-        // Create a FormData object to hold the file data
-        const formData = new FormData(this); // 'this' refers to the form element
-
-        // Send an AJAX request to the server using Fetch API
+        const formData = new FormData(this);
         fetch('cat1_direct_teaching_insert.php', {
                 method: 'POST',
                 body: formData,
             })
             .then(response => response.text())
             .then(data => {
-                console.log(data); // Display server response (e.g., success message)
+                console.log(data);
             })
             .catch(error => {
-                console.error(error); // Handle errors
+                console.error(error);
             });
     });
     </script>
@@ -272,7 +269,7 @@ if (mysqli_error($conn)) {
         });
     });
     </script>
-    <script>
+    <!-- <script>
     $(document).ready(function() {
         $("#myForm").submit(function(e) {
             e.preventDefault();
@@ -287,7 +284,7 @@ if (mysqli_error($conn)) {
             });
         });
     });
-    </script>
+    </script> -->
 </body>
 
 </html>
