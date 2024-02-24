@@ -36,7 +36,7 @@ if (mysqli_query($conn, $query)) {
 </head>
 
 <body>
-    <!-- <?php require "./components/header.php" ?> -->
+    <?php require "./components/header.php" ?>
 
     <div class="main_div center">
         <h4>Learning Methodology</h4>
@@ -94,7 +94,7 @@ if (mysqli_query($conn, $query)) {
                     <form id="myForm" action="cat1_learning_methodologies_insert.php" method="POST"
                         enctype="multipart/form-data">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
-
+                        <input type="hidden" name="subcategory_id" value="<?php echo $subcategory_id; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="pbasYear">PBAS Year:</label>

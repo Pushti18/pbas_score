@@ -2,6 +2,8 @@
 // Start session and include database connection
 session_start();
 include("db_connection.php");
+$category = $_SESSION['cat1'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -20,8 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert data into the database
-    $sql = "INSERT INTO mentoring (employee_id, pbasYear, mentorName, studentNames, outcomeMentoring, hoursSpent, points) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO mentoring (cat1_id,subcat_1,employee_id, pbasYear, mentorName, studentNames, outcomeMentoring, hoursSpent, points) 
+            VALUES (?,?,?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("isisssi", $employee_id, $pbasYear, $mentorName, $studentNames, $outcomeMentoring, $hoursSpent, $points);
     if ($stmt->execute()) {

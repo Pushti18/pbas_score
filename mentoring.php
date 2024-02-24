@@ -14,11 +14,15 @@ $result = mysqli_query($conn, $sql);
 if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
-$sql = "INSERT INTO cat1 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
-mysqli_query($conn, $sql);
+$employee_id = $_SESSION['employee_id'];
+$category = $_SESSION['cat1'];
 
-if (mysqli_error($conn)) {
-    // echo "Error: " . mysqli_error($conn);
+$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+echo $query;
+if (mysqli_query($conn, $query)) {
+    // echo "Employee ID updated successfully in the database.";
+} else {
+    // echo "Error updating record: " . mysqli_error($conn);
 }
 ?>
 
@@ -68,7 +72,7 @@ if (mysqli_error($conn)) {
                                     echo "<td>{$row['hoursSpent']}</td>";
                                     echo "</tr>";
                                 }
-                                ?> 
+                                ?>
                     </tbody>
                 </table>
             </div>
@@ -89,7 +93,7 @@ if (mysqli_error($conn)) {
                 <div class="modal-body">
                     <form id="myForm" action="cat1_mentoring_insert.php" method="POST">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
-
+                        <input type="hidden" name="subcategory_id" value="<?php echo $subcategory_id; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="pbasYear">PBAS Year:</label>
@@ -114,21 +118,18 @@ if (mysqli_error($conn)) {
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="studentNames">Name of Students:</label>
-                                <input type="text" class="form-control" id="studentNames"
-                                    name="studentNames">
+                                <input type="text" class="form-control" id="studentNames" name="studentNames">
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="outcomeMentoring">Outcome Mentoring:</label>
-                                <input type="text" class="form-control" id="outcomeMentoring"
-                                    name="outcomeMentoring">
+                                <input type="text" class="form-control" id="outcomeMentoring" name="outcomeMentoring">
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="hoursSpent">Hours Spent:</label>
-                                <input type="number" class="form-control" id="hoursSpent"
-                                    name="hoursSpent" min="0">
+                                <input type="number" class="form-control" id="hoursSpent" name="hoursSpent" min="0">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>

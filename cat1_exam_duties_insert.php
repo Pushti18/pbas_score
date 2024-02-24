@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("db_connection.php");
+$category = $_SESSION['cat1'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
 $employee_id = $_SESSION['employee_id'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -18,8 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $hours_score = calculateScore($hours_spent_question, $hours_spent_examinations, $hours_spent_answer_book);
 
-    $sql = "INSERT INTO exam_duties (employee_id, pbas_year, semester, stream_name, course_name, question_paper_count, hours_spent_question, examinations_count, hours_spent_examinations, answer_book_count, hours_spent_answer_book, points) 
-            VALUES ('$employee_id', '$pbasYear', '$semester', '$streamName', '$courseName', '$questionPaper', '$hoursSpentQuestion', '$numExaminations', '$hoursSpentExaminations', '$numAnswerBook','$hoursSpentAnswerBook','hours_score')";
+    $sql = "INSERT INTO exam_duties (cat1_id,subcat_1,employee_id, pbas_year, semester, stream_name, course_name, question_paper_count, hours_spent_question, examinations_count, hours_spent_examinations, answer_book_count, hours_spent_answer_book, points) 
+            VALUES ('$category','$subcategory_id','$employee_id', '$pbasYear', '$semester', '$streamName', '$courseName', '$questionPaper', '$hoursSpentQuestion', '$numExaminations', '$hoursSpentExaminations', '$numAnswerBook','$hoursSpentAnswerBook','hours_score')";
 
 mysqli_query($conn, $sql);
 

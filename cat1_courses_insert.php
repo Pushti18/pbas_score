@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("db_connection.php");
+$category = $_SESSION['cat1'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_id = $_POST['employee_id'];
@@ -30,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (move_uploaded_file($_FILES["documentInnovation"]["tmp_name"], $target_file)) {
             echo "The file " . basename($_FILES["documentInnovation"]["name"]) . " has been uploaded.";
 
-            $sql = "INSERT INTO courses (employee_id, pbasYear, courseName, detailofuploadedsubject, hoursSpentInnovation, documentInnovation, points) 
-                    VALUES ('$employee_id', '$pbasYear', '$courseName', '$detailofuploadedsubject', '$hoursSpentInnovation', '$documentInnovation', '$points')";
+            $sql = "INSERT INTO courses (cat1_id,subcat_1,employee_id, pbasYear, courseName, detailofuploadedsubject, hoursSpentInnovation, documentInnovation, points) 
+                    VALUES ('$category','$subcategory_id','$employee_id', '$pbasYear', '$courseName', '$detailofuploadedsubject', '$hoursSpentInnovation', '$documentInnovation', '$points')";
 
             if (mysqli_query($conn, $sql)) {
                 echo "Data inserted into courses table successfully.";

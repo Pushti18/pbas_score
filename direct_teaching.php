@@ -16,7 +16,7 @@ if (!$result) {
 }
 
 $employee_id = $_SESSION['employee_id'];
-$category = $_SESSION['category_id'];
+$category = $_SESSION['cat1'];
 
 $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
 echo $query;
@@ -36,7 +36,7 @@ if (mysqli_query($conn, $query)) {
 </head>
 
 <body>
-    <!-- <?php require "./components/header.php" ?> -->
+    <?php require "./components/header.php" ?>
 
     <div class="main_div center">
         <h4>Guidance To Student</h4>
@@ -95,7 +95,7 @@ if (mysqli_query($conn, $query)) {
                     <form id="myForm" action="cat1_direct_teaching_insert.php" method="POST"
                         enctype="multipart/form-data">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
-
+                        <input type="hidden" name="subcategory_id" value="<?php echo $subcategory_id; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="university">Fill below details to add Guidance To Student in Project

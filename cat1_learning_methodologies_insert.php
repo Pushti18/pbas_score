@@ -3,7 +3,8 @@ session_start();
 include("db_connection.php");
 
 $category = $_SESSION['cat1'];
-$subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
+
 // Handle form data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $employee_id = $_SESSION['employee_id'];
