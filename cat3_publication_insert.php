@@ -1,6 +1,8 @@
 <?php
 session_start();
 include("db_connection.php");
+$category = $_SESSION['cat3'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $region = $_POST['region'];
@@ -31,49 +33,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
         // File uploaded successfully
 
-    $fetchCategoryIdSql = "SELECT category_id FROM cat3 WHERE category_id = '$category_id'";
-    $result = mysqli_query($conn, $fetchCategoryIdSql);
+        $fetchCategoryIdSql = "SELECT category_id FROM cat3 WHERE category_id = '$category_id'";
+        $result = mysqli_query($conn, $fetchCategoryIdSql);
 
-    if ($row = mysqli_fetch_assoc($result)) {
-        $category_id = $row['category_id'];
-        $sql = "INSERT INTO publication (cat3_id, employee_id, region, type, title, author, role, publication_group, 
+        if ($row = mysqli_fetch_assoc($result)) {
+            $category_id = $row['category_id'];
+            $sql = "INSERT INTO publication (cat3_id,subcat_3, employee_id, region, type, title, author, role, publication_group, 
                 journal_title, co_author, month_of_publication, year_of_publication, publisher, publication_date, 
                 volume_no, page_no, attachment, current_status_of_work, pbas_score) 
-                VALUES ('$category_id', '$employee_id','$region', '$type', '$title', '$author', '$role', '$publication_group', 
+                VALUES ('$category','$subcategory_id', '$employee_id','$region', '$type', '$title', '$author', '$role', '$publication_group', 
                 '$journalTitle', '$coAuthor', '$month', '$year', '$publisher', '$pubDate', '$volume', '$page', '$attachment', '$current_status_of_work', '$pbasScore')";
 
-        if (mysqli_query($conn, $sql)) {
-            $fetchDetailsSql = "SELECT * FROM publication WHERE employee_id = '$employee_id' AND title = '$title'";
-            $detailsResult = mysqli_query($conn, $fetchDetailsSql);
+            if (mysqli_query($conn, $sql)) {
+                $fetchDetailsSql = "SELECT * FROM publication WHERE employee_id = '$employee_id' AND title = '$title'";
+                $detailsResult = mysqli_query($conn, $fetchDetailsSql);
 
-            if ($detailsRow = mysqli_fetch_assoc($detailsResult)) {
-                $publication_details = [
-                    'title' => $detailsRow['title'],
-                    'academic_year' => $detailsRow['academic_year'],
-                    'status' => $detailsRow['status'],
-                    'type' => $detailsRow['type'],
-                    'region' => $detailsRow['region'],
-                    'approval_status' => $detailsRow['approval_status'],
-                    'pbas_score' => $detailsRow['pbas_score']
-                ];
+                if ($detailsRow = mysqli_fetch_assoc($detailsResult)) {
+                    $publication_details = [
+                        'title' => $detailsRow['title'],
+                        'academic_year' => $detailsRow['academic_year'],
+                        'status' => $detailsRow['status'],
+                        'type' => $detailsRow['type'],
+                        'region' => $detailsRow['region'],
+                        'approval_status' => $detailsRow['approval_status'],
+                        'pbas_score' => $detailsRow['pbas_score']
+                    ];
 
-                echo json_encode($publication_details);
+                    echo json_encode($publication_details);
+                } else {
+                    echo json_encode(['error' => "Details not found."]);
+                }
             } else {
-                echo json_encode(['error' => "Details not found."]);
+                echo json_encode(['error' => "Error: " . mysqli_error($conn)]);
             }
         } else {
-            echo json_encode(['error' => "Error: " . mysqli_error($conn)]);
+            echo "Category ID not found.";
         }
+
     } else {
-        echo "Category ID not found.";
+        echo "Sorry, there was an error uploading your file.";
     }
 
+    mysqli_close($conn);
 } else {
-    echo "Sorry, there was an error uploading your file.";
-}
-
-mysqli_close($conn);
-} else {
-echo "Invalid request method.";
+    echo "Invalid request method.";
 }
 ?>

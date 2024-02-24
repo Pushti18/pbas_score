@@ -1,8 +1,10 @@
 <?php
 session_start();
 include("db_connection.php");
-$cat3_id = $_SESSION['cat3_id']; 
-$employee_id = $_SESSION['employee_id']; 
+$category = $_SESSION['cat3'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
+
+$employee_id = $_SESSION['employee_id'];
 
 $pbas_year = isset($_POST['pbasYear']) ? $_POST['pbasYear'] : '';
 $title = isset($_POST['title']) ? $_POST['title'] : '';
@@ -57,8 +59,8 @@ if ($patent_register == 'Yes') {
     }
 }
 
-$sql = "INSERT INTO project_output (cat3_id, employee_id, pbas_year, title, project_outcome, region, details_of_outcome, patent_register, pbas_score) 
-        VALUES ('$cat3_id', '$employee_id', '$pbas_year', '$title', '$project_outcome', '$region', '$details_of_outcome', '$patent_register', '$pbasScore')";
+$sql = "INSERT INTO project_output (cat3_id,subcat_3, employee_id, pbas_year, title, project_outcome, region, details_of_outcome, patent_register, pbas_score) 
+        VALUES ('$category','$subcategory_id', '$employee_id', '$pbas_year', '$title', '$project_outcome', '$region', '$details_of_outcome', '$patent_register', '$pbasScore')";
 mysqli_query($conn, $sql);
 
 if (mysqli_error($conn)) {

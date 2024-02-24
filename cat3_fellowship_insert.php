@@ -1,8 +1,10 @@
 <?php
 session_start();
 include("db_connection.php");
-$cat3_id = $_SESSION['cat3_id']; 
-$employee_id = $_SESSION['employee_id']; 
+$category = $_SESSION['cat3'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
+
+$employee_id = $_SESSION['employee_id'];
 
 $title = isset($_POST['title']) ? $_POST['title'] : '';
 $associated_organization = isset($_POST['associatedOrganization']) ? $_POST['associatedOrganization'] : '';
@@ -29,15 +31,15 @@ $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
     // File uploaded successfully
 
-$sql = "INSERT INTO fellowship (cat3_id, employee_id, title, associated_organization, fellowship_awards, pbas_year, award_fellowship_copy, pbas_score) 
-        VALUES ('$cat3_id', '$employee_id', '$title', '$associated_organization', '$fellowship_awards', '$pbas_year', '$attachment', '$pbasScore')";
-mysqli_query($conn, $sql);
+    $sql = "INSERT INTO fellowship (cat3_id,subcat_3, employee_id, title, associated_organization, fellowship_awards, pbas_year, award_fellowship_copy, pbas_score) 
+        VALUES ('$category','$subcategory_id','$employee_id', '$title', '$associated_organization', '$fellowship_awards', '$pbas_year', '$attachment', '$pbasScore')";
+    mysqli_query($conn, $sql);
 
-if (mysqli_error($conn)) {
-    echo "Error: " . mysqli_error($conn);
-} else {
-    echo "Data stored successfully. PBAS Score: $pbasScore";
-}
+    if (mysqli_error($conn)) {
+        echo "Error: " . mysqli_error($conn);
+    } else {
+        echo "Data stored successfully. PBAS Score: $pbasScore";
+    }
 } else {
     echo "Invalid request method.";
 }

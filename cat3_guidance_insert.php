@@ -1,9 +1,10 @@
 <?php
 session_start();
 include("db_connection.php");
+$category = $_SESSION['cat3'];
+$subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
-$cat3_id = $_SESSION['cat3_id']; 
-$employee_id = $_SESSION['employee_id']; 
+$employee_id = $_SESSION['employee_id'];
 
 $name_of_university = isset($_POST['nameOfUniversity']) ? $_POST['nameOfUniversity'] : '';
 $degree = isset($_POST['degree']) ? $_POST['degree'] : '';
@@ -22,21 +23,21 @@ $pbasScore = 0;
 
 if ($degree == 'Ph.D') {
     if ($current_status_of_work == 'Completed') {
-        $mainSupervisorScore = 15; 
-        $jointSupervisorScore = 8; 
+        $mainSupervisorScore = 15;
+        $jointSupervisorScore = 8;
         $pbasScore = ($mainSupervisorScore + $jointSupervisorScore);
     } elseif ($current_status_of_work == 'In Progress') {
-        $mainSupervisorScore = 10; 
-        $jointSupervisorScore = 5; 
+        $mainSupervisorScore = 10;
+        $jointSupervisorScore = 5;
         $pbasScore = ($mainSupervisorScore + $jointSupervisorScore);
     }
 } elseif ($degree != '' && $current_status_of_work == 'Completed') {
-    $mainSupervisorScore = 5; 
-    $jointSupervisorScore = 3; 
+    $mainSupervisorScore = 5;
+    $jointSupervisorScore = 3;
     $pbasScore = ($mainSupervisorScore + $jointSupervisorScore);
 }
-$sql = "INSERT INTO guidance (cat3_id, employee_id, name_of_university, degree, degree_award_date, student_name, enrollment_no, project_title, project_year, project_type, thesis_submission_date, current_status_of_work, pbas_score) 
-        VALUES ('$cat3_id', '$employee_id', '$name_of_university', '$degree', '$degree_award_date', '$student_name', '$enrollment_no', '$project_title', '$project_year', '$project_type', '$thesis_submission_date', '$current_status_of_work', '$pbasScore')";
+$sql = "INSERT INTO guidance (cat3_id,subcat_3, employee_id, name_of_university, degree, degree_award_date, student_name, enrollment_no, project_title, project_year, project_type, thesis_submission_date, current_status_of_work, pbas_score) 
+        VALUES ('$category','$subcategory_id', '$employee_id', '$name_of_university', '$degree', '$degree_award_date', '$student_name', '$enrollment_no', '$project_title', '$project_year', '$project_type', '$thesis_submission_date', '$current_status_of_work', '$pbasScore')";
 mysqli_query($conn, $sql);
 
 if (mysqli_error($conn)) {
