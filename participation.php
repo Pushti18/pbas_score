@@ -178,7 +178,7 @@ if (mysqli_query($conn, $query)) {
     </div>
 
     <?php require "./components/category-table-top-script.php" ?>
-    <script>
+    <!-- <script>
         document.getElementById('myForm').addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the default form submission
 
@@ -204,6 +204,39 @@ if (mysqli_query($conn, $query)) {
                 })
                 .catch(error => {
                     console.error(error); // Handle errors
+                });
+        });
+    </script> -->
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const documentInput = document.getElementById('attachment');
+            const file = documentInput.files[0];
+
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            // Create a FormData object to hold the file data
+            const formData = new FormData(this); // 'this' refers to the form element
+
+            // Send an AJAX request to the server using Fetch API
+            fetch('cat2_participation_insert.php', {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to upload file.');
+                    }
+                    alert('File uploaded successfully.'); // Show success message or handle response accordingly
+                    $('#myModal').modal('hide'); // Close modal popup
+                })
+                .catch(error => {
+                    alert(error.message); // Display error message
                 });
         });
     </script>

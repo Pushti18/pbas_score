@@ -193,62 +193,78 @@ if (mysqli_query($conn, $query)) {
 
     <?php require "./components/category-table-top-script.php" ?>
     <script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-        const documentInput = document.getElementById('attachment');
-        const file = documentInput.files[0];
+            const documentInput = document.getElementById('attachment');
+            const file = documentInput.files[0];
 
-        if (!file) {
-            alert('Please select a file to upload.');
-            return;
-        }
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
 
-        // Create a FormData object to hold the file data
-        const formData = new FormData(this); // 'this' refers to the form element
+            // Create a FormData object to hold the file data
+            const formData = new FormData(this); // 'this' refers to the form element
 
-        // Send an AJAX request to the server using Fetch API
-        fetch('cat2_administrative_insert.php', {
+            // Send an AJAX request to the server using Fetch API
+            fetch('cat2_administrative_insert.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data); // Display server response (e.g., success message)
-            })
-            .catch(error => {
-                console.error(error); // Handle errors
-            });
-    });
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data); // Display server response (e.g., success message)
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        });
     </script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
+            });
         });
-    });
     </script>
 
     <script>
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat2_administrative_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response);
-                }
+        // $(document).ready(function() {
+        //     $("#myForm").submit(function(e) {
+        //         e.preventDefault();
+        //         var formData = $(this).serialize();
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "cat2_administrative_insert.php",
+        //             data: formData,
+        //             success: function(response) {
+        //                 alert(response);
+        //             }
+        //         });
+        //     });
+        // });
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat2_administrative_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response); // Show success message or handle response accordingly
+                        $('#myModal').modal('hide'); // Close modal popup
+                        refreshTable(); // Refresh table data
+                    }
+                });
             });
         });
-    });
     </script>
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -270,26 +286,26 @@ if (mysqli_query($conn, $query)) {
     </div>
 
     <script>
-    $(document).ready(function() {
-        $('.btn-delete').click(function() {
-            var id = $(this).data('id');
-            $('#deleteConfirmationModal').modal('show');
-            $('#confirmDeleteBtn').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "administrative_delete_entry.php",
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        alert(response);
-                    },
-                    error: function(xhr, status, error) {}
+        $(document).ready(function () {
+            $('.btn-delete').click(function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "administrative_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) { }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
                 });
-                $('#deleteConfirmationModal').modal('hide');
             });
         });
-    });
     </script>
 </body>
 

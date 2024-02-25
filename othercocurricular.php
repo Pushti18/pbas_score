@@ -236,15 +236,19 @@ if (mysqli_query($conn, $query)) {
                 method: 'POST',
                 body: formData,
             })
-                .then(response => response.text())
-                .then(data => {
-                    console.log(data); // Display server response (e.g., success message)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to upload file.');
+                    }
+                    alert('File uploaded successfully.'); // Show success message or handle response accordingly
+                    $('#myModal').modal('hide'); // Close modal popup
                 })
                 .catch(error => {
-                    console.error(error); // Handle errors
+                    alert(error.message); // Display error message
                 });
         });
     </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
             $('#details_table').DataTable({

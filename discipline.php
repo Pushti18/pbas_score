@@ -244,6 +244,22 @@ if (mysqli_query($conn, $query)) {
     </script>
 
     <script>
+        // $(document).ready(function () {
+        //     $("#myForm").submit(function (e) {
+        //         e.preventDefault();
+        //         var formData = $(this).serialize();
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "cat2_discipline_insert.php",
+        //             data: formData,
+        //             success: function (response) {
+        //                 alert(response);
+        //             }
+        //         });
+        //     });
+        // });
+
+
         $(document).ready(function () {
             $("#myForm").submit(function (e) {
                 e.preventDefault();
@@ -253,7 +269,9 @@ if (mysqli_query($conn, $query)) {
                     url: "cat2_discipline_insert.php",
                     data: formData,
                     success: function (response) {
-                        alert(response);
+                        alert(response); // Show success message or handle response accordingly
+                        $('#myModal').modal('hide'); // Close modal popup
+                        refreshTable(); // Refresh table data
                     }
                 });
             });

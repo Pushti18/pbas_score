@@ -371,76 +371,109 @@ if (mysqli_query($conn, $query)) {
 
     <?php require "./components/category-table-top-script.php" ?>
 
-    <script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const documentInput = document.getElementById('attachment');
-        const file = documentInput.files[0];
-        if (!file) {
-            alert('Please select a file to upload.');
-            return;
-        }
+    <!-- <script>
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const documentInput = document.getElementById('attachment');
+            const file = documentInput.files[0];
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
 
-        const formData = new FormData(this);
-        fetch('cat1_direct_teaching_insert.php', {
+            const formData = new FormData(this);
+            fetch('cat1_direct_teaching_insert.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script> -->
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const documentInput = document.getElementById('attachment');
+            const file = documentInput.files[0];
+
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
+
+            // Create a FormData object to hold the file data
+            const formData = new FormData(this); // 'this' refers to the form element
+
+            // Send an AJAX request to the server using Fetch API
+            fetch('cat1_direct_teaching_insert.php', {
+                method: 'POST',
+                body: formData,
             })
-            .catch(error => {
-                console.error(error);
-            });
-    });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to upload file.');
+                    }
+                    alert('File uploaded successfully.'); // Show success message or handle response accordingly
+                    $('#myModal').modal('hide'); // Close modal popup
+                })
+                .catch(error => {
+                    alert(error.message); // Display error message
+                });
+        });
     </script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
+            });
         });
-    });
     </script>
     <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
         });
-    });
     </script>
     <script>
-    // Function to open edit modal
-    function openEditModal(id) {
-        // Fetch data for the selected entry using AJAX
-        $.ajax({
-            type: "GET",
-            url: "direct_teaching_edit_page.php",
-            data: {
-                id: id
-            },
-            success: function(response) {
-                // Populate the modal with fetched data
-                $('#editModal .modal-content').html(response);
-                $('#editModal').modal('show'); // Open the modal
-            },
-            error: function(xhr, status, error) {
-                // Handle error
-            }
-        });
-    }
+        // Function to open edit modal
+        function openEditModal(id) {
+            // Fetch data for the selected entry using AJAX
+            $.ajax({
+                type: "GET",
+                url: "direct_teaching_edit_page.php",
+                data: {
+                    id: id
+                },
+                success: function (response) {
+                    // Populate the modal with fetched data
+                    $('#editModal .modal-content').html(response);
+                    $('#editModal').modal('show'); // Open the modal
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                }
+            });
+        }
 
-    // Edit Button Click Event
-    $('.btn-edit').click(function() {
-        var id = $(this).data('id');
-        openEditModal(id); // Open edit modal for the selected entry
-    });
+        // Edit Button Click Event
+        $('.btn-edit').click(function () {
+            var id = $(this).data('id');
+            openEditModal(id); // Open edit modal for the selected entry
+        });
     </script>
     <!-- HTML structure for modal confirmation dialog -->
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
@@ -463,26 +496,26 @@ if (mysqli_query($conn, $query)) {
     </div>
 
     <script>
-    $(document).ready(function() {
-        $('.btn-delete').click(function() {
-            var id = $(this).data('id');
-            $('#deleteConfirmationModal').modal('show');
-            $('#confirmDeleteBtn').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "direct_teaching_delete_entry.php",
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        alert(response);
-                    },
-                    error: function(xhr, status, error) {}
+        $(document).ready(function () {
+            $('.btn-delete').click(function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "direct_teaching_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) { }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
                 });
-                $('#deleteConfirmationModal').modal('hide');
             });
         });
-    });
     </script>
 
     <!-- <script>
