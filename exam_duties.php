@@ -34,6 +34,7 @@ if (mysqli_query($conn, $query)) {
 
 <head>
     <title> Examination Duties</title>
+
     <?php require "./components/category-table-script.php" ?>
 </head>
 
@@ -58,21 +59,25 @@ if (mysqli_query($conn, $query)) {
                             <th>SEM</th>
                             <th>STREAM NAME</th>
                             <th>COURSE NAME</th>
-                            <th>PBAS SCORE</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<tr>";
-                                    echo "<td>{$row['pbas_year']}</td>";
-                                    echo "<td>{$row['semester']}</td>";
-                                    echo "<td>{$row['stream_name']}</td>";
-                                    echo "<td>{$row['course_name']}</td>";
-                                    echo "<td>{$row['points']}</tr>";
-                                }
-                                ?>
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>{$row['pbas_year']}</td>";
+                            echo "<td>{$row['semester']}</td>";
+                            echo "<td>{$row['stream_name']}</td>";
+                            echo "<td>{$row['course_name']}</td>";
+                            echo "<td>
+                                     <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                                    <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                                  </td>";
+                            echo "</tr>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -192,70 +197,127 @@ if (mysqli_query($conn, $query)) {
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
+            });
         });
-    });
     </script>
     <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
         });
-    });
     </script>
+    </script>
+    <!-- HTML structure for modal confirmation dialog -->
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this entry?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-delete').click(function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "exam_duties_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) { }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_exam_duties_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response); // Show success message or handle response accordingly
+                        $('#myModal').modal('hide'); // Close modal popup
+                        refreshTable(); // Refresh table data
+                    }
+                });
+            });
+
+            // Function to refresh table data
+            function refreshTable() {
+                $.ajax({
+                    type: "GET",
+                    url: "your_php_script_to_fetch_updated_data.php", // Replace with actual URL to fetch updated table data
+                    success: function (data) {
+                        $('#details_table tbody').html(data); // Update table body with new data
+                    }
+                });
+            }
+        });
+    </script>
+
     <!-- <script>
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat1_exam_duties_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response);
-                }
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_exam_duties_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response); // Show success message or handle response accordingly
+                        $('#myModal').modal('hide'); // Close modal popup
+                        refreshTable(); // Refresh table data
+                    }
+                });
             });
-        });
-    });
-    </script> -->
-    <script>
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat1_exam_duties_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response); // Show success message or handle response accordingly
-                    $('#myModal').modal('hide'); // Close modal popup
-                    refreshTable(); // Refresh table data
-                }
-            });
-        });
 
-        // Function to refresh table data
-        function refreshTable() {
-            $.ajax({
-                type: "GET",
-                url: "cat1_exam_duties_insert.php", // Replace with actual URL to fetch table data
-                success: function(data) {
-                    $('#details_table tbody').html(data); // Update table body with new data
-                }
-            });
-        }
-    });
-    </script>
+            // Function to refresh table data
+            function refreshTable() {
+                $.ajax({
+                    type: "GET",
+                    url: "cat1_exam_duties_insert.php", // Replace with actual URL to fetch table data
+                    success: function (data) {
+                        $('#details_table tbody').html(data); // Update table body with new data
+                    }
+                });
+            }
+        });
+    </script> -->
 
 </body>
 

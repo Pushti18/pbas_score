@@ -70,7 +70,11 @@ if (mysqli_query($conn, $query)) {
                             echo "<td>{$row['briefRole']}</td>";
                             echo "<td>{$row['semester']}</td>";
                             echo "<td>{$row['hoursSpentAnswerBook']}</td>";
-                            // echo "<td>{$row['action']}</td>";
+                            echo "<td>
+                            <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                           <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                         </td>";
+                            echo "</tr>";
                             echo "</tr>";
                         }
                         ?>
@@ -231,6 +235,47 @@ if (mysqli_query($conn, $query)) {
                     success: function (response) {
                         alert(response);
                     }
+                });
+            });
+        });
+    </script>
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this entry?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('.btn-delete').click(function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "extension_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) { }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
                 });
             });
         });

@@ -14,11 +14,15 @@ if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
 
-$sql = "INSERT INTO cat3 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
-mysqli_query($conn, $sql);
+$employee_id = $_SESSION['employee_id'];
+$category = $_SESSION['cat3'];
 
-if (mysqli_error($conn)) {
-    // echo "Error: " . mysqli_error($conn);
+$query = "UPDATE `cat3` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+echo $query;
+if (mysqli_query($conn, $query)) {
+    // echo "Employee ID updated successfully in the database.";
+} else {
+    // echo "Error updating record: " . mysqli_error($conn);
 }
 $publication_details = isset($_SESSION['publication_details']) ? $_SESSION['publication_details'] : null;
 
@@ -97,7 +101,7 @@ mysqli_close($conn);
                 <div class="modal-body">
                     <form id="myForm" action="cat3_publication_insert.php" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
-
+                        <input type="hidden" name="subcategory_id" value="<?php echo $subcategory_id; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="region">Region:</label>
@@ -173,9 +177,18 @@ mysqli_close($conn);
                                 <select class="form-control" id="month" name="month">
                                     <?php
                                     $months = [
-                                        "01" => "January", "02" => "February", "03" => "March", "04" => "April",
-                                        "05" => "May", "06" => "June", "07" => "July", "08" => "August",
-                                        "09" => "September", "10" => "October", "11" => "November", "12" => "December"
+                                        "01" => "January",
+                                        "02" => "February",
+                                        "03" => "March",
+                                        "04" => "April",
+                                        "05" => "May",
+                                        "06" => "June",
+                                        "07" => "July",
+                                        "08" => "August",
+                                        "09" => "September",
+                                        "10" => "October",
+                                        "11" => "November",
+                                        "12" => "December"
                                     ];
 
                                     foreach ($months as $key => $value) {
@@ -210,9 +223,9 @@ mysqli_close($conn);
                                 <input type="date" class="form-control datepicker" id="pubDate" name="pubDate">
                             </div>
                             <script>
-                            $(document).ready(function() {
-                                $("#pubDate").datepicker();
-                            });
+                                $(document).ready(function () {
+                                    $("#pubDate").datepicker();
+                                });
                             </script>
                         </div>
 
@@ -261,96 +274,96 @@ mysqli_close($conn);
 
     <?php require "./components/category-table-top-script.php" ?>
     <script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-        const documentInput = document.getElementById('attachment');
-        const file = documentInput.files[0];
+            const documentInput = document.getElementById('attachment');
+            const file = documentInput.files[0];
 
-        if (!file) {
-            alert('Please select a file to upload.');
-            return;
-        }
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
 
-        // Create a FormData object to hold the file data
-        const formData = new FormData(this); // 'this' refers to the form element
+            // Create a FormData object to hold the file data
+            const formData = new FormData(this); // 'this' refers to the form element
 
-        // Send an AJAX request to the server using Fetch API
-        fetch('cat3_publication_insert.php', {
+            // Send an AJAX request to the server using Fetch API
+            fetch('cat3_publication_insert.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data); // Display server response (e.g., success message)
-            })
-            .catch(error => {
-                console.error(error); // Handle errors
-            });
-    });
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data); // Display server response (e.g., success message)
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        });
     </script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
 
-            $.ajax({
-                type: "POST",
-                url: "cat3_publication_insert.php",
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function(response) {
-                    try {
-                        var data = JSON.parse(response);
-                        var table = $('#details_table').DataTable();
+                $.ajax({
+                    type: "POST",
+                    url: "cat3_publication_insert.php",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        try {
+                            var data = JSON.parse(response);
+                            var table = $('#details_table').DataTable();
 
-                        table.row.add([
-                            data.title,
-                            data.academic_year,
-                            data.status,
-                            data.type,
-                            data.region,
-                            data.approval_status,
-                            '<button onclick="showDetails(\'' + data.title +
-                            '\', \'' + data.current_status_of_work + '\', \'' +
-                            data.type + '\', \'' + data.region + '\', \'' + data
-                            .pbas_score + '\')">Show Details</button>'
-                        ]).draw();
+                            table.row.add([
+                                data.title,
+                                data.academic_year,
+                                data.status,
+                                data.type,
+                                data.region,
+                                data.approval_status,
+                                '<button onclick="showDetails(\'' + data.title +
+                                '\', \'' + data.current_status_of_work + '\', \'' +
+                                data.type + '\', \'' + data.region + '\', \'' + data
+                                    .pbas_score + '\')">Show Details</button>'
+                            ]).draw();
 
-                        // Clear the form
-                        $("#myForm")[0].reset();
-                    } catch (error) {
-                        console.error("Error parsing JSON response: " + error);
+                            // Clear the form
+                            $("#myForm")[0].reset();
+                        } catch (error) {
+                            console.error("Error parsing JSON response: " + error);
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error("AJAX request failed: " + errorThrown);
                     }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error("AJAX request failed: " + errorThrown);
-                }
+                });
             });
         });
-    });
     </script>
     <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
         });
-    });
     </script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
+            });
         });
-    });
     </script>
 </body>
 

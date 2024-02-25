@@ -70,7 +70,11 @@ if (mysqli_query($conn, $query)) {
                             echo "<td>{$row['briefRole']}</td>";
                             echo "<td>{$row['semester']}</td>";
                             echo "<td>{$row['hoursSpentAnswerBook']}</td>";
-                            // echo "<td>{$row['action']}</td>";
+                            echo "<td>
+                            <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                           <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                         </td>";
+                            echo "</tr>";
                             echo "</tr>";
                         }
                         ?>
@@ -189,62 +193,103 @@ if (mysqli_query($conn, $query)) {
 
     <?php require "./components/category-table-top-script.php" ?>
     <script>
-        document.getElementById('myForm').addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
-            const documentInput = document.getElementById('attachment');
-            const file = documentInput.files[0];
+        const documentInput = document.getElementById('attachment');
+        const file = documentInput.files[0];
 
-            if (!file) {
-                alert('Please select a file to upload.');
-                return;
-            }
+        if (!file) {
+            alert('Please select a file to upload.');
+            return;
+        }
 
-            // Create a FormData object to hold the file data
-            const formData = new FormData(this); // 'this' refers to the form element
+        // Create a FormData object to hold the file data
+        const formData = new FormData(this); // 'this' refers to the form element
 
-            // Send an AJAX request to the server using Fetch API
-            fetch('cat2_administrative_insert.php', {
+        // Send an AJAX request to the server using Fetch API
+        fetch('cat2_administrative_insert.php', {
                 method: 'POST',
                 body: formData,
             })
-                .then(response => response.text())
-                .then(data => {
-                    console.log(data); // Display server response (e.g., success message)
-                })
-                .catch(error => {
-                    console.error(error); // Handle errors
-                });
-        });
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Display server response (e.g., success message)
+            })
+            .catch(error => {
+                console.error(error); // Handle errors
+            });
+    });
     </script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#details_table').DataTable({
-                dom: 'Bfrtip',
-                lengthMenu: [
-                    [5, 10, 25, 50],
-                    ['5 Files', '10 Files', '25 Files', '50 Files']
-                ],
+    $(document).ready(function() {
+        $('#details_table').DataTable({
+            dom: 'Bfrtip',
+            lengthMenu: [
+                [5, 10, 25, 50],
+                ['5 Files', '10 Files', '25 Files', '50 Files']
+            ],
 
-            });
         });
+    });
     </script>
 
     <script>
-        $(document).ready(function () {
-            $("#myForm").submit(function (e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: "cat2_administrative_insert.php",
-                    data: formData,
-                    success: function (response) {
-                        alert(response);
-                    }
-                });
+    $(document).ready(function() {
+        $("#myForm").submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "cat2_administrative_insert.php",
+                data: formData,
+                success: function(response) {
+                    alert(response);
+                }
             });
         });
+    });
+    </script>
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this entry?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('.btn-delete').click(function() {
+            var id = $(this).data('id');
+            $('#deleteConfirmationModal').modal('show');
+            $('#confirmDeleteBtn').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "administrative_delete_entry.php",
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        alert(response);
+                    },
+                    error: function(xhr, status, error) {}
+                });
+                $('#deleteConfirmationModal').modal('hide');
+            });
+        });
+    });
     </script>
 </body>
 

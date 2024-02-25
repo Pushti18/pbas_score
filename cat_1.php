@@ -69,16 +69,14 @@ if (isset($_GET['employee_id']) && isset($_GET['category'])) {
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="courses.php?category_title=Innovative Teaching - Learning methodologies, Updating of subject contents / courses, meentoring etc&subcategory_id=Category I-C(ii)&subcategory_title=Updating of subject contents /courses">
+                <a href="courses.php?&subcategory_id=cat1_c2">
                     Category I-C(ii) - Updating of subject contents /courses
                 </a>
             </div>
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="mentoring.php?category_title=Innovative Teaching - Learning methodologies, Updating of subject contents / courses, meentoring etc&subcategory_id=Category I-C(iii)&subcategory_title=Mentoring">
+                <a href="mentoring.php?&subcategory_id=cat1_c3">
                     Category I-C(iii) - Mentoring
                 </a>
             </div>

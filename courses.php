@@ -56,22 +56,26 @@ if (mysqli_query($conn, $query)) {
                             <th>courseName</th>
                             <th>detailofuploadedsubject</th>
                             <th>hoursSpentInnovation</th>
-                            <th>APPROVAL STATUS</th>
                             <th>ACTION</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<tr>";
-                                    echo "<td>{$row['pbasYear']}</td>";
-                                    echo "<td>{$row['courseName']}</td>";
-                                    echo "<td>{$row['detailofuploadedsubject']}</td>";
-                                    echo "<td>{$row['hoursSpentInnovation']}</td>";
-                                    echo "</tr>";
-                                }
-                                ?>
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            echo "<td>{$row['pbasYear']}</td>";
+                            echo "<td>{$row['courseName']}</td>";
+                            echo "<td>{$row['detailofuploadedsubject']}</td>";
+                            echo "<td>{$row['hoursSpentInnovation']}</td>";
+                            echo "<td>
+                                     <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                                    <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                                  </td>";
+                            echo "</tr>";
+                            echo "</tr>";
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -207,6 +211,21 @@ if (mysqli_query($conn, $query)) {
     });
     </script>
     <script>
+    // $(document).ready(function() {
+    //     $("#myForm").submit(function(e) {
+    //         e.preventDefault();
+    //         var formData = $(this).serialize();
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "cat1_courses_insert.php",
+    //             data: formData,
+    //             success: function(response) {
+    //                 alert(response);
+    //             }
+    //         });
+    //     });
+    // });
+
     $(document).ready(function() {
         $("#myForm").submit(function(e) {
             e.preventDefault();
@@ -216,8 +235,51 @@ if (mysqli_query($conn, $query)) {
                 url: "cat1_courses_insert.php",
                 data: formData,
                 success: function(response) {
-                    alert(response);
+                    alert(response); // Show success message or handle response accordingly
+                    $('#myModal').modal('hide'); // Close modal popup
+                    refreshTable(); // Refresh table data
                 }
+            });
+        });
+    });
+    </script>
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this entry?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    $(document).ready(function() {
+        $('.btn-delete').click(function() {
+            var id = $(this).data('id');
+            $('#deleteConfirmationModal').modal('show');
+            $('#confirmDeleteBtn').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "courses_delete_entry.php",
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        alert(response);
+                    },
+                    error: function(xhr, status, error) {}
+                });
+                $('#deleteConfirmationModal').modal('hide');
             });
         });
     });

@@ -2,8 +2,12 @@
 session_start();
 include("db_connection.php");
 global $conn;
-if (isset($_GET['employee_id'])) {
+if (isset($_GET['employee_id']) && isset($_GET['category'])) {
     $employee_id = $_GET['employee_id'];
+    $category = $_GET['category'];
+
+    echo $category;
+
     $query = "UPDATE `cat2` SET `employee_id` = $employee_id ";
 
     if (mysqli_query($conn, $query)) {
@@ -40,8 +44,7 @@ if (isset($_GET['employee_id'])) {
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="discipline.php?category_id=1&category_title=Student related co-curricular, extension and field based activities&subcategory_id=1(i)&subcategory_title=Discipline related co-curricular activities (e.g. remedial classes, carrer counseling,study visimt, student seminar and other events)">
+                <a href="discipline.php?&subcategory_id=cat2_a1">
                     Category II-A(i) - Discipline related co-curricular activities (e.g. remedial classes, carrer
                     counseling, study visit, student seminar and other events)
                 </a>
@@ -49,8 +52,7 @@ if (isset($_GET['employee_id'])) {
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="othercocurricular.php?category_id=1&category_title=Student related co-curricular, extension and field based activities&subcategory_id=1(ii)&subcategory_title=Other co-curricular activities (Cultural, Sports, NSS, NCC etc. - please specify)">
+                <a href="othercocurricular.php?&subcategory_id=cat2_a2">
                     Category II-A(ii) - Other co-curricular activities (Cultural, Sports, NSS, NCC etc. - please
                     specify)
                 </a>
@@ -58,8 +60,7 @@ if (isset($_GET['employee_id'])) {
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="extension.php?category_id=1&category_title=Student related co-curricular, extension and field based activities&subcategory_id=1(iii)&subcategory_title=Extension and dissemination activities (public / popular lectures / talks / seminars etc)">
+                <a href="extension.php?&subcategory_id=cat2_a3">
                     Category II-A(iii) - Extension and dissemination activities (public / popular lectures / talks /
                     seminars etc)
                 </a>
@@ -76,8 +77,7 @@ if (isset($_GET['employee_id'])) {
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="administrative.php?category_id=2&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=2(i)&subcategory_title=Administrative responsibility (including as Dean/ Principal/ Chairperson /Convener/Teache-in-charge/ similar other duties that require regular office hrs of its discharge), please specify">
+                <a href="administrative.php?&subcategory_id=cat2_b1">
                     Category II-B(i) - Administrative responsibility (including as Dean/ Principal/ Chairperson
                     /Convener/ Teache-in-charge/ similar other duties that require regular office hrs of its discharge),
                     please specify
@@ -86,16 +86,14 @@ if (isset($_GET['employee_id'])) {
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="participation.php?category_id=2&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=2(ii)&subcategory_title=Participation in Board of Studies, Academic and Administrative Committees">
+                <a href="participation.php?&subcategory_id=cat2_b2">
                     Category II-B(ii) - Participation in Board of Studies, Academic and Administrative Committees
                 </a>
             </div>
 
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
-                <a
-                    href="others.php?category_id=2&category_title=Contribution to Corporate life and management of the department and institution through participation in academic and administrative committees and responsibilities.&subcategory_id=2(iii)&subcategory_title=Others">
+                <a href="others.php?&subcategory_id=cat2_b3">
                     Category II-B(iii) - Others
                 </a>
             </div>

@@ -14,11 +14,15 @@ if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
 
-$sql = "INSERT INTO cat3 (category_id,category_title,subcategory_id, subcategory_title) VALUES ('$category_id','$category_title','$subcategory_id', '$subcategory_title')";
-mysqli_query($conn, $sql);
+$employee_id = $_SESSION['employee_id'];
+$category = $_SESSION['cat3'];
 
-if (mysqli_error($conn)) {
-    // echo "Error: " . mysqli_error($conn);
+$query = "UPDATE `cat3` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+echo $query;
+if (mysqli_query($conn, $query)) {
+    // echo "Employee ID updated successfully in the database.";
+} else {
+    // echo "Error updating record: " . mysqli_error($conn);
 }
 
 mysqli_close($conn);
@@ -94,6 +98,7 @@ mysqli_close($conn);
 
                     <form id="myForm" action="cat3_guidance_insert.php" method="POST">
                         <input type="hidden" name="employee_id" value="<?php echo $_SESSION['employee_id']; ?>">
+                        <input type="hidden" name="subcategory_id" value="<?php echo $subcategory_id; ?>">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="nameOfUniversity">Name of the University:</label>
@@ -183,33 +188,33 @@ mysqli_close($conn);
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
-        });
-    });
-    </script>
-    <script>
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat3_guidance_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response);
-
-                }
             });
         });
-    });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat3_guidance_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response);
+
+                    }
+                });
+            });
+        });
     </script>
 </body>
 

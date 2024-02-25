@@ -2,8 +2,12 @@
 session_start();
 include("db_connection.php");
 global $conn;
-if (isset($_GET['employee_id'])) {
+if (isset($_GET['employee_id']) && isset($_GET['category'])) {
     $employee_id = $_GET['employee_id'];
+    $category = $_GET['category'];
+
+    echo $category;
+
     $query = "UPDATE `cat3` SET `employee_id` = $employee_id ";
 
     if (mysqli_query($conn, $query)) {
@@ -32,7 +36,7 @@ if (isset($_GET['employee_id'])) {
 
             <div class="category">
                 <div class="tick-circle-icon"></div>
-                <a href="publication.php">
+                <a href="">
                     <strong> Category : III-A - Research Papers Publication in </strong>
                 </a>
             </div>
