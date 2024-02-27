@@ -9,8 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'];
 
 
-    $sql = "DELETE FROM learning_methodologies WHERE id = '$id' AND employee_id='$employee_id' and cat1_id = '$category' AND subcat_1='$subcategory_id'";
-    // echo $sql;
+    $sql = "DELETE FROM learning_methodologies WHERE id = '$id' AND employee_id='$employee_id' and cat1_id = '$category' ";
+    echo $sql;
     if (mysqli_query($conn, $sql)) {
         echo "Entry deleted successfully.";
     } else {

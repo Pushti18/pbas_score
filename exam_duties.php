@@ -39,7 +39,7 @@ if (mysqli_query($conn, $query)) {
 </head>
 
 <body>
-    <?php require "./components/header.php" ?>
+    <!-- <?php require "./components/header.php" ?> -->
 
     <div class="main_div center">
         <h4>Examination Duties</h4>
@@ -194,6 +194,192 @@ if (mysqli_query($conn, $query)) {
         </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalModalLabel">Add Examination Duties</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" action="cat1_exam_duties_update.php" method="POST">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editPbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editsemester">Semester:</label>
+                                <select class="form-control" id="editsemester" name="editsemester">
+                                    <?php
+                                    for ($i = 1; $i <= 8; $i++) {
+                                        echo "<option value='Sem {$i}'>Sem {$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editstreamName">Stream Name:</label>
+                                <input type="text" class="form-control" id="editstreamName" name="editstreamName">
+                            </div>
+
+
+                            <div class="form-group col-md-6">
+                                <label for="editcourseName">Course Name:</label>
+                                <select class="form-control" id="editcourseName" name="editcourseName">
+                                    <option value="Select Course">Select Course</option>
+                                    <option value="Course A">Course A</option>
+                                    <option value="Course B">Course B</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editquestionPaper">No of Question Paper:</label>
+                                <input type="text" class="form-control" id="editquestionPaper" name="editquestionPaper">
+                            </div>
+
+
+                            <div class="form-group col-md-6">
+                                <label for="edithoursSpentQuestion">Hours Spent (Question Paper):</label>
+                                <input type="number" class="form-control" id="edithoursSpentQuestion"
+                                    name="edithoursSpentQuestion" min="0">
+                            </div>
+
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editnumExaminations">No's of Examinations (Supervisor's Duties):</label>
+                                <input type="text" class="form-control" id="editnumExaminations"
+                                    name="editnumExaminations">
+                            </div>
+
+
+                            <div class="form-group col-md-6">
+                                <label for="edithoursSpentExaminations">Hours Spent (Examinations):</label>
+                                <input type="number" class="form-control" id="edithoursSpentExaminations"
+                                    name="edithoursSpentExaminations" min="0">
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editnumAnswerBook">No of Answer Book:</label>
+                                <input type="text" class="form-control" id="editnumAnswerBook" name="editnumAnswerBook">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="edithoursSpentAnswerBook">Hours Spent (Answer Book):</label>
+                                <input type="number" class="form-control" id="edithoursSpentAnswerBook"
+                                    name="edithoursSpentAnswerBook" min="0">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                // AJAX request to fetch data of the selected entry
+                $.ajax({
+                    type: "GET",
+                    url: "cat1_exam_duties_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var data = JSON.parse(response);
+                        if (data.status == 'success') {
+                            // Populate the form fields with the fetched data
+                            $('#editEntryId').val(data.data.id);
+                            $('#editPbasYear').val(data.data.pbasYear);
+                            $('#editSemester').val(data.data.semester);
+                            $('#editStreamName').val(data.data.streamName);
+                            $('#editCourseName').val(data.data.courseName);
+                            $('#editQuestionPaper').val(data.data.questionPaper);
+                            $('#editHoursSpentQuestion').val(data.data.hoursSpentQuestion);
+                            $('#editNumExaminations').val(data.data.numExaminations);
+                            $('#editHoursSpentExaminations').val(data.data.hoursSpentExaminations);
+                            $('#editNumAnswerBook').val(data.data.numAnswerBook);
+                            $('#editHoursSpentAnswerBook').val(data.data.hoursSpentAnswerBook);
+
+                            // Show the edit modal
+                            $('#editModal').modal('show');
+                        } else {
+                            // Handle the error
+                            console.log('Error fetching data: ' + data.message);
+                        }
+                    }
+                });
+            });
+        });
+        // $(document).ready(function () {
+        //     $('.btn-edit').click(function () {
+        //         var entryId = $(this).data('id');
+
+        //         // AJAX request to fetch data of the selected entry
+        //         $.ajax({
+        //             type: "GET",
+        //             url: "cat1_exam_duties_update.php",
+        //             data: {
+        //                 entry_id: entryId
+        //             },
+        //             success: function (response) {
+        //                 // Parse the JSON response
+        //                 var entryData = JSON.parse(response);
+
+        //                 // Populate the edit modal form fields with fetched data
+        //                 $('#editEntryId').val(entryId);
+        //                 $('#editPbasYear').val(entryData.pbasYear);
+        //                 $('#editsemester').val(entryData.semester);
+        //                 $('#editstreamName').val(entryData.streamName);
+        //                 $('#editcourseName').val(entryData.courseName);
+        //                 $('#editquestionPaper').val(entryData.questionPaper);
+        //                 $('#edithoursSpentQuestion').val(entryData.hoursSpentQuestion);
+
+        //                 $('#editnumExaminations').val(entryData.numExaminations);
+        //                 $('#edithoursSpentExaminations').val(entryData.hoursSpentExaminations);
+        //                 $('#editnumAnswerBook').val(entryData.numAnswerBook);
+        //                 $('#edithoursSpentAnswerBook').val(entryData.hoursSpentAnswerBook);
+
+        //                 // Show the edit modal
+        //                 $('#editModal').modal('show');
+        //             }
+        //         });
+        //     });
+        // });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">

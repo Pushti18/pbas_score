@@ -159,89 +159,192 @@ if (mysqli_query($conn, $query)) {
         </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Subject Contents/Courses</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="myForm" action="cat1_courses_update.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editPbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editPbasYear" name="editPbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editcourseName">Course Name:</label>
+                                <input type="text" class="form-control" id="editcourseName" name="editcourseName">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editdetailofuploadedsubject">Detail of Uploaded Subject:</label>
+                                <input type="text" class="form-control" id="editdetailofuploadedsubject"
+                                    name="editdetailofuploadedsubject">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="edithoursSpentInnovation">Hours Spent:</label>
+                                <input type="number" class="form-control" id="edithoursSpentInnovation"
+                                    name="edithoursSpentInnovation" min="0">
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editdocumentInnovation">Upload Document Justifying Your Innovation:</label>
+                                <input type="file" class="form-control" id="editdocumentInnovation"
+                                    name="editdocumentInnovation" accept=".pdf, .doc, .docx">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edituploadexecutive">Also Upload an executive summary of the same in given
+                                    format by download
+                                    gi:</label>
+                                <input type="file" class="form-control" id="edituploadexecutive"
+                                    name="edituploadexecutive" accept=".pdf, .doc, .docx">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <!-- <button type="submit" class="btn btn-primary" id="uploadButton">Submit</button> -->
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                // AJAX request to fetch data of the selected entry
+                $.ajax({
+                    type: "GET",
+                    url: "cat1_courses_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+
+                        // Populate the edit modal form fields with fetched data
+                        $('#editEntryId').val(entryId);
+                        $('#editPbasYear').val(entryData.pbasYear);
+                        $('#editcourseName').val(entryData.courseName);
+                        $('#editdetailofuploadedsubject').val(entryData.detailofuploadedsubject);
+                        $('#edithoursSpentInnovation').val(entryData.hoursSpentInnovation);
+                        // Show the edit modal
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
     <script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-        const documentInput = document.getElementById('documentInnovation');
-        const file = documentInput.files[0];
+            const documentInput = document.getElementById('documentInnovation');
+            const file = documentInput.files[0];
 
-        if (!file) {
-            alert('Please select a file to upload.');
-            return;
-        }
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
 
-        // Create a FormData object to hold the file data
-        const formData = new FormData(this); // 'this' refers to the form element
+            // Create a FormData object to hold the file data
+            const formData = new FormData(this); // 'this' refers to the form element
 
-        // Send an AJAX request to the server using Fetch API
-        fetch('cat1_courses_insert.php', {
+            // Send an AJAX request to the server using Fetch API
+            fetch('cat1_courses_insert.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data); // Display server response (e.g., success message)
-            })
-            .catch(error => {
-                console.error(error); // Handle errors
-            });
-    });
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data); // Display server response (e.g., success message)
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        });
     </script>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
-        });
-    });
-    </script>
-    <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-    });
-    </script>
-    <script>
-    // $(document).ready(function() {
-    //     $("#myForm").submit(function(e) {
-    //         e.preventDefault();
-    //         var formData = $(this).serialize();
-    //         $.ajax({
-    //             type: "POST",
-    //             url: "cat1_courses_insert.php",
-    //             data: formData,
-    //             success: function(response) {
-    //                 alert(response);
-    //             }
-    //         });
-    //     });
-    // });
-
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat1_courses_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response); // Show success message or handle response accordingly
-                    $('#myModal').modal('hide'); // Close modal popup
-                    refreshTable(); // Refresh table data
-                }
             });
         });
-    });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        });
+    </script>
+    <script>
+        // $(document).ready(function() {
+        //     $("#myForm").submit(function(e) {
+        //         e.preventDefault();
+        //         var formData = $(this).serialize();
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "cat1_courses_insert.php",
+        //             data: formData,
+        //             success: function(response) {
+        //                 alert(response);
+        //             }
+        //         });
+        //     });
+        // });
+
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_courses_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response); // Show success message or handle response accordingly
+                        $('#myModal').modal('hide'); // Close modal popup
+                        refreshTable(); // Refresh table data
+                    }
+                });
+            });
+        });
     </script>
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -263,26 +366,26 @@ if (mysqli_query($conn, $query)) {
     </div>
 
     <script>
-    $(document).ready(function() {
-        $('.btn-delete').click(function() {
-            var id = $(this).data('id');
-            $('#deleteConfirmationModal').modal('show');
-            $('#confirmDeleteBtn').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "courses_delete_entry.php",
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        alert(response);
-                    },
-                    error: function(xhr, status, error) {}
+        $(document).ready(function () {
+            $('.btn-delete').click(function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "courses_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) { }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
                 });
-                $('#deleteConfirmationModal').modal('hide');
             });
         });
-    });
     </script>
 </body>
 

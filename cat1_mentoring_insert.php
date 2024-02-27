@@ -21,19 +21,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $points = floor($hoursSpent / 10);
     }
 
-    // Insert data into the database
-    $sql = "INSERT INTO mentoring (cat1_id,subcat_1,employee_id, pbasYear, mentorName, studentNames, outcomeMentoring, hoursSpent, points) 
-            VALUES (?,?,?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("isisssi", $employee_id, $pbasYear, $mentorName, $studentNames, $outcomeMentoring, $hoursSpent, $points);
-    if ($stmt->execute()) {
-        echo "Data inserted successfully.";
+    $sql = "INSERT INTO mentoring (cat1_id,subcat_1,employee_id, pbasYear, mentorName, studentNames, outcomeMentoring, hoursSpent, points)
+            VALUES ('$category', '$subcategory_id', '$employee_id', '$pbasYear', '$mentorName','$studentNames', '$outcomeMentoring', '$hoursSpent', '$points')";
+
+    mysqli_query($conn, $sql);
+
+    if (mysqli_error($conn)) {
+        echo "Error: " . mysqli_error($conn);
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Data inserted into mentoring table successfully.";
     }
 
-    // Close statement and database connection
-    $stmt->close();
-    $conn->close();
+    // Insert data into the database
+    // $sql = "INSERT INTO mentoring (cat1_id,subcat_1,employee_id, pbasYear, mentorName, studentNames, outcomeMentoring, hoursSpent, points) 
+    //         VALUES (?,?,?, ?, ?, ?, ?, ?, ?)";
+    // $stmt = $conn->prepare($sql);
+    // $stmt->bind_param("isisssi", $category, $subcategory_id, $employee_id, $pbasYear, $mentorName, $studentNames, $outcomeMentoring, $hoursSpent, $points);
+    // if ($stmt->execute()) {
+    //     echo "Data inserted successfully.";
+    // } else {
+    //     echo "Error: " . $stmt->error;
+    // }
+
+    // // Close statement and database connection
+    // $stmt->close();
+    // $conn->close();
 }
 ?>

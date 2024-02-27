@@ -70,8 +70,8 @@ if (mysqli_query($conn, $query)) {
                             echo "<td>{$row['natureOfInnovation']}</td>";
                             echo "<td>{$row['hoursSpentInnovation']}</td>";
                             echo "<td>
-                                     <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
-                                    <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                            <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                            <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
                                   </td>";
                             echo "</tr>";
                             echo "</tr>";
@@ -153,90 +153,178 @@ if (mysqli_query($conn, $query)) {
             </div>
         </div>
     </div>
+    <!-- Modal for editing existing entry -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Learning Methodology</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm" action="learning_methodologies_fetch_entry.php" method="POST"
+                        enctype="multipart/form-data">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editPbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editPbasYear" name="editPbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editCourseName">Course Name:</label>
+                                <input type="text" class="form-control" id="editCourseName" name="editCourseName">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editNatureOfInnovation">Nature of Innovation:</label>
+                                <input type="text" class="form-control" id="editNatureOfInnovation"
+                                    name="editNatureOfInnovation">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editHoursSpentInnovation">Hours Spent:</label>
+                                <input type="number" class="form-control" id="editHoursSpentInnovation"
+                                    name="editHoursSpentInnovation" min="0">
+                            </div>
+                        </div>
+                        <!-- Add file input for uploading a new file -->
+                        <div class="form-group">
+                            <label for="editAttachment">Upload New File:</label>
+                            <input type="file" class="form-control-file" id="editAttachment" name="editAttachment">
+                        </div>
+                        <!-- Add any additional fields if needed -->
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                // AJAX request to fetch data of the selected entry
+                $.ajax({
+                    type: "GET",
+                    url: "learning_methodologies_fetch_entry.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+
+                        // Populate the edit modal form fields with fetched data
+                        $('#editEntryId').val(entryId);
+                        $('#editPbasYear').val(entryData.pbasYear);
+                        $('#editCourseName').val(entryData.courseName);
+                        $('#editNatureOfInnovation').val(entryData.natureOfInnovation);
+                        $('#editHoursSpentInnovation').val(entryData.hoursSpentInnovation);
+
+                        // Show the edit modal
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
 
     <?php require "./components/category-table-top-script.php" ?>
     <script>
-    document.getElementById('myForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        document.getElementById('myForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-        const documentInput = document.getElementById('attachment');
-        const file = documentInput.files[0];
+            const documentInput = document.getElementById('attachment');
+            const file = documentInput.files[0];
 
-        if (!file) {
-            alert('Please select a file to upload.');
-            return;
-        }
+            if (!file) {
+                alert('Please select a file to upload.');
+                return;
+            }
 
-        // Create a FormData object to hold the file data
-        const formData = new FormData(this); // 'this' refers to the form element
+            // Create a FormData object to hold the file data
+            const formData = new FormData(this); // 'this' refers to the form element
 
-        // Send an AJAX request to the server using Fetch API
-        fetch('cat1_learning_methodologies_insert.php', {
+            // Send an AJAX request to the server using Fetch API
+            fetch('cat1_learning_methodologies_insert.php', {
                 method: 'POST',
                 body: formData,
             })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data); // Display server response (e.g., success message)
-            })
-            .catch(error => {
-                console.error(error); // Handle errors
-            });
-    });
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data); // Display server response (e.g., success message)
+                })
+                .catch(error => {
+                    console.error(error); // Handle errors
+                });
+        });
     </script>
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
-        });
-    });
-    </script>
-    <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
-        });
-    });
-    </script>
-
-    <script>
-    // $(document).ready(function () {
-    //     $("#myForm").submit(function (e) {
-    //         e.preventDefault();
-    //         var formData = $(this).serialize();
-    //         $.ajax({
-    //             type: "POST",
-    //             url: "cat1_learning_methodologies_insert.php",
-    //             data: formData,
-    //             success: function (response) {
-    //                 alert(response);
-    //             }
-    //         });
-    //     });
-    // });
-
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat1_learning_methodologies_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response); // Show success message or handle response accordingly
-                    $('#myModal').modal('hide'); // Close modal popup
-                    refreshTable(); // Refresh table data
-                }
             });
         });
-    });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
+        });
+    </script>
+
+    <script>
+        // $(document).ready(function () {
+        //     $("#myForm").submit(function (e) {
+        //         e.preventDefault();
+        //         var formData = $(this).serialize();
+        //         $.ajax({
+        //             type: "POST",
+        //             url: "cat1_learning_methodologies_insert.php",
+        //             data: formData,
+        //             success: function (response) {
+        //                 alert(response);
+        //             }
+        //         });
+        //     });
+        // });
+
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_learning_methodologies_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response); // Show success message or handle response accordingly
+                        $('#myModal').modal('hide'); // Close modal popup
+                        refreshTable(); // Refresh table data
+                    }
+                });
+            });
+        });
     </script>
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
@@ -258,26 +346,55 @@ if (mysqli_query($conn, $query)) {
     </div>
 
     <script>
-    $(document).ready(function() {
-        $('.btn-delete').click(function() {
-            var id = $(this).data('id');
-            $('#deleteConfirmationModal').modal('show');
-            $('#confirmDeleteBtn').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "learning_methodologies_delete_entry.php",
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        alert(response);
-                    },
-                    error: function(xhr, status, error) {}
+        // $(document).ready(function () {
+        //     $('.btn-delete').click(function () {
+        //         var id = $(this).data('id');
+        //         $('#deleteConfirmationModal').modal('show');
+        //         $('#confirmDeleteBtn').click(function () {
+        //             $.ajax({
+        //                 type: "POST",
+        //                 url: "learning_methodologies_delete_entry.php",
+        //                 data: {
+        //                     id: id
+        //                 },
+        //                 success: function (response) {
+        //                     alert(response);
+        //                 },
+        //                 error: function (xhr, status, error) { }
+        //             });
+        //             $('#deleteConfirmationModal').modal('hide');
+        //         });
+        //     });
+        // });
+        $(document).ready(function () {
+            // Use event delegation to handle click events for delete buttons
+            $('#details_table').on('click', '.btn-delete', function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+
+                $('#confirmDeleteBtn').off().on('click', function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "learning_methodologies_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                            // Reload or update the DataTable after successful deletion
+                            $('#details_table').DataTable().ajax.reload(); // Assuming you're using server-side processing
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr, status, error);
+                            // Handle errors if necessary
+                        }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
                 });
-                $('#deleteConfirmationModal').modal('hide');
             });
         });
-    });
+
+
     </script>
 
 </body>

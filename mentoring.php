@@ -142,7 +142,97 @@ if (mysqli_query($conn, $query)) {
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Mentoring</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
+                <div class="modal-body">
+                    <form id="editForm" action="cat1_mentoring_update.php" method="POST">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editPbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editPbasYear" name="editPbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editmentorName">Name of Mentor:</label>
+                                <input type="text" class="form-control" id="editmentorName" name="editmentorName">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editstudentNames">Name of Students:</label>
+                                <input type="text" class="form-control" id="editstudentNames" name="editstudentNames">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editoutcomeMentoring">Outcome Mentoring:</label>
+                                <input type="text" class="form-control" id="editoutcomeMentoring"
+                                    name="editoutcomeMentoring">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edithoursSpent">Hours Spent:</label>
+                                <input type="number" class="form-control" id="edithoursSpent" name="edithoursSpent"
+                                    min="0">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                // AJAX request to fetch data of the selected entry
+                $.ajax({
+                    type: "GET",
+                    url: "cat1_mentoring_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+
+                        // Populate the edit modal form fields with fetched data
+                        $('#editEntryId').val(entryId);
+                        $('#editPbasYear').val(entryData.pbasYear);
+                        $('#editmentorName').val(entryData.mentorName);
+                        $('#editstudentNames').val(entryData.studentNames);
+                        $('#editoutcomeMentoring').val(entryData.outcomeMentoring);
+                        $('#edithoursSpent').val(entryData.hoursSpent);
+
+                        // Show the edit modal
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">
