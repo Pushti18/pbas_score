@@ -58,7 +58,6 @@ mysqli_close($conn);
                             <th>PROJECT TITLE</th>
                             <th>DEGREE AWARD DATE</th>
                             <th>PROJECT YEAR</th>
-                            <th>APPROVAL STATUS</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
@@ -71,9 +70,11 @@ mysqli_close($conn);
                             echo "<td>{$row['project_title']}</td>";
                             echo "<td>{$row['degree_award_date']}</td>";
                             echo "<td>{$row['project_year']}</td>";
-
-                            // echo "<td>{$row['approval_status']}</td>";
-                            // echo "<td><a href='edit_research.php?id={$row['id']}'>Edit</a> | <a href='delete_research.php?id={$row['id']}'>Delete</a></td>";
+                            echo "<td>
+                            <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                            <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                        </td>";
+                            echo "</tr>";
                             echo "</tr>";
                         }
                         ?>

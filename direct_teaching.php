@@ -2,29 +2,26 @@
 session_start();
 include("db_connection.php");
 
-$category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
-$subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
-$subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
-$category_id = $_SESSION['category_id'];
+$subcategory_id = isset($_GET['']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
-$sql = "SELECT * FROM direct_teaching WHERE employee_id = '{$_SESSION['employee_id']}'";
+$employee_id = $_SESSION['employee_id'];
+$category = $_SESSION['cat1'];
+
+$sql = "SELECT * FROM direct_teaching WHERE employee_id='$employee_id'";
 $result = mysqli_query($conn, $sql);
 
 if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
 
-$employee_id = $_SESSION['employee_id'];
-$category = $_SESSION['cat1'];
-
-$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
-echo $query;
-if (mysqli_query($conn, $query)) {
-    // echo "Employee ID updated successfully in the database.";
-} else {
-    // echo "Error updating record: " . mysqli_error($conn);
-}
+// $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+// echo $query;
+// if (mysqli_query($conn, $query)) {
+//     // echo "Employee ID updated successfully in the database.";
+// } else {
+//     // echo "Error updating record: " . mysqli_error($conn);
+// }
 
 ?>
 
@@ -70,11 +67,10 @@ if (mysqli_query($conn, $query)) {
                             echo "<td>{$row['degree']}</td>";
                             echo "<td>{$row['hoursSpent']}</td>";
                             echo "<td>
-        <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
-        <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
-      </td>";
+                                <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                                <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                            </td>";
                             echo "</tr>";
-
                         }
                         ?>
                     </tbody>
@@ -82,7 +78,6 @@ if (mysqli_query($conn, $query)) {
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -449,9 +444,7 @@ if (mysqli_query($conn, $query)) {
         });
     </script>
     <script>
-        // Function to open edit modal
         function openEditModal(id) {
-            // Fetch data for the selected entry using AJAX
             $.ajax({
                 type: "GET",
                 url: "direct_teaching_edit_page.php",
@@ -459,23 +452,20 @@ if (mysqli_query($conn, $query)) {
                     id: id
                 },
                 success: function (response) {
-                    // Populate the modal with fetched data
                     $('#editModal .modal-content').html(response);
-                    $('#editModal').modal('show'); // Open the modal
+                    $('#editModal').modal('show');
                 },
                 error: function (xhr, status, error) {
-                    // Handle error
+                    console.log(error);
                 }
             });
         }
 
-        // Edit Button Click Event
         $('.btn-edit').click(function () {
             var id = $(this).data('id');
-            openEditModal(id); // Open edit modal for the selected entry
+            openEditModal(id);
         });
     </script>
-    <!-- HTML structure for modal confirmation dialog -->
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -517,35 +507,6 @@ if (mysqli_query($conn, $query)) {
             });
         });
     </script>
-
-    <!-- <script>
-    $(document).ready(function() {
-
-
-        // Delete Button Click Event
-        $('.btn-delete').click(function() {
-            var id = $(this).data('id');
-            var confirmation = confirm("Are you sure you want to delete this entry?");
-            if (confirmation) {
-                $.ajax({
-                    type: "POST",
-                    url: "direct_teaching_delete_entry.php",
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        alert(response); // Alert success message
-                        // You may want to reload the page or update the table here
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error
-                    }
-                });
-            }
-        });
-    });
-    </script> -->
-
 </body>
 
 </html>

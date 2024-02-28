@@ -2,9 +2,7 @@
 session_start();
 include("db_connection.php");
 
-$category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
-$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
-$subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
+$category_id = $_SESSION["cat1"];
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
@@ -17,13 +15,13 @@ if (!$result) {
 $employee_id = $_SESSION['employee_id'];
 $category = $_SESSION['cat1'];
 
-$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
-echo $query;
-if (mysqli_query($conn, $query)) {
-    // echo "Employee ID updated successfully in the database.";
-} else {
-    // echo "Error updating record: " . mysqli_error($conn);
-}
+// $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+// echo $query;
+// if (mysqli_query($conn, $query)) {
+//     // echo "Employee ID updated successfully in the database.";
+// } else {
+//     // echo "Error updating record: " . mysqli_error($conn);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -147,7 +145,7 @@ if (mysqli_query($conn, $query)) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Add Mentoring</h5>
+                    <h5 class="modal-title" id="editModalLabel">Update Mentoring</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -207,7 +205,6 @@ if (mysqli_query($conn, $query)) {
             $('.btn-edit').click(function () {
                 var entryId = $(this).data('id');
 
-                // AJAX request to fetch data of the selected entry
                 $.ajax({
                     type: "GET",
                     url: "cat1_mentoring_update.php",
@@ -217,8 +214,6 @@ if (mysqli_query($conn, $query)) {
                     success: function (response) {
                         // Parse the JSON response
                         var entryData = JSON.parse(response);
-
-                        // Populate the edit modal form fields with fetched data
                         $('#editEntryId').val(entryId);
                         $('#editPbasYear').val(entryData.pbasYear);
                         $('#editmentorName').val(entryData.mentorName);
@@ -226,7 +221,6 @@ if (mysqli_query($conn, $query)) {
                         $('#editoutcomeMentoring').val(entryData.outcomeMentoring);
                         $('#edithoursSpent').val(entryData.hoursSpent);
 
-                        // Show the edit modal
                         $('#editModal').modal('show');
                     }
                 });
@@ -283,6 +277,7 @@ if (mysqli_query($conn, $query)) {
                         alert(response); // Show success message or handle response accordingly
                         $('#myModal').modal('hide'); // Close modal popup
                         refreshTable(); // Refresh table data
+
                     }
                 });
             });

@@ -2,9 +2,7 @@
 session_start();
 include("db_connection.php");
 
-$category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
-$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
-$subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
+$category_id = $_SESSION["cat1"];
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
@@ -16,17 +14,8 @@ if (!$result) {
     die("Error: " . mysqli_error($conn));
 }
 
-
 $employee_id = $_SESSION['employee_id'];
 $category = $_SESSION['cat1'];
-
-$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
-echo $query;
-if (mysqli_query($conn, $query)) {
-    // echo "Employee ID updated successfully in the database.";
-} else {
-    // echo "Error updating record: " . mysqli_error($conn);
-}
 ?>
 
 <!DOCTYPE html>
@@ -34,12 +23,13 @@ if (mysqli_query($conn, $query)) {
 
 <head>
     <title> Examination Duties</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <?php require "./components/category-table-script.php" ?>
 </head>
 
 <body>
-    <!-- <?php require "./components/header.php" ?> -->
+    <?php require "./components/header.php" ?>
 
     <div class="main_div center">
         <h4>Examination Duties</h4>
@@ -199,7 +189,7 @@ if (mysqli_query($conn, $query)) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalModalLabel">Add Examination Duties</h5>
+                    <h5 class="modal-title" id="editModalModalLabel">Update Examination Duties</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -305,108 +295,90 @@ if (mysqli_query($conn, $query)) {
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <script>
-        $(document).ready(function () {
-            $('.btn-edit').click(function () {
-                var entryId = $(this).data('id');
+    $(document).ready(function() {
+        $('.btn-edit').click(function() {
+            var entryId = $(this).data('id');
+            console.log(entryId)
+            $.ajax({
+                type: "GET",
+                url: "cat1_exam_duties_update.php",
+                data: {
+                    entry_id: entryId
+                },
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    console.log(data);
+                    document.getElementById('editEntryId').value = data.id;
+                    document.getElementById('editpbasYear').value = data.pbas_year;
+                    document.getElementById('editsemester').value = data.semester;
+                    document.getElementById('editstreamName').value = data.stream_name;
+                    document.getElementById('editcourseName').value = data.course_name;
+                    document.getElementById('editquestionPaper').value = data
+                        .question_paper_count;
+                    document.getElementById('edithoursSpentQuestion').value = data
+                        .hours_spent_question;
+                    document.getElementById('editnumExaminations').value = data
+                        .examinations_count;
+                    document.getElementById('edithoursSpentExaminations').value = data
+                        .hours_spent_examinations;
+                    document.getElementById('editnumAnswerBook').value = data
+                        .answer_book_count;
+                    document.getElementById('edithoursSpentAnswerBook').value = data
+                        .hours_spent_answer_book;
 
-                // AJAX request to fetch data of the selected entry
-                $.ajax({
-                    type: "GET",
-                    url: "cat1_exam_duties_update.php",
-                    data: {
-                        entry_id: entryId
-                    },
-                    success: function (response) {
-                        // Parse the JSON response
-                        var data = JSON.parse(response);
-                        if (data.status == 'success') {
-                            // Populate the form fields with the fetched data
-                            $('#editEntryId').val(data.data.id);
-                            $('#editPbasYear').val(data.data.pbasYear);
-                            $('#editSemester').val(data.data.semester);
-                            $('#editStreamName').val(data.data.streamName);
-                            $('#editCourseName').val(data.data.courseName);
-                            $('#editQuestionPaper').val(data.data.questionPaper);
-                            $('#editHoursSpentQuestion').val(data.data.hoursSpentQuestion);
-                            $('#editNumExaminations').val(data.data.numExaminations);
-                            $('#editHoursSpentExaminations').val(data.data.hoursSpentExaminations);
-                            $('#editNumAnswerBook').val(data.data.numAnswerBook);
-                            $('#editHoursSpentAnswerBook').val(data.data.hoursSpentAnswerBook);
 
-                            // Show the edit modal
-                            $('#editModal').modal('show');
-                        } else {
-                            // Handle the error
-                            console.log('Error fetching data: ' + data.message);
-                        }
-                    }
-                });
+
+                    $('#editModal').modal('show');
+
+                }
             });
         });
-        // $(document).ready(function () {
-        //     $('.btn-edit').click(function () {
-        //         var entryId = $(this).data('id');
+    });
 
-        //         // AJAX request to fetch data of the selected entry
-        //         $.ajax({
-        //             type: "GET",
-        //             url: "cat1_exam_duties_update.php",
-        //             data: {
-        //                 entry_id: entryId
-        //             },
-        //             success: function (response) {
-        //                 // Parse the JSON response
-        //                 var entryData = JSON.parse(response);
-
-        //                 // Populate the edit modal form fields with fetched data
-        //                 $('#editEntryId').val(entryId);
-        //                 $('#editPbasYear').val(entryData.pbasYear);
-        //                 $('#editsemester').val(entryData.semester);
-        //                 $('#editstreamName').val(entryData.streamName);
-        //                 $('#editcourseName').val(entryData.courseName);
-        //                 $('#editquestionPaper').val(entryData.questionPaper);
-        //                 $('#edithoursSpentQuestion').val(entryData.hoursSpentQuestion);
-
-        //                 $('#editnumExaminations').val(entryData.numExaminations);
-        //                 $('#edithoursSpentExaminations').val(entryData.hoursSpentExaminations);
-        //                 $('#editnumAnswerBook').val(entryData.numAnswerBook);
-        //                 $('#edithoursSpentAnswerBook').val(entryData.hoursSpentAnswerBook);
-
-        //                 // Show the edit modal
-        //                 $('#editModal').modal('show');
-        //             }
-        //         });
-        //     });
-        // });
+    $(document).ready(function() {
+        $("#editForm").submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "cat1_exam_duties_update.php",
+                data: formData,
+                success: function(response) {
+                    alert(response);
+                    $('#editModal').modal('hide');
+                    window.location.reload();
+                }
+            });
+        });
+    });
     </script>
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $('#details_table').DataTable({
-                dom: 'Bfrtip',
-                lengthMenu: [
-                    [5, 10, 25, 50],
-                    ['5 Files', '10 Files', '25 Files', '50 Files']
-                ],
+    $(document).ready(function() {
+        $('#details_table').DataTable({
+            dom: 'Bfrtip',
+            lengthMenu: [
+                [5, 10, 25, 50],
+                ['5 Files', '10 Files', '25 Files', '50 Files']
+            ],
 
-            });
         });
+    });
     </script>
     <script>
-        $(document).ready(function () {
-            $('.datepicker').datepicker({
-                format: 'yyyy-mm-dd',
-                autoclose: true
-            });
+    $(document).ready(function() {
+        $('.datepicker').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true
         });
+    });
     </script>
     </script>
-    <!-- HTML structure for modal confirmation dialog -->
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Delete Confirmation</h4>
@@ -424,87 +396,57 @@ if (mysqli_query($conn, $query)) {
     </div>
 
     <script>
-        $(document).ready(function () {
-            $('.btn-delete').click(function () {
-                var id = $(this).data('id');
-                $('#deleteConfirmationModal').modal('show');
-                $('#confirmDeleteBtn').click(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "exam_duties_delete_entry.php",
-                        data: {
-                            id: id
-                        },
-                        success: function (response) {
-                            alert(response);
-                        },
-                        error: function (xhr, status, error) { }
-                    });
-                    $('#deleteConfirmationModal').modal('hide');
+    $(document).ready(function() {
+        $('.btn-delete').click(function() {
+            var id = $(this).data('id');
+            $('#deleteConfirmationModal').modal('show');
+            $('#confirmDeleteBtn').click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "exam_duties_delete_entry.php",
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        alert(response);
+                    },
+                    error: function(xhr, status, error) {}
                 });
+                $('#deleteConfirmationModal').modal('hide');
             });
         });
+    });
     </script>
+
     <script>
-        $(document).ready(function () {
-            $("#myForm").submit(function (e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: "cat1_exam_duties_insert.php",
-                    data: formData,
-                    success: function (response) {
-                        alert(response); // Show success message or handle response accordingly
-                        $('#myModal').modal('hide'); // Close modal popup
-                        refreshTable(); // Refresh table data
-                    }
-                });
+    $(document).ready(function() {
+        $("#myForm").submit(function(e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: "cat1_exam_duties_insert.php",
+                data: formData,
+                success: function(response) {
+                    alert(response);
+                    $('#myModal').modal('hide');
+                    p
+                    refreshTable();
+                }
             });
-
-            // Function to refresh table data
-            function refreshTable() {
-                $.ajax({
-                    type: "GET",
-                    url: "your_php_script_to_fetch_updated_data.php", // Replace with actual URL to fetch updated table data
-                    success: function (data) {
-                        $('#details_table tbody').html(data); // Update table body with new data
-                    }
-                });
-            }
         });
+
+        function refreshTable() {
+            $.ajax({
+                type: "GET",
+                url: "your_php_script_to_fetch_updated_data.php", // Replace with actual URL to fetch updated table data
+                success: function(data) {
+                    $('#details_table tbody').html(data); // Update table body with new data
+                }
+            });
+        }
+    });
     </script>
-
-    <!-- <script>
-        $(document).ready(function () {
-            $("#myForm").submit(function (e) {
-                e.preventDefault();
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: "cat1_exam_duties_insert.php",
-                    data: formData,
-                    success: function (response) {
-                        alert(response); // Show success message or handle response accordingly
-                        $('#myModal').modal('hide'); // Close modal popup
-                        refreshTable(); // Refresh table data
-                    }
-                });
-            });
-
-            // Function to refresh table data
-            function refreshTable() {
-                $.ajax({
-                    type: "GET",
-                    url: "cat1_exam_duties_insert.php", // Replace with actual URL to fetch table data
-                    success: function (data) {
-                        $('#details_table tbody').html(data); // Update table body with new data
-                    }
-                });
-            }
-        });
-    </script> -->
-
 </body>
 
 </html>

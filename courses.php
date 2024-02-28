@@ -2,9 +2,7 @@
 session_start();
 include("db_connection.php");
 
-$category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
-$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
-$subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
+$category_id = $_SESSION["cat1"];
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
@@ -17,13 +15,14 @@ if (!$result) {
 $employee_id = $_SESSION['employee_id'];
 $category = $_SESSION['cat1'];
 
-$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
-echo $query;
-if (mysqli_query($conn, $query)) {
-    // echo "Employee ID updated successfully in the database.";
-} else {
-    // echo "Error updating record: " . mysqli_error($conn);
-}
+// $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+// echo $query;
+// if (mysqli_query($conn, $query)) {
+//     // echo "Employee ID updated successfully in the database.";
+// } else {
+//     // echo "Error updating record: " . mysqli_error($conn);
+// }
+// 
 ?>
 
 <!DOCTYPE html>
@@ -253,7 +252,8 @@ if (mysqli_query($conn, $query)) {
                         $('#editEntryId').val(entryId);
                         $('#editPbasYear').val(entryData.pbasYear);
                         $('#editcourseName').val(entryData.courseName);
-                        $('#editdetailofuploadedsubject').val(entryData.detailofuploadedsubject);
+                        $('#editdetailofuploadedsubject').val(entryData
+                            .detailofuploadedsubject);
                         $('#edithoursSpentInnovation').val(entryData.hoursSpentInnovation);
                         // Show the edit modal
                         $('#editModal').modal('show');

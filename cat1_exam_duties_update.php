@@ -17,29 +17,28 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
 }
 
-// Updating data
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data and sanitize inputs
-    $entryId = $_POST["entry_id"];
-    $pbasYear = mysqli_real_escape_string($conn, $_POST["editPbasYear"]);
-    $semester = mysqli_real_escape_string($conn, $_POST["editsemester"]);
-    $streamName = mysqli_real_escape_string($conn, $_POST["editstreamName"]);
-    $courseName = mysqli_real_escape_string($conn, $_POST["editcourseName"]);
-    $questionPaper = mysqli_real_escape_string($conn, $_POST["editquestionPaper"]);
-    $hoursSpentQuestion = mysqli_real_escape_string($conn, $_POST["edithoursSpentQuestion"]);
-    $numExaminations = mysqli_real_escape_string($conn, $_POST["editnumExaminations"]);
-    $hoursSpentExaminations = mysqli_real_escape_string($conn, $_POST["edithoursSpentExaminations"]);
-    $numAnswerBook = mysqli_real_escape_string($conn, $_POST["editnumAnswerBook"]);
-    $hoursSpentAnswerBook = mysqli_real_escape_string($conn, $_POST["edithoursSpentAnswerBook"]);
+    // Retrieve data from the form
+    $entry_id = $_POST['entry_id'];
+    $pbasYear = $_POST['editpbasYear'];
+    $semester = $_POST['editsemester'];
+    $streamName = $_POST['editstreamName'];
+    $courseName = $_POST['editcourseName'];
+    $questionPaper = $_POST['editquestionPaper'];
+    $hoursSpentQuestion = $_POST['edithoursSpentQuestion'];
+    $numExaminations = $_POST['editnumExaminations'];
+    $hoursSpentExaminations = $_POST['edithoursSpentExaminations'];
+    $numAnswerBook = $_POST['editnumAnswerBook'];
+    $hoursSpentAnswerBook = $_POST['edithoursSpentAnswerBook'];
 
-    $sql = "UPDATE exam_duties SET pbas_year='$pbasYear', semester='$semester', stream_name='$streamName', course_name='$courseName', question_paper_count='$questionPaper', hours_spent_question='$hoursSpentQuestion', examinations_count='$numExaminations', hours_spent_examinations='$hoursSpentExaminations', answer_book_count='$numAnswerBook', hours_spent_answer_book='$hoursSpentAnswerBook' WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
-    echo $sql;
+    // Perform the update operation
+    $sql = "UPDATE exam_duties SET pbas_year='$pbasYear', semester='$semester', stream_name='$streamName', course_name='$courseName', question_paper_count='$questionPaper', hours_spent_question='$hoursSpentQuestion', examinations_count='$numExaminations', hours_spent_examinations='$hoursSpentExaminations', answer_book_count='$numAnswerBook', hours_spent_answer_book='$hoursSpentAnswerBook' WHERE id='$entry_id'";
 
     if (mysqli_query($conn, $sql)) {
-        echo "Entry updated successfully.";
+        echo "Record updated successfully";
     } else {
-        echo "Error updating entry: " . mysqli_error($conn);
+        echo "Error updating record: " . mysqli_error($conn);
     }
 
+    mysqli_close($conn);
 }
-?>

@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     $sql = "DELETE FROM extension WHERE id = '$id' AND employee_id='$employee_id' and cat2_id = '$category'";
-    // echo $sql;
+    echo $sql;
     if (mysqli_query($conn, $sql)) {
         echo "Entry deleted successfully.";
     } else {

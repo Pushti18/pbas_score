@@ -2,22 +2,20 @@
 session_start();
 include("db_connection.php");
 global $conn;
-if (isset($_GET['employee_id']) && isset($_GET['category'])) {
 
-    echo $_SESSION["category"];
-
+if (isset($_GET['employee_id']) && isset($_SESSION['cat1'])) {
     $employee_id = $_GET['employee_id'];
-    $category = $_GET['category'];
+    $category = $_SESSION["cat1"];
 
-    $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` =  $category";
-    echo $query;
-    if (mysqli_query($conn, $query)) {
-        // echo "Employee ID updated successfully in the database.";
-    } else {
-        // echo "Error updating record: " . mysqli_error($conn);
-    }
+    // $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` =  $category";
+    // echo $query;
+    // if (mysqli_query($conn, $query)) {
+    //     // echo "Employee ID updated successfully in the database.";
+    // } else {
+    //     // echo "Error updating record: " . mysqli_error($conn);
+    // }
     $_SESSION['employee_id'] = $employee_id;
-    $_SESSION['category_id'] = $category;
+    // $_SESSION['category_id'] = $category;
 }
 ?>
 

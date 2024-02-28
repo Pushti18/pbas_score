@@ -2,9 +2,7 @@
 session_start();
 include("db_connection.php");
 
-$category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
-$category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
-$subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
+$category_id = $_SESSION['cat1'];
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
 global $conn;
 
@@ -18,13 +16,13 @@ if (!$result) {
 $employee_id = $_SESSION['employee_id'];
 $category = $_SESSION['cat1'];
 
-$query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
-echo $query;
-if (mysqli_query($conn, $query)) {
-    // echo "Employee ID updated successfully in the database.";
-} else {
-    // echo "Error updating record: " . mysqli_error($conn);
-}
+// $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` = $category and `subcategory_id`=$subcategory_id";
+// echo $query;
+// if (mysqli_query($conn, $query)) {
+//     // echo "Employee ID updated successfully in the database.";
+// } else {
+//     // echo "Error updating record: " . mysqli_error($conn);
+// }
 ?>
 
 <!DOCTYPE html>
@@ -198,12 +196,10 @@ if (mysqli_query($conn, $query)) {
                                     name="editHoursSpentInnovation" min="0">
                             </div>
                         </div>
-                        <!-- Add file input for uploading a new file -->
                         <div class="form-group">
                             <label for="editAttachment">Upload New File:</label>
                             <input type="file" class="form-control-file" id="editAttachment" name="editAttachment">
                         </div>
-                        <!-- Add any additional fields if needed -->
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
                 </div>
@@ -216,7 +212,6 @@ if (mysqli_query($conn, $query)) {
             $('.btn-edit').click(function () {
                 var entryId = $(this).data('id');
 
-                // AJAX request to fetch data of the selected entry
                 $.ajax({
                     type: "GET",
                     url: "learning_methodologies_fetch_entry.php",
@@ -224,17 +219,12 @@ if (mysqli_query($conn, $query)) {
                         entry_id: entryId
                     },
                     success: function (response) {
-                        // Parse the JSON response
                         var entryData = JSON.parse(response);
-
-                        // Populate the edit modal form fields with fetched data
                         $('#editEntryId').val(entryId);
                         $('#editPbasYear').val(entryData.pbasYear);
                         $('#editCourseName').val(entryData.courseName);
                         $('#editNatureOfInnovation').val(entryData.natureOfInnovation);
                         $('#editHoursSpentInnovation').val(entryData.hoursSpentInnovation);
-
-                        // Show the edit modal
                         $('#editModal').modal('show');
                     }
                 });
@@ -255,10 +245,8 @@ if (mysqli_query($conn, $query)) {
                 return;
             }
 
-            // Create a FormData object to hold the file data
             const formData = new FormData(this); // 'this' refers to the form element
 
-            // Send an AJAX request to the server using Fetch API
             fetch('cat1_learning_methodologies_insert.php', {
                 method: 'POST',
                 body: formData,
@@ -382,7 +370,8 @@ if (mysqli_query($conn, $query)) {
                         success: function (response) {
                             alert(response);
                             // Reload or update the DataTable after successful deletion
-                            $('#details_table').DataTable().ajax.reload(); // Assuming you're using server-side processing
+                            $('#details_table').DataTable().ajax
+                                .reload(); // Assuming you're using server-side processing
                         },
                         error: function (xhr, status, error) {
                             console.error(xhr, status, error);
@@ -393,8 +382,6 @@ if (mysqli_query($conn, $query)) {
                 });
             });
         });
-
-
     </script>
 
 </body>

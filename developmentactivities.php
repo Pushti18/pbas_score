@@ -200,7 +200,148 @@ if (mysqli_query($conn, $query)) {
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Professional Development Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
+                <div class="modal-body">
+
+                    <form id="editForm" action="cat2_developmentactivities_update.php" method="POST">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editpbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editmainActivity">Main Activity:</label>
+                                <select class="form-control" id="editmainActivity" name="editmainActivity">
+                                    <option value="discipline_related_co_curricular_activities">Professional Development
+                                        Activities</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editsubActivity">Sub Activity:</label>
+                                <select class="form-control" id="editsubActivity" name="editsubActivity">
+                                    <option value="select_sub_activity">Select Sub Activity</option>
+                                    <option value="industrial_visits">FDP</option>
+                                    <option value="remedial_classes">Workshop</option>
+                                    <option value="special_classes">Seminar
+                                    </option>
+                                    <option value="academic_clubs_committee">Lecture / Expert Talk</option>
+                                    <option value="debates_presentations">STTP</option>
+                                    <option value="internships">Industrial Training</option>
+                                    <option value="exchange_programs">Recognized organization Visit</option>
+                                    <option value="preparing_students_events">Dissemination Activity attended</option>
+                                    <option value="career_counseling">Training</option>
+                                    <option value="competitive_exams">Conference</option>
+                                    <option value="expert_lectures">Professional Membership
+                                    </option>
+                                    <option value="tech_fest">JOURNALS/ Magazine Article</option>
+                                    <option value="celebrations">Conference paper Presentation</option>
+                                    <option value="celebrations">Conference poster Presentation</option>
+                                    <option value="celebrations">Artical</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editactivityTitle">Activity Title:</label>
+                                <input type="text" class="form-control" id="editactivityTitle" name="editactivityTitle">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editbriefRole">Brief Role/No of Students:</label>
+                                <input type="text" class="form-control" id="editbriefRole" name="editbriefRole">
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editsemester">Semester:</label>
+                                <select class="form-control" id="editsemester" name="editsemester">
+                                    <?php
+                                    for ($i = 1; $i <= 8; $i++) {
+                                        echo "<option value='Sem {$i}'>Sem {$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edithoursSpentAnswerBook">Hours Spent:</label>
+                                <input type="number" class="form-control" id="edithoursSpentAnswerBook"
+                                    name="edithoursSpentAnswerBook" min="0">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="attachment">Attachment (if available):</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment"
+                                    accept=".pdf, .doc, .docx">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editdescription">Description:</label>
+                            <textarea class="form-control" id="editdescription" name="editdescription"
+                                rows="4"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    url: "cat2_developmentactivities_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+                        $('#editEntryId').val(entryId);
+                        $('#editPbasYear').val(entryData.pbasYear);
+                        $('#editmainActivity').val(entryData.mainActivity);
+                        $('#editsubActivity').val(entryData.subActivity);
+                        $('#editactivityTitle').val(entryData.activityTitle);
+                        $('#editbriefRole').val(entryData.briefRole);
+                        $('#editsemester').val(entryData.semester);
+                        $('#edithoursSpentAnswerBook').val(entryData.hoursSpentAnswerBook);
+                        $('#editdescription').val(entryData.description);
+
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
     <!-- <script>
         document.getElementById('myForm').addEventListener('submit', function (event) {
