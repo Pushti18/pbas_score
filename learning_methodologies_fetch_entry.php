@@ -26,12 +26,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $natureOfInnovation = mysqli_real_escape_string($conn, $_POST["editNatureOfInnovation"]);
     $hoursSpentInnovation = mysqli_real_escape_string($conn, $_POST["editHoursSpentInnovation"]);
     $hours = intval($hoursSpentInnovation); // Convert hours to integer
+
+    $existingFileName = $_POST['editAttachment'];
+    $newFileName = $_FILES['editAttachment']['name'];
+    if ($newFileName) {
+        // New file has been uploaded; handle the file upload and store the new file name
+        $newFilePath = "uploads/" . $newFileName;
+        // Move the uploaded file to the target location
+        move_uploaded_file($_FILES['editAttachment']['tmp_name'], $newFilePath);
+    } else {
+        // No new file has been uploaded; keep the existing file
+        $newFileName = $existingFileName;
+    }
     $points = 0; // Initialize points
     if ($hours >= 10) {
         // Calculate points: 1 point for every 10 hours
         $points = floor($hours / 10);
     }
-    $sql = "UPDATE learning_methodologies SET pbasYear = '$pbasYear', courseName = '$courseName', natureOfInnovation = '$natureOfInnovation', hoursSpentInnovation = '$hoursSpentInnovation', points='$points' WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
+    $sql = "UPDATE learning_methodologies SET attachment='$existingFileName', pbasYear = '$pbasYear', courseName = '$courseName', natureOfInnovation = '$natureOfInnovation', hoursSpentInnovation = '$hoursSpentInnovation', points='$points' WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
     echo $sql;
     // if (isset($_FILES["editAttachment"]) && $_FILES["editAttachment"]["error"] == UPLOAD_ERR_OK) {
     //     $file = file_get_contents($_FILES["editAttachment"]["tmp_name"]);

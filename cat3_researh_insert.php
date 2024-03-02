@@ -35,8 +35,8 @@ if ($project_for == 'Consultancy') {
     }
 }
 
-$sql = "INSERT INTO research (cat3_id,subcat_3,employee_id,project_category, project_for, pbas_year, project_duration,title, funding_agency, grant_amount, approval_copy_path, pbas_score) 
-        VALUES ('$category','$subcategory_id','$employee_id','$project_category', '$project_for', '$pbas_year', '$project_duration', '$title','$funding_agency', '$grant_amount', '$approval_copy', '$pbasScore')";
+$sql = "INSERT INTO research (cat3_id,subcat_3,employee_id,project_category, project_for, pbas_year, project_duration,title, funding_agency, grant_amount, pbas_score) 
+        VALUES ('$category','$subcategory_id','$employee_id','$project_category', '$project_for', '$pbas_year', '$project_duration', '$title','$funding_agency', '$grant_amount',  '$pbasScore')";
 mysqli_query($conn, $sql);
 
 if (mysqli_error($conn)) {

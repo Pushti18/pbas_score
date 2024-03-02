@@ -225,6 +225,8 @@ $category = $_SESSION['cat1'];
                         $('#editCourseName').val(entryData.courseName);
                         $('#editNatureOfInnovation').val(entryData.natureOfInnovation);
                         $('#editHoursSpentInnovation').val(entryData.hoursSpentInnovation);
+                        $('#editAttachment').val(entryData.Attachment);
+
                         $('#editModal').modal('show');
                     }
                 });

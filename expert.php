@@ -59,7 +59,6 @@ mysqli_close($conn);
                             <th>PBAS YEAR</th>
                             <th>TYPE</th>
                             <th>TALK LEVEL</th>
-                            <th>APPROVAL STATUS</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
@@ -73,9 +72,11 @@ mysqli_close($conn);
                             echo "<td>{$row['pbas_year']}</td>";
                             echo "<td>{$row['type']}</td>";
                             echo "<td>{$row['talk_level']}</td>";
-
-                            // echo "<td>{$row['approval_status']}</td>";
-                            // echo "<td><a href='edit_research.php?id={$row['id']}'>Edit</a> | <a href='delete_research.php?id={$row['id']}'>Delete</a></td>";
+                            echo "<td>
+                            <button class='btn btn-info btn-edit' data-id='{$row['id']}' data-toggle='modal' data-target='#editModal'>Edit</button>
+                            <button class='btn btn-danger btn-delete' data-id='{$row['id']}'>Delete</button>
+                        </td>";
+                            echo "</tr>";
                             echo "</tr>";
                         }
                         ?>
@@ -200,10 +201,10 @@ mysqli_close($conn);
             const documentInput = document.getElementById('attachment');
             const file = documentInput.files[0];
 
-            if (!file) {
-                alert('Please select a file to upload.');
-                return;
-            }
+            // if (!file) {
+            //     alert('Please select a file to upload.');
+            //     return;
+            // }
 
             // Create a FormData object to hold the file data
             const formData = new FormData(this); // 'this' refers to the form element
@@ -259,6 +260,49 @@ mysqli_close($conn);
                 });
             });
         });
+    </script>
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this entry?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.btn-delete', function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "expert_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) {
+                        }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
+                });
+            });
+        });
+
     </script>
 </body>
 

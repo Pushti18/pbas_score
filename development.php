@@ -113,7 +113,7 @@ mysqli_close($conn);
                                 <label for="researchType">Type Research:</label>
                                 <select class="form-control" id="researchType" name="researchType">
                                     <option value="Please Select">Please Select</option>
-                                    <option value="R&D">RND</option>
+                                    <option value="RND">RND</option>
                                     <option value="Consultancy">Consultancy</option>
                                     <!-- Add more options as needed -->
                                 </select>
@@ -191,10 +191,10 @@ mysqli_close($conn);
             const documentInput = document.getElementById('attachment');
             const file = documentInput.files[0];
 
-            if (!file) {
-                alert('Please select a file to upload.');
-                return;
-            }
+            // if (!file) {
+            //     alert('Please select a file to upload.');
+            //     return;
+            // }
 
             // Create a FormData object to hold the file data
             const formData = new FormData(this); // 'this' refers to the form element
@@ -220,10 +220,10 @@ mysqli_close($conn);
             const documentInput = document.getElementById('executiveSummary');
             const file = documentInput.files[0];
 
-            if (!file) {
-                alert('Please select a file to upload.');
-                return;
-            }
+            // if (!file) {
+            //     alert('Please select a file to upload.');
+            //     return;
+            // }
 
             // Create a FormData object to hold the file data
             const formData = new FormData(this); // 'this' refers to the form element
@@ -269,6 +269,49 @@ mysqli_close($conn);
                 });
             });
         });
+    </script>
+    <div id="deleteConfirmationModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this entry?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.btn-delete', function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "development_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            alert(response);
+                        },
+                        error: function (xhr, status, error) {
+                        }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
+                });
+            });
+        });
+
     </script>
 </body>
 
