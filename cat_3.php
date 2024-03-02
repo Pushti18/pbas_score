@@ -102,7 +102,7 @@ if (isset($_GET['employee_id']) && isset($_GET['category'])) {
 
             <div class="category">
                 <div class="tick-circle-icon"></div>
-                <a href="research.php">
+                <a href="">
                     <strong>Category : III-C(i) - Research Projects</strong>
                 </a>
             </div>

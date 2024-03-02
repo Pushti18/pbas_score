@@ -169,6 +169,99 @@ mysqli_close($conn);
         ?>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Fellowships / Awards</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="myForm" action="cat3_fellowship_update.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edittitle">Title:</label>
+                                <input type="text" class="form-control" id="edittitle" name="edittitle">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editassociatedOrganization">Associated Organization:</label>
+                                <input type="text" class="form-control" id="editassociatedOrganization"
+                                    name="editassociatedOrganization">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editfellowshipAwards">Fellowship/Awards:</label>
+                                <select class="form-control" id="editfellowshipAwards" name="editfellowshipAwards">
+                                    <option value="International">International Award/Fellowship</option>
+                                    <option value="National">National Award</option>
+                                    <option value="StateUniversity">State/University level</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editpbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="attachment">Award/Fellowship Copy:</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment" accept=".pdf">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    url: "cat3_fellowship_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+                        $('#editEntryId').val(entryId);
+                        $('#edittitle').val(entryData.title);
+                        $('#editassociatedOrganization').val(entryData.associated_organization);
+                        $('#editfellowshipAwards').val(entryData.fellowship_awards);
+                        $('#editpbasYear').val(entryData.pbas_year);
+
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
     <script>
         document.getElementById('myForm').addEventListener('submit', function (event) {

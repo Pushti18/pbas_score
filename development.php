@@ -183,6 +183,123 @@ mysqli_close($conn);
         ?>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Research Development Detail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="myForm" action="cat3_development_update.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <!-- Additional Fields -->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edittitle">Title:</label>
+                                <input type="text" class="form-control" id="edittitle" name="edittitle" value="">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editresearchType">Type Research:</label>
+                                <select class="form-control" id="editresearchType" name="editresearchType">
+                                    <option value="Please Select">Please Select</option>
+                                    <option value="RND">RND</option>
+                                    <option value="Consultancy">Consultancy</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editsponserType">Sponsor Type:</label>
+                                <select class="form-control" id="editsponserType" name="editsponserType">
+                                    <option value="Please Select">Please Select</option>
+                                    <option value="Sponsored">Sponsored</option>
+                                    <option value="In-House">In-House</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editremarks">Remarks:</label>
+                                <input type="text" class="form-control" id="editremarks" name="editremarks" value="">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editpbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editattachment">Upload Documents:</label>
+                                <input type="file" class="form-control" id="editattachment" name="editattachment"
+                                    accept=".pdf, .doc, .docx">
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+
+                            <div class="form-group col-md-6">
+                                <label for="editexecutiveSummary">Upload Executive Summary:</label>
+                                <input type="file" class="form-control" id="editexecutiveSummary"
+                                    name="editexecutiveSummary" accept=".pdf">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    url: "cat3_development_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+                        $('#editEntryId').val(entryId);
+
+                        $('#editpbasYear').val(entryData.pbas_year);
+                        $('#editsponserType').val(entryData.sponsor_type);
+                        $('#editremarks').val(entryData.remarks);
+                        $('#editresearchType').val(entryData.research_type);
+                        $('#edittitle').val(entryData.title);
+
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
     <script>
         document.getElementById('myForm').addEventListener('submit', function (event) {

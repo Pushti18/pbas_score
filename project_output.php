@@ -164,6 +164,117 @@ mysqli_close($conn);
         </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Projects Outcome/Outputs</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="myForm" action="cat3_project_output_update.php" method="POST">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editpbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="edittitle">Title:</label>
+                                <input type="text" class="form-control" id="edittitle" name="edittitle">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editprojectOutcome">Project Outcome:</label>
+                                <textarea class="form-control" id="editprojectOutcome"
+                                    name="editprojectOutcome"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editregion">Region:</label>
+                                <select class="form-control" id="editregion" name="editregion">
+                                    <option value="Please Select">Please Select</option>
+                                    <option value="National">National</option>
+                                    <option value="International">International</option>
+                                    <option value="International Bodies">International Bodies</option>
+                                    <option value="Central Government Bodies">Central Government Bodies</option>
+                                    <option value="State Government Bodies">State Government Bodies</option>
+                                    <option value="Local">Local</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editdetailsOfOutcome">Details of Outcome:</label>
+                                <textarea class="form-control" id="editdetailsOfOutcome"
+                                    name="editdetailsOfOutcome"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Patent Register:</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="editpatentRegister"
+                                        id="editpatentYes" value="Yes">
+                                    <label class="form-check-label" for="editpatentYes">Yes</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="editpatentRegister"
+                                        id="editpatentNo" value="No">
+                                    <label class="form-check-label" for="editpatentNo">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    url: "cat3_project_output_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+                        $('#editEntryId').val(entryId);
+                        $('#editpbasYear').val(entryData.pbas_year);
+                        $('#edittitle').val(entryData.title);
+                        $('#editprojectOutcome').val(entryData.project_outcome);
+                        $('#editregion').val(entryData.region);
+                        $('#editdetailsOfOutcome').val(entryData.details_of_outcome);
+                        $('#editpatentRegister').val(entryData.patent_register);
+
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
     <?php require "./components/category-table-top-script.php" ?>
     <script>
         document.getElementById('myForm').addEventListener('submit', function (event) {

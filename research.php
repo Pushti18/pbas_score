@@ -213,8 +213,19 @@ mysqli_close($conn);
                             </div>
                         </div>
 
+
                         <div class="form-row">
                             <div class="form-group col-md-6">
+                                <label for="editpbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                            <!-- <div class="form-group col-md-6">
                                 <label for="editpbasYear">PBAS Year:</label>
                                 <select class="form-control" id="edityear" name="edityear">
                                     <?php
@@ -226,7 +237,7 @@ mysqli_close($conn);
                                     }
                                     ?>
                                 </select>
-                            </div>
+                            </div> -->
                             <div class="form-group col-md-6">
                                 <label for="edittitle">Title:</label>
                                 <input type="text" class="form-control" id="edittitle" name="edittitle">
@@ -248,7 +259,9 @@ mysqli_close($conn);
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="editgrantAmount">Grant Amount:</label>
-                                <input type="text" class="form-control" id="grantAmount" name="grantAmount">
+                                <input type="text" class="form-control" name="editgrantAmount" id="editgrantAmount"
+                                    value="">
+                                <!-- <input type="text" class="form-control" id="grantAmount" name="grantAmount"> -->
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="attachment">Approval Copy:</label>
@@ -278,13 +291,13 @@ mysqli_close($conn);
                         // Parse the JSON response
                         var entryData = JSON.parse(response);
                         $('#editEntryId').val(entryId);
-                        $('#editprojectCategory').val(entryData.projectCategory);
-                        $('#editprojectFor').val(entryData.projectFor);
-                        $('#editpbasYear').val(entryData.pbasYear);
+                        $('#editprojectCategory').val(entryData.project_category);
+                        $('#editprojectFor').val(entryData.project_for);
+                        $('#editpbasYear').val(entryData.pbas_score);
                         $('#edittitle').val(entryData.title);
-                        $('#editfundingAgency').val(entryData.fundingAgency);
-                        $('#editprojectDuration').val(entryData.projectDuration);
-                        $('#editgrantAmount').val(entryData.grantAmount);
+                        $('#editfundingAgency').val(entryData.funding_agency);
+                        $('#editprojectDuration').val(entryData.project_duration);
+                        $('#editgrantAmount').val(entryData.grant_amount);
 
                         $('#editModal').modal('show');
                     }

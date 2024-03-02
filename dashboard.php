@@ -2,18 +2,7 @@
 session_start();
 include("db_connection.php");
 global $conn;
-// $category = $_SESSION['cat1'];
-// $subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
-// SELECT SUM(points) as total_points FROM direct_teaching WHERE employee_id = [employee_id] AND cat1_id = [cat1_id];
 
-// SELECT SUM(points) as total_points FROM exam_duties WHERE employee_id = [employee_id] AND cat1_id = [cat1_id];
-
-// SELECT SUM(points) as total_points FROM learning_methodologies WHERE employee_id = [employee_id] AND cat1_id = [cat1_id];
-
-// SELECT SUM(points) as total_points FROM courses WHERE employee_id = [employee_id] AND cat1_id = [cat1_id];
-
-// SELECT SUM(points) as total_points FROM mentoring WHERE employee_id = [employee_id] AND cat1_id = [cat1_id]; 
-// $employee_id = $_SESSION['employee_id'];
 $employee_id = $_SESSION['employee_id'];
 function getCat1TotalPoints()
 {
@@ -63,47 +52,31 @@ function getCat2TotalPoints()
 
     return $row['total_points'];
 }
-// function getCat2TotalPoints()
-// {
-//     global $conn;
 
-//     // $sql = "SELECT SUM(total_points) as total_points FROM (
-//     //     SELECT SUM(points) as total_points FROM discipline WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     //     UNION ALL
-//     //     SELECT SUM(points) as total_points FROM othercocurricular WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     //     UNION ALL
-//     //     SELECT SUM(points) as total_points FROM extension WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     //     UNION ALL
-//     //     SELECT SUM(points) as total_points FROM administrative WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     //     UNION ALL
-//     //     SELECT SUM(points) as total_points FROM others WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     //     UNION ALL
-//     //     SELECT SUM(points) as total_points FROM development_activities WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     //     UNION ALL
-//     //     SELECT SUM(points) as total_points FROM participation WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat2_id = 'cat2'
-//     // ) as total_points_table";
 
-//     $sql = "SELECT 
-//     (SELECT SUM(points) FROM discipline WHERE employee_id = " . $_SESSION['employee_id'] . ") +
-//     (SELECT SUM(points) FROM othercocurricular WHERE employee_id = " . $_SESSION['employee_id'] . ") +
-//     (SELECT SUM(points) FROM extension WHERE employee_id = " . $_SESSION['employee_id'] . ") +
-//     (SELECT SUM(points) FROM administrative WHERE employee_id = " . $_SESSION['employee_id'] . ") +
-//     (SELECT SUM(points) FROM others WHERE employee_id = " . $_SESSION['employee_id'] . ") +
-//     (SELECT SUM(points) FROM development_activities WHERE employee_id = " . $_SESSION['employee_id'] . ") +
-//     (SELECT SUM(points) FROM participation WHERE employee_id = " . $_SESSION['employee_id'] . ") as total_points";
-//     echo ($sql);
-//     $result = $conn->query($sql);
-//     if (!$result) {
-//         die('Invalid query: ' . $conn->error);
-//     }
-//     $result = $conn->query($sql);
-//     $row = $result->fetch_assoc();
+function getCat3TotalPoints()
+{
+    global $conn;
 
-//     // Convert the associative array to a JSON string
-//     $jsonString = json_encode($row);
-//     // echo ($jsonString);
-//     return $jsonString;
-// }
+    $sql = "SELECT 
+        (SELECT SUM(pbas_score) FROM research WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT SUM(pbas_score) FROM project_output WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT SUM(pbas_score) FROM guidance WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT SUM(pbas_score) FROM fellowship WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT SUM(pbas_score) FROM expert WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT SUM(pbas_score) FROM development WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') as total_points";
+    // echo ($sql);
+    $result = $conn->query($sql);
+    if (!$result) {
+        die('Invalid query: ' . $conn->error);
+    }
+    $row = $result->fetch_assoc();
+    if (!isset($row['total_points'])) {
+        die('Unexpected query result format');
+    }
+
+    return $row['total_points'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -135,11 +108,15 @@ function getCat2TotalPoints()
                     $cat2TotalPointsJson = getCat2TotalPoints();
                     $cat2TotalPoints = json_decode($cat2TotalPointsJson, true)['total_points'];
 
+                    $cat3TotalPointsJson = getCat3TotalPoints();
+                    $cat3TotalPoints = json_decode($cat3TotalPointsJson, true)['total_points'];
+
+
                     $dataPoints = array(
                         array("label" => "Cat 1", "value" => $cat1TotalPoints),
                         array("label" => "Cat 2", "value" => $cat2TotalPointsJson),
-                        array("label" => "Cat 3", "value" => 0),
-                        array("label" => "Total Points", "value" => $cat1TotalPoints + $cat2TotalPointsJson),
+                        array("label" => "Cat 3", "value" => $cat3TotalPointsJson),
+                        array("label" => "Total Points", "value" => $cat1TotalPoints + $cat2TotalPointsJson + $cat3TotalPointsJson),
                     );
                     $totalPoints = array_sum(array_column($dataPoints, 'value'));
                     ?>

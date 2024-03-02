@@ -186,6 +186,145 @@ mysqli_close($conn);
         </div>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Research Guidance: PhD. programme</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="myForm" action="cat3_guidance_update.php" method="POST">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editnameOfUniversity">Name of the University:</label>
+                                <input type="text" class="form-control" id="editnameOfUniversity"
+                                    name="editnameOfUniversity">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editdegree">Degree:</label>
+                                <select class="form-control" id="editdegree" name="editdegree">
+                                    <option value="Select Degree">Select Degree</option>
+                                    <option value="Ph.D">Ph.D</option>
+                                    <!-- Add more options for other degrees as needed -->
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editdegreeAwardDate">Degree Award Date:</label>
+                                <input type="date" class="form-control" id="editdegreeAwardDate"
+                                    name="editdegreeAwardDate">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editstudentName">Student Name:</label>
+                                <input type="text" class="form-control" id="editstudentName" name="editstudentName">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editenrollmentNo">Enrollment No:</label>
+                                <input type="text" class="form-control" id="editenrollmentNo" name="editenrollmentNo">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editprojectTitle">Project Title:</label>
+                                <input type="text" class="form-control" id="editprojectTitle" name="editprojectTitle">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editprojectYear">Project Year:</label>
+                                <select class="form-control" id="editprojectYear" name="editprojectYear">
+                                    <?php
+                                    $startYear = 2015;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        $nextYear = $i + 1;
+                                        echo "<option value='{$i}-{$nextYear}'>{$i}-{$nextYear}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="editprojectType">Project Type:</label>
+                                <select class="form-control" id="editprojectType" name="editprojectType">
+                                    <option value="Research">Select Type</option>
+                                    <option value="Thesis">In House</option>
+                                    <option value="Other">Industry</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editthesisSubmissionDate">Thesis/Project Submission Date:</label>
+                                <input type="date" class="form-control" id="editthesisSubmissionDate"
+                                    name="editthesisSubmissionDate">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editcurrentStatusOfWork">Current Status of Work:</label>
+                                <select class="form-control" id="editcurrentStatusOfWork"
+                                    name="editcurrentStatusOfWork">
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    url: "cat3_guidance_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+                        $('#editEntryId').val(entryId);
+
+                        $('#editnameOfUniversity').val(entryData.name_of_university);
+                        $('#editdegree').val(entryData.degree);
+                        $('#editdegreeAwardDate').val(entryData.degree_award_date);
+                        $('#editstudentName').val(entryData.student_name);
+                        $('#editenrollmentNo').val(entryData.enrollment_no);
+                        $('#editprojectTitle').val(entryData.project_title);
+                        $('#editprojectYear').val(entryData.project_year);
+                        $('#editprojectType').val(entryData.project_type);
+                        $('#editthesisSubmissionDate').val(entryData.thesis_submission_date);
+                        $('#editcurrentStatusOfWork').val(entryData.current_status_of_work);
+
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">

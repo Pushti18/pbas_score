@@ -26,10 +26,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pbas_year = mysqli_real_escape_string($conn, isset($_POST["editpbasYear"]) ? $_POST["editpbasYear"] : '');
     $project_duration = mysqli_real_escape_string($conn, $_POST["editprojectDuration"]);
     $funding_agency = mysqli_real_escape_string($conn, $_POST["editfundingAgency"]);
-    $grant_amount = mysqli_real_escape_string($conn, isset($_POST["editgrantAmount"]) ? (int) $_POST["editgrantAmount"] : '');
+    // $grant_amount = mysqli_real_escape_string($conn, isset($_POST["editgrantAmount"]) ? $_POST["editgrantAmount"] : '');
     $title = mysqli_real_escape_string($conn, $_POST["edittitle"]);
-
-    echo ($project_category);
+    // $grant_amount = mysqli_real_escape_string($conn, isset($_GET["editgrantAmount"]) ? $_GET["editgrantAmount"] : '');
+    $grant_amount = mysqli_real_escape_string($conn, isset($_POST["editgrantAmount"]) ? $_POST["editgrantAmount"] : '');
+    // var_dump($_POST["editgrantAmount"]);
+    echo ($grant_amount);
     $sql = "UPDATE research SET  project_category = '$project_category',title =  '$title', project_for = '$project_for', pbas_year ='$pbas_year', project_duration ='$project_duration', funding_agency='$funding_agency', grant_amount='$grant_amount' 
     WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
 

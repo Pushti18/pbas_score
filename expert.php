@@ -193,6 +193,126 @@ mysqli_close($conn);
         ?>
     </div>
 
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Add Expert Talk Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <form id="myForm" action="cat3_expert_update.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="entry_id" id="editEntryId">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edittopic">Topic:</label>
+                                <input type="text" class="form-control" id="edittopic" name="edittopic">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editlectureDetail">Lecture Detail:</label>
+                                <input type="text" class="form-control" id="editlectureDetail" name="editlectureDetail">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="editinstituteName">Institute Name:</label>
+                                <input type="text" class="form-control" id="editinstituteName" name="editinstituteName">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editdateToTalk">Date to Talk:</label>
+                                <input type="date" class="form-control" id="editdateToTalk" name="editdateToTalk">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edittalkLevel">Talk Level:</label>
+                                <select class="form-control" id="edittalkLevel" name="edittalkLevel">
+                                    <option value="Please Select">Please Select</option>
+                                    <option value="National">National</option>
+                                    <option value="International">International</option>
+                                    <option value="State">State</option>
+                                    <option value="University">University</option>
+                                    <option value="Academic">Academic</option>
+                                    <option value="Association">Association</option>
+                                    <option value="Local">Local</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="edittype">Type:</label>
+                                <select class="form-control" id="edittype" name="edittype">
+                                    <option value="Lecture">Lecture</option>
+                                    <option value="Paper">Paper</option>
+                                    <!-- Add more options for types as needed -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="attachment">Talk Proof (if available):</label>
+                                <input type="file" class="form-control" id="attachment" name="attachment" accept=".pdf">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="editpbasYear">PBAS Year:</label>
+                                <select class="form-control" id="editpbasYear" name="editpbasYear">
+                                    <?php
+                                    $startYear = 1990;
+                                    $endYear = 2050;
+
+                                    for ($i = $startYear; $i <= $endYear; $i++) {
+                                        echo "<option value='{$i}'>{$i}</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    url: "cat3_expert_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        // Parse the JSON response
+                        var entryData = JSON.parse(response);
+                        $('#editEntryId').val(entryId);
+
+                        $('#editpbasYear').val(entryData.pbas_year);
+                        $('#edittype').val(entryData.type);
+                        $('#edittalkLevel').val(entryData.talk_level);
+                        $('#editdateToTalk').val(entryData.date_to_talk);
+                        $('#editinstituteName').val(entryData.institute_name);
+                        $('#editlectureDetail').val(entryData.lecture_detail);
+                        $('#edittopic').val(entryData.topic);
+
+                        $('#editModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
     <?php require "./components/category-table-top-script.php" ?>
     <script>
         document.getElementById('myForm').addEventListener('submit', function (event) {
