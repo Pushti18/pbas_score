@@ -465,7 +465,7 @@ $category = $_SESSION['cat3'];
                         $('#editrole').val(entryData.role);
                         $('#editpublication_group').val(entryData.publication_group);
                         $('#editjournalTitle').val(entryData.journal_title);
-                        $('#editcoAuthor').val(entryData.coAuthor);
+                        $('#editcoAuthor').val(entryData.co_author);
                         $('#editmonth').val(entryData.month_of_publication);
                         $('#edityear').val(entryData.year_of_publication);
                         $('#editpublisher').val(entryData.publisher);
