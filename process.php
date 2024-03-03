@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $redirectUrl = 'cat_3.php?employee_id=' . $employeeId;
                     break;
                 default:
-                    $redirectUrl = 'default_page.php';
+                    $redirectUrl = 'dashboard.php';
             }
 
             header("Location: $redirectUrl");
