@@ -21,11 +21,7 @@ function getCat1TotalPoints()
     ) as total_points_table";
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
-    // echo ($row);
-
-    // Convert the associative array to a JSON string
     $jsonString = json_encode($row);
-    // echo ($jsonString);
     return $jsonString;
 }
 function getCat2TotalPoints()
