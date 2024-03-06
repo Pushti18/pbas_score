@@ -34,7 +34,7 @@ if (!$result) {
 </head>
 
 <body>
-    <?php require "./components/header.php" ?>
+    <!-- <?php require "./components/header.php" ?> -->
 
     <div class="main_div center">
         <h4>Guidance To Student</h4>

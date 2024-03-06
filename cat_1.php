@@ -6,7 +6,7 @@ global $conn;
 if (isset($_GET['employee_id']) && isset($_SESSION['cat1'])) {
     $employee_id = $_GET['employee_id'];
     $category = $_SESSION["cat1"];
-
+    echo ($category);
     // $query = "UPDATE `cat1` SET `employee_id` = $employee_id and `category_id` =  $category";
     // echo $query;
     // if (mysqli_query($conn, $query)) {
@@ -28,7 +28,7 @@ if (isset($_GET['employee_id']) && isset($_SESSION['cat1'])) {
 </head>
 
 <body>
-    <?php require "./components/header.php" ?>
+    <!-- <?php require "./components/header.php" ?> -->
 
     <div class="category-div main_div">
         <div class="category-container">

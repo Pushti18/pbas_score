@@ -4,6 +4,7 @@ include("db_connection.php");
 global $conn;
 
 $employee_id = $_SESSION['employee_id'];
+$employeeId = 1;
 function getCat1TotalPoints()
 {
     global $conn;
@@ -73,6 +74,44 @@ function getCat3TotalPoints()
 
     return $row['total_points'];
 }
+
+$_SESSION['cat1'] = "cat1";
+$_SESSION['cat2'] = "cat2";
+$_SESSION['cat3'] = "cat3";
+
+function setSession($category)
+{
+    switch ($category) {
+        case 'Category 1':
+            $_SESSION['cat1'] = "cat1";
+            $redirectUrl = 'cat_1.php?employee_id=' . $_GET['employee_id'] . '&cat=' . urlencode($_SESSION['cat1']);
+            break;
+        case 'Category 2':
+            break;
+        case 'Category 3':
+            break;
+        default:
+            $redirectUrl = 'default.php?employee_id=' . $_GET['employee_id'];
+            break;
+    }
+    header('Location: ' . $redirectUrl);
+    exit;
+}
+
+if (isset($_GET['category'])) {
+    setSession($_GET['category']);
+} else {
+}
+$sql = "SELECT target FROM pbas_score WHERE employee_id =  " . $_SESSION['employee_id'] . " ORDER BY year ASC LIMIT 1";
+// echo ($sql);
+$result = $conn->query($sql);
+$target = null;
+if ($result !== false && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $target = $row['target'];
+} else {
+    echo "Error: " . $conn->error;
+}
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +135,13 @@ function getCat3TotalPoints()
                     <!-- <h3>Point Pie Chart</h3> -->
                     <canvas id="myChart"></canvas>
 
-
+                    <?php
+                    if (isset($target)) {
+                        echo "<p>Target: $target</p>";
+                    } else {
+                        echo "<p>No target found.</p>";
+                    }
+                    ?>
                     <?php
                     $cat1TotalPointsJson = getCat1TotalPoints();
                     $cat1TotalPoints = json_decode($cat1TotalPointsJson, true)['total_points'];
@@ -163,14 +208,14 @@ function getCat3TotalPoints()
                                 <label for="target">Target:</label>
                                 <input type="text" class="form-control" id="target" name="target" placeholder="Ex: 10">
                             </div>
-                            <div class="form-group col-md-6">
+                            <!-- <div class="form-group col-md-6">
                                 <label for="category">Category:</label>
                                 <select class="form-control" id="category" name="category">
                                     <option value="Category 1">Category 1</option>
                                     <option value="Category 2">Category 2</option>
                                     <option value="Category 3">Category 3</option>
                                 </select>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div>
@@ -178,11 +223,37 @@ function getCat3TotalPoints()
                         </div>
                     </form>
                 </div>
+                <div id="categories">
+                    <a href="cat_1.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat1']); ?>"
+                        class="category-tag" data-category="Category 1" onclick="setSession('Category 1')">Category
+                        1</a>
+                    <a href="cat_2.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat2']); ?>"
+                        class="category-tag" data-category="Category 2" onclick="setSession('Category 1')">Category
+                        2</a>
+                    <a href="cat_3.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat3']); ?>"
+                        class="category-tag" data-category="Category 3" onclick="setSession('Category 1')">Category
+                        3</a>
+
+
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
+        function setSession(category) {
+            fetch('set_category.php', {
+                method: 'POST',
+                body: new URLSearchParams({ category: category })
+            })
+                .then(response => response.text())
+                .then(redirectUrl => {
+                    window.location.href = redirectUrl;
+                })
+                .catch(error => console.error(error));
+        }
+
         $(document).ready(function () {
             $("#myForm").submit(function (e) {
                 e.preventDefault();
@@ -245,7 +316,32 @@ function getCat3TotalPoints()
                 alert("Please select a valid category.");
                 return false;
         }
+
     </script>
+    <!-- SweetAlert library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Function to parse URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        // Check if status parameter exists
+        var status = getUrlParameter('status');
+        if (status === 'exists') {
+            // Show SweetAlert message indicating that a record already exists
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'A record already exists for the academic year and employee ID combination!',
+            });
+        }
+    </script>
+
 </body>
 
 </html>

@@ -5,46 +5,43 @@ include("db_connection.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $year = $_POST['year'];
     $target = $_POST['target'];
-    $category = $_POST['category'];
     $employeeId = 1;
 
-    if (!empty($year) && !empty($target) && !empty($category)) {
-        $sql = "INSERT INTO pbas_score (year, target, category, employee_id) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssi", $year, $target, $category, $employeeId);
+    // Check if a record already exists for the academic year and employee ID combination
+    $sql_check = "SELECT COUNT(*) AS count FROM pbas_score WHERE year = ? AND employee_id = ?";
+    $stmt_check = $conn->prepare($sql_check);
+    $stmt_check->bind_param("si", $year, $employeeId);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+    $row_check = $result_check->fetch_assoc();
+    $existing_records_count = $row_check['count'];
+    $stmt_check->close();
 
-        if ($stmt->execute()) {
-            $selectedCategory = $_POST['category'];
-            $redirectUrl = '';
+    if ($existing_records_count == 0) {
+        // No record exists for the academic year and employee ID combination, so insert new record
+        if (!empty($year) && !empty($target)) {
+            $sql = "INSERT INTO pbas_score (year, target, employee_id) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssi", $year, $target, $employeeId);
 
-            $category = "";
-            switch ($selectedCategory) {
-                case 'Category 1':
-                    $_SESSION['cat1'] = "cat1";
-                    $redirectUrl = 'cat_1.php?employee_id=' . $employeeId;
-                    break;
-                case 'Category 2':
-                    $_SESSION['cat2'] = "cat2";
-                    $redirectUrl = 'cat_2.php?employee_id=' . $employeeId;
-                    break;
-                case 'Category 3':
-                    $_SESSION['cat3'] = "cat3";
-                    $redirectUrl = 'cat_3.php?employee_id=' . $employeeId;
-                    break;
-                default:
-                    $redirectUrl = 'dashboard.php';
+            if ($stmt->execute()) {
+                // Set session or any other logic here if needed
+                header("Location: dashboard.php");
+                exit();
+            } else {
+                echo "Error: " . $stmt->error;
             }
-
-            header("Location: $redirectUrl");
-            exit();
         } else {
-            echo "Error: " . $stmt->error;
+            echo "Invalid data submitted!";
         }
     } else {
-        echo "Invalid data submitted!";
+        // Redirect back to the same page with a status indicating record already exists
+        header("Location: dashboard.php?status=exists");
+        exit();
     }
 } else {
     // Handle cases where the request method is not POST
 }
 
 $conn->close();
+?>
