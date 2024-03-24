@@ -23,21 +23,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO exam_duties (cat1_id,subcat_1,employee_id, pbas_year, semester, stream_name, course_name, question_paper_count, hours_spent_question, examinations_count, hours_spent_examinations, answer_book_count, hours_spent_answer_book, points) 
             VALUES ('$category','$subcategory_id','$employee_id', '$pbasYear', '$semester', '$streamName', '$courseName', '$questionPaper', '$hoursSpentQuestion', '$numExaminations', '$hoursSpentExaminations', '$numAnswerBook','$hoursSpentAnswerBook','hours_score')";
 
-mysqli_query($conn, $sql);
+    mysqli_query($conn, $sql);
 
-if (mysqli_error($conn)) {
-    echo "Error: " . mysqli_error($conn);
+    if (mysqli_error($conn)) {
+        echo "Error: " . mysqli_error($conn);
+    } else {
+        echo "Data inserted into discipline table successfully.";
+    }
 } else {
-    echo "Data inserted into discipline table successfully.";
-}
-} else {
-echo "Invalid request method.";
+    echo "Invalid request method.";
 }
 mysqli_close($conn);
 
-function calculateScore($hours_spent_question, $hours_spent_examinations, $hours_spent_answer_book) {
+function calculateScore($hours_spent_question, $hours_spent_examinations, $hours_spent_answer_book)
+{
     $total_hours = $hours_spent_question + $hours_spent_examinations + $hours_spent_answer_book;
-    $score = ceil($total_hours / 10); // Calculate score based on 10 hours per point
+    $score = ceil($total_hours / 10);
     return $score;
 }
 ?>

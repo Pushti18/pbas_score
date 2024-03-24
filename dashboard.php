@@ -102,7 +102,7 @@ if (isset($_GET['category'])) {
     setSession($_GET['category']);
 } else {
 }
-$sql = "SELECT target FROM pbas_score WHERE employee_id =  " . $_SESSION['employee_id'] . " ORDER BY year ASC LIMIT 1";
+$sql = "SELECT target FROM pbas_score WHERE employee_id =  " . $_SESSION['employee_id'] . " ORDER BY year DESC LIMIT 1";
 // echo ($sql);
 $result = $conn->query($sql);
 $target = null;
@@ -113,7 +113,6 @@ if ($result !== false && $result->num_rows > 0) {
     echo "Error: " . $conn->error;
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -134,10 +133,9 @@ if ($result !== false && $result->num_rows > 0) {
                 <div class="col-md-6 chart-container">
                     <!-- <h3>Point Pie Chart</h3> -->
                     <canvas id="myChart"></canvas>
-
                     <?php
                     if (isset($target)) {
-                        echo "<p>Target: $target</p>";
+                        echo "<p>Target Set: $target</p>";
                     } else {
                         echo "<p>No target found.</p>";
                     }
@@ -153,13 +151,24 @@ if ($result !== false && $result->num_rows > 0) {
                     $cat3TotalPoints = json_decode($cat3TotalPointsJson, true)['total_points'];
 
 
+                    $totalPoints = $cat1TotalPoints + $cat2TotalPointsJson + $cat3TotalPointsJson;
+                    if (isset($target)) {
+                        $percentageAchieved = ($totalPoints / $target) * 100;
+                        $percentagecat1TotalPoints = ($cat1TotalPoints / $target) * 100;
+                        $percentagecat2TotalPoints = ($cat2TotalPointsJson / $target) * 100;
+                        $percentagecat3TotalPoints = ($cat3TotalPointsJson / $target) * 100;
+                        // echo "<p>Target: $target</p>";
+                        echo "<p>Percentage achieved: $percentageAchieved%</p>";
+                    } else {
+                        echo "<p>No target found.</p>";
+                    }
                     $dataPoints = array(
-                        array("label" => "Cat 1", "value" => $cat1TotalPoints),
-                        array("label" => "Cat 2", "value" => $cat2TotalPointsJson),
-                        array("label" => "Cat 3", "value" => $cat3TotalPointsJson),
-                        array("label" => "Total Points", "value" => $cat1TotalPoints + $cat2TotalPointsJson + $cat3TotalPointsJson),
+                        array("label" => "Cat 1: $cat1TotalPoints ", "value" => ($percentagecat1TotalPoints)),
+                        array("label" => "Cat 2: $cat2TotalPointsJson", "value" => $percentagecat2TotalPoints),
+                        array("label" => "Cat 3 : $cat3TotalPointsJson", "value" => $percentagecat3TotalPoints),
+                        array("label" => "Total Points : $totalPoints", "value" => $percentageAchieved),
                     );
-                    $totalPoints = array_sum(array_column($dataPoints, 'value'));
+                    // $totalPoints = array_sum(array_column($dataPoints, 'value'));
                     ?>
                     <script>
                         var ctx = document.getElementById('myChart').getContext('2d');
@@ -185,58 +194,61 @@ if ($result !== false && $result->num_rows > 0) {
                     </script>
                 </div>
 
-                <div class="planner-container">
+                <div class="col-md-4 planner-container">
                     <h3 class="mb-3">Planner</h3>
                     <form id="myForm" action="process.php" method="POST">
-                        <div class="mb-3">
-                            <label for="year">Year:</label>
-                            <select id="year" name="year" class="form-control">
-                                <option value="">Select Year</option>
-                                <?php
-                                $currentYear = date('Y');
-                                for ($i = 0; $i < 5; $i++) {
-                                    $yearOption = $currentYear . '-' . ($currentYear + 1);
-                                    echo '<option value="' . $yearOption . '">' . $yearOption . '</option>';
-                                    $currentYear++;
-                                }
-                                ?>
-                            </select>
-                        </div>
 
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="target">Target:</label>
-                                <input type="text" class="form-control" id="target" name="target" placeholder="Ex: 10">
-                            </div>
-                            <!-- <div class="form-group col-md-6">
-                                <label for="category">Category:</label>
-                                <select class="form-control" id="category" name="category">
-                                    <option value="Category 1">Category 1</option>
-                                    <option value="Category 2">Category 2</option>
-                                    <option value="Category 3">Category 3</option>
-                                </select>
-                            </div> -->
-                        </div>
+                        <label for="year">Year:</label>
+                        <select id="year" name="year" class="form-control year-dropdown">
+                            <option value="">Select Year</option>
+                            <?php
+                            $currentYear = date('Y');
+                            for ($i = 0; $i < 5; $i++) {
+                                $yearOption = $currentYear . '-' . ($currentYear + 1);
+                                echo '<option value="' . $yearOption . '">' . $yearOption . '</option>';
+                                $currentYear++;
+                            }
+                            ?>
+                        </select>
 
+                        <div class="year-dropdown">
+                            <label for="target">Target:</label>
+                            <input type="text" class="form-control" id="target" name="target" placeholder="Ex: 10">
+                        </div>
+                        <br>
                         <div>
                             <button class="btn btn-primary btn-md">Submit</button>
                         </div>
                     </form>
                 </div>
-                <div id="categories">
-                    <a href="cat_1.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat1']); ?>"
-                        class="category-tag" data-category="Category 1" onclick="setSession('Category 1')">Category
-                        1</a>
-                    <a href="cat_2.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat2']); ?>"
-                        class="category-tag" data-category="Category 2" onclick="setSession('Category 1')">Category
-                        2</a>
-                    <a href="cat_3.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat3']); ?>"
-                        class="category-tag" data-category="Category 3" onclick="setSession('Category 1')">Category
-                        3</a>
 
-
+                <!-- <div class="planner-container">
+                    <ul class="category-list">
+                        <li class="category-item">Category 1</li>
+                        <li class="category-item">Category 2</li>
+                        <li class="category-item">Category 3</li>
+                    </ul>
+                </div> -->
+                <div class="col-md-4 planner-container" id="categories">
+                    <br>
+                    <ul class="planner-container">
+                        <a href="cat_1.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat1']); ?>"
+                            class="category-tag" data-category="Category 1" onclick="setSession('Category 1')">Category
+                            1</a>
+                    </ul>
+                    <br>
+                    <ul class="planner-container">
+                        <a href="cat_2.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat2']); ?>"
+                            class="category-tag" data-category="Category 2" onclick="setSession('Category 1')">Category
+                            2</a>
+                    </ul>
+                    <br>
+                    <ul class="planner-container">
+                        <a href="cat_3.php?employee_id=<?php echo $employeeId; ?>&amp;cat=<?php echo urlencode($_SESSION['cat3']); ?>"
+                            class="category-tag" data-category="Category 3" onclick="setSession('Category 1')">Category
+                            3</a>
+                    </ul>
                 </div>
-
             </div>
         </div>
     </div>
@@ -318,7 +330,6 @@ if ($result !== false && $result->num_rows > 0) {
         }
 
     </script>
-    <!-- SweetAlert library -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
@@ -341,7 +352,6 @@ if ($result !== false && $result->num_rows > 0) {
             });
         }
     </script>
-
 </body>
 
 </html>

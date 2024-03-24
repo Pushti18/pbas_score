@@ -98,8 +98,9 @@ header img {
 .dashboard-container {
   display: flex;
   justify-content: center;
-  gap: 30px;
+  gap: 20px;
 }
+
 
 button {
   padding: 10px;
@@ -242,4 +243,40 @@ h1 {
 
 .center {
   text-align: center;
+}
+
+.category-list-container {
+  -webkit-box-shadow: 3px 3px 10px 3px #dddddd;
+  -moz-box-shadow: 3px 3px 10px 3px #dddddd;
+  box-shadow: 3px 3px 10px 3px #dddddd;
+  border-radius: 5px;
+  padding: 10px;
+  height: fit-content;
+}
+
+.category-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-item {
+  display: inline-block;
+  width: 60%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.category-item:hover {
+  background-color: #f0f0f0;
+  border-color: #999999;
+  cursor: pointer;
+}
+
+.year-dropdown {
+  margin-bottom: 10px;
 }

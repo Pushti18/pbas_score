@@ -28,7 +28,7 @@ if (isset($_GET['employee_id']) && isset($_SESSION['cat1'])) {
 </head>
 
 <body>
-    <!-- <?php require "./components/header.php" ?> -->
+    <?php require "./components/header.php" ?>
 
     <div class="category-div main_div">
         <div class="category-container">
