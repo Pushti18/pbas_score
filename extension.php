@@ -287,7 +287,7 @@ if (mysqli_query($conn, $query)) {
                         entry_id: entryId
                     },
                     success: function (response) {
-                        // Parse the JSON response
+
                         var entryData = JSON.parse(response);
                         $('#editEntryId').val(entryId);
                         $('#editPbasYear').val(entryData.pbasYear);
