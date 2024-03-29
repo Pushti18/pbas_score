@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 $category = $_SESSION['cat3'];
 $subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
@@ -10,7 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "DELETE FROM development WHERE id = '$id' AND employee_id='$employee_id' and cat3_id = '$category' ";
     echo $sql;
     if (mysqli_query($conn, $sql)) {
-        echo "Entry deleted successfully.";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Entry deleted successfully.";
     } else {
         echo "Error: " . mysqli_error($conn);
     }

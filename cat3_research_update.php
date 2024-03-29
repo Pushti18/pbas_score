@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 // Fetching data for editing
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -31,16 +31,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $grant_amount = mysqli_real_escape_string($conn, isset($_GET["editgrantAmount"]) ? $_GET["editgrantAmount"] : '');
     $grant_amount = mysqli_real_escape_string($conn, isset($_POST["editgrantAmount"]) ? $_POST["editgrantAmount"] : '');
     // var_dump($_POST["editgrantAmount"]);
-    echo ($grant_amount);
-    $sql = "UPDATE research SET  project_category = '$project_category',title =  '$title', project_for = '$project_for', pbas_year ='$pbas_year', project_duration ='$project_duration', funding_agency='$funding_agency', grant_amount='$grant_amount' 
-    WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
+    // echo ($grant_amount);
+    $existingFileName = $_POST['editAttachment'];
+    $newFileName = $_FILES['editAttachment']['name'];
+
+    // Check if a new file is uploaded
+    if ($newFileName) {
+        // New file has been uploaded; handle the file upload and store the new file name
+        $newFilePath = "uploads/" . $newFileName;
+        // Move the uploaded file to the target location
+        move_uploaded_file($_FILES['editAttachment']['tmp_name'], $newFilePath);
+        $attachment = $newFileName; // Use the new file name
+    } else {
+        // No new file has been uploaded; keep the existing file
+        $attachment = $existingFileName;
+    }
+    $sql = "UPDATE research SET  project_category = '$project_category',title =  '$title', project_for = '$project_for', pbas_year ='$pbas_year', project_duration ='$project_duration', funding_agency='$funding_agency', grant_amount='$grant_amount' ";
 
 
+    if ($newFileName) {
+        $sql .= ", attachment = '$attachment'";
+    }
+    $sql .= " WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
 
-    echo $sql;
 
     if (mysqli_query($conn, $sql)) {
-        echo "Entry updated successfully.";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Entry updated successfully.";
     } else {
         echo "Error updating entry: " . mysqli_error($conn);
     }

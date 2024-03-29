@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $subcategory_id = isset($_GET['']) ? $_GET['subcategory_id'] : '';
 global $conn;
@@ -498,7 +498,8 @@ if (!$result) {
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            location.reload();
+                            // alert(response);
                         },
                         error: function (xhr, status, error) { }
                     });

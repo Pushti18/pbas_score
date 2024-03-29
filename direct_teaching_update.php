@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $record_id = $_POST['record_id'];
@@ -31,7 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     WHERE id='$record_id'";
 
     if (mysqli_query($conn, $update_sql)) {
-        echo "Record updated successfully";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Record updated successfully";
     } else {
         echo "Error updating record: " . mysqli_error($conn);
     }

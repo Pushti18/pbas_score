@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
@@ -75,7 +75,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_error($conn)) {
             echo "Error: " . mysqli_error($conn);
         } else {
-            echo "Data stored successfully. PBAS Score: $pbasScore";
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit();
+            // echo "Data stored successfully. PBAS Score: $pbasScore";
         }
     } else {
         echo "Sorry, there was an error uploading your file.";

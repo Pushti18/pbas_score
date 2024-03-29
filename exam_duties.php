@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_id = $_SESSION["cat1"];
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
@@ -297,84 +297,84 @@ $category = $_SESSION['cat1'];
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
-    $(document).ready(function() {
-        $('.btn-edit').click(function() {
-            var entryId = $(this).data('id');
-            console.log(entryId)
-            $.ajax({
-                type: "GET",
-                url: "cat1_exam_duties_update.php",
-                data: {
-                    entry_id: entryId
-                },
-                success: function(response) {
-                    var data = JSON.parse(response);
-                    console.log(data);
-                    document.getElementById('editEntryId').value = data.id;
-                    document.getElementById('editpbasYear').value = data.pbas_year;
-                    document.getElementById('editsemester').value = data.semester;
-                    document.getElementById('editstreamName').value = data.stream_name;
-                    document.getElementById('editcourseName').value = data.course_name;
-                    document.getElementById('editquestionPaper').value = data
-                        .question_paper_count;
-                    document.getElementById('edithoursSpentQuestion').value = data
-                        .hours_spent_question;
-                    document.getElementById('editnumExaminations').value = data
-                        .examinations_count;
-                    document.getElementById('edithoursSpentExaminations').value = data
-                        .hours_spent_examinations;
-                    document.getElementById('editnumAnswerBook').value = data
-                        .answer_book_count;
-                    document.getElementById('edithoursSpentAnswerBook').value = data
-                        .hours_spent_answer_book;
+        $(document).ready(function () {
+            $('.btn-edit').click(function () {
+                var entryId = $(this).data('id');
+                console.log(entryId)
+                $.ajax({
+                    type: "GET",
+                    url: "cat1_exam_duties_update.php",
+                    data: {
+                        entry_id: entryId
+                    },
+                    success: function (response) {
+                        var data = JSON.parse(response);
+                        console.log(data);
+                        document.getElementById('editEntryId').value = data.id;
+                        document.getElementById('editpbasYear').value = data.pbas_year;
+                        document.getElementById('editsemester').value = data.semester;
+                        document.getElementById('editstreamName').value = data.stream_name;
+                        document.getElementById('editcourseName').value = data.course_name;
+                        document.getElementById('editquestionPaper').value = data
+                            .question_paper_count;
+                        document.getElementById('edithoursSpentQuestion').value = data
+                            .hours_spent_question;
+                        document.getElementById('editnumExaminations').value = data
+                            .examinations_count;
+                        document.getElementById('edithoursSpentExaminations').value = data
+                            .hours_spent_examinations;
+                        document.getElementById('editnumAnswerBook').value = data
+                            .answer_book_count;
+                        document.getElementById('edithoursSpentAnswerBook').value = data
+                            .hours_spent_answer_book;
 
 
 
-                    $('#editModal').modal('show');
+                        $('#editModal').modal('show');
 
-                }
+                    }
+                });
             });
         });
-    });
 
-    $(document).ready(function() {
-        $("#editForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat1_exam_duties_update.php",
-                data: formData,
-                success: function(response) {
-                    alert(response);
-                    $('#editModal').modal('hide');
-                    window.location.reload();
-                }
+        $(document).ready(function () {
+            $("#editForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_exam_duties_update.php",
+                    data: formData,
+                    success: function (response) {
+                        alert(response);
+                        $('#editModal').modal('hide');
+                        window.location.reload();
+                    }
+                });
             });
         });
-    });
     </script>
     <?php require "./components/category-table-top-script.php" ?>
 
     <script type="text/javascript">
-    $(document).ready(function() {
-        $('#details_table').DataTable({
-            dom: 'Bfrtip',
-            lengthMenu: [
-                [5, 10, 25, 50],
-                ['5 Files', '10 Files', '25 Files', '50 Files']
-            ],
+        $(document).ready(function () {
+            $('#details_table').DataTable({
+                dom: 'Bfrtip',
+                lengthMenu: [
+                    [5, 10, 25, 50],
+                    ['5 Files', '10 Files', '25 Files', '50 Files']
+                ],
 
+            });
         });
-    });
     </script>
     <script>
-    $(document).ready(function() {
-        $('.datepicker').datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true
+            });
         });
-    });
     </script>
     </script>
     <div id="deleteConfirmationModal" class="modal fade" role="dialog">
@@ -396,56 +396,58 @@ $category = $_SESSION['cat1'];
     </div>
 
     <script>
-    $(document).ready(function() {
-        $('.btn-delete').click(function() {
-            var id = $(this).data('id');
-            $('#deleteConfirmationModal').modal('show');
-            $('#confirmDeleteBtn').click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "exam_duties_delete_entry.php",
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        alert(response);
-                    },
-                    error: function(xhr, status, error) {}
+        $(document).ready(function () {
+            $('.btn-delete').click(function () {
+                var id = $(this).data('id');
+                $('#deleteConfirmationModal').modal('show');
+                $('#confirmDeleteBtn').click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "exam_duties_delete_entry.php",
+                        data: {
+                            id: id
+                        },
+                        success: function (response) {
+                            // alert(response);
+                            location.reload();
+                        },
+                        error: function (xhr, status, error) { }
+                    });
+                    $('#deleteConfirmationModal').modal('hide');
                 });
-                $('#deleteConfirmationModal').modal('hide');
             });
         });
-    });
     </script>
 
     <script>
-    $(document).ready(function() {
-        $("#myForm").submit(function(e) {
-            e.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: "POST",
-                url: "cat1_exam_duties_insert.php",
-                data: formData,
-                success: function(response) {
-                    alert(response);
-                    $('#myModal').modal('hide');
-                    p
-                    refreshTable();
-                }
+        $(document).ready(function () {
+            $("#myForm").submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "cat1_exam_duties_insert.php",
+                    data: formData,
+                    success: function (response) {
+                        // alert(response);
+                        location.reload();
+                        $('#myModal').modal('hide');
+                        p
+                        refreshTable();
+                    }
+                });
             });
-        });
 
-        function refreshTable() {
-            $.ajax({
-                type: "GET",
-                url: "your_php_script_to_fetch_updated_data.php", // Replace with actual URL to fetch updated table data
-                success: function(data) {
-                    $('#details_table tbody').html(data); // Update table body with new data
-                }
-            });
-        }
-    });
+            function refreshTable() {
+                $.ajax({
+                    type: "GET",
+                    url: "your_php_script_to_fetch_updated_data.php", // Replace with actual URL to fetch updated table data
+                    success: function (data) {
+                        $('#details_table tbody').html(data); // Update table body with new data
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

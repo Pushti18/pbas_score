@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 $category = $_SESSION['cat3'];
 $subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
@@ -38,7 +38,9 @@ mysqli_query($conn, $sql);
 if (mysqli_error($conn)) {
     echo "Error: " . mysqli_error($conn);
 } else {
-    echo "Data stored successfully. PBAS Score: $pbasScore";
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+    exit();
+    // echo "Data stored successfully. PBAS Score: $pbasScore";
 }
 // } else {
 //     echo "Invalid request method.";

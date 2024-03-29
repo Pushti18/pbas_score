@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
@@ -213,7 +213,8 @@ if (mysqli_query($conn, $query)) {
 
                 <div class="modal-body">
 
-                    <form id="editForm" action="cat2_developmentactivities_update.php" method="POST">
+                    <form id="editForm" action="cat2_developmentactivities_update.php" method="POST"
+                        enctype="multipart/form-data">
                         <input type="hidden" name="entry_id" id="editEntryId">
                         <div class="form-row">
                             <div class="form-group col-md-6">
@@ -293,8 +294,8 @@ if (mysqli_query($conn, $query)) {
                                     name="edithoursSpentAnswerBook" min="0">
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="attachment">Attachment (if available):</label>
-                                <input type="file" class="form-control" id="attachment" name="attachment"
+                                <label for="editAttachment">Attachment (if available):</label>
+                                <input type="file" class="form-control" id="editAttachment" name="editAttachment"
                                     accept=".pdf, .doc, .docx">
                             </div>
                         </div>
@@ -335,7 +336,7 @@ if (mysqli_query($conn, $query)) {
                         $('#editsemester').val(entryData.semester);
                         $('#edithoursSpentAnswerBook').val(entryData.hoursSpentAnswerBook);
                         $('#editdescription').val(entryData.description);
-
+                        $('#editAttachment').val(entryData.attachment)
                         $('#editModal').modal('show');
                     }
                 });
@@ -428,7 +429,8 @@ if (mysqli_query($conn, $query)) {
                     url: "cat2_development_activities_insert.php",
                     data: formData,
                     success: function (response) {
-                        alert(response);
+                        location.reload();
+                        // alert(response);
                     }
                 });
             });
@@ -466,7 +468,8 @@ if (mysqli_query($conn, $query)) {
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            location.reload();
+                            // alert(response);
                         },
                         error: function (xhr, status, error) { }
                     });

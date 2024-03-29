@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
@@ -223,8 +223,9 @@ mysqli_close($conn);
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="attachment">Award/Fellowship Copy:</label>
-                                <input type="file" class="form-control" id="attachment" name="attachment" accept=".pdf">
+                                <label for="editAttachment">Award/Fellowship Copy:</label>
+                                <input type="file" class="form-control" id="editAttachment" name="editAttachment"
+                                    accept=".pdf">
                             </div>
                         </div>
 
@@ -255,7 +256,7 @@ mysqli_close($conn);
                         $('#editassociatedOrganization').val(entryData.associated_organization);
                         $('#editfellowshipAwards').val(entryData.fellowship_awards);
                         $('#editpbasYear').val(entryData.pbas_year);
-
+                        $('#editAttachment').val(entryData.attachment)
                         $('#editModal').modal('show');
                     }
                 });
@@ -323,7 +324,8 @@ mysqli_close($conn);
                     url: "cat3_fellowship_insert.php",
                     data: formData,
                     success: function (response) {
-                        alert(response);
+                        location.reload();
+                        // alert(response);
                     }
                 });
             });
@@ -361,7 +363,8 @@ mysqli_close($conn);
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            location.reload();
+                            // alert(response);
                         },
                         error: function (xhr, status, error) {
                         }

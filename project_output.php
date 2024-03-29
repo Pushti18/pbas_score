@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
 $subcategory_title = isset($_GET['subcategory_title']) ? $_GET['subcategory_title'] : '';
@@ -336,8 +336,8 @@ mysqli_close($conn);
                     url: "cat3_project_output_insert.php",
                     data: formData,
                     success: function (response) {
-
-                        alert(response);
+                        location.reload();
+                        // alert(response);
                     }
                 });
             });
@@ -375,7 +375,8 @@ mysqli_close($conn);
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            location.reload();
+                            // alert(response);
                         },
                         error: function (xhr, status, error) {
                         }

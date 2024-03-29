@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
@@ -419,8 +419,8 @@ $category = $_SESSION['cat3'];
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="attachment">Publication Front Image:</label>
-                                <input type="file" class="form-control" id="attachment" name="attachment"
+                                <label for="editAttachment">Publication Front Image:</label>
+                                <input type="file" class="form-control" id="editAttachment" name="editAttachment"
                                     accept=".jpg, .jpeg, .png, .gif">
                             </div>
                             <div class="form-group col-md-6">
@@ -473,7 +473,7 @@ $category = $_SESSION['cat3'];
                         $('#editvolume').val(entryData.volume_no);
                         $('#editpage').val(entryData.page_no);
                         $('#editcurrent_status_of_work').val(entryData.current_status_of_work);
-
+                        $('#editAttachment').val(entryData.attachment)
                         $('#editModal').modal('show');
                     }
                 });
@@ -605,7 +605,8 @@ $category = $_SESSION['cat3'];
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            location.reload();
+                            // alert(response);
                         },
                         error: function (xhr, status, error) {
                         }

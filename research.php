@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_title = isset($_GET['category_title']) ? $_GET['category_title'] : '';
 $category_id = isset($_GET['category_id']) ? $_GET['category_id'] : '';
@@ -264,8 +264,9 @@ mysqli_close($conn);
                                 <!-- <input type="text" class="form-control" id="grantAmount" name="grantAmount"> -->
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="attachment">Approval Copy:</label>
-                                <input type="file" class="form-control" id="attachment" name="attachment" accept=".pdf">
+                                <label for="editAttachment">Approval Copy:</label>
+                                <input type="file" class="form-control" id="editAttachment" name="editAttachment"
+                                    accept=".pdf">
                             </div>
                         </div>
 
@@ -298,7 +299,7 @@ mysqli_close($conn);
                         $('#editfundingAgency').val(entryData.funding_agency);
                         $('#editprojectDuration').val(entryData.project_duration);
                         $('#editgrantAmount').val(entryData.grant_amount);
-
+                        $('#editAttachment').val(entryData.attachment)
                         $('#editModal').modal('show');
                     }
                 });
@@ -358,7 +359,8 @@ mysqli_close($conn);
                     url: "cat3_researh_insert.php",
                     data: formData,
                     success: function (response) {
-                        alert(response);
+                        location.reload();
+                        // alert(response);
                     }
                 });
             });
@@ -396,7 +398,8 @@ mysqli_close($conn);
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            location.reload();
+                            // alert(response);
                         },
                         error: function (xhr, status, error) {
                         }

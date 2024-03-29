@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 // $cat2_id = $_SESSION['cat2_id']; 
 $employee_id = $_SESSION['employee_id'];
 $category = $_SESSION['cat2'];
@@ -39,7 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_error($conn)) {
             echo "Error: " . mysqli_error($conn);
         } else {
-            echo "Data inserted into discipline table successfully.";
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit();
+            // echo "Data inserted into discipline table successfully.";
         }
     } else {
         echo "Sorry, there was an error uploading your file.";

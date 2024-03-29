@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 $category = $_SESSION['cat3'];
 $subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 
@@ -45,7 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (mysqli_error($conn)) {
         echo "Error: " . mysqli_error($conn);
     } else {
-        echo "Data stored successfully.";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Data stored successfully.";
     }
     mysqli_close($conn);
 } else {

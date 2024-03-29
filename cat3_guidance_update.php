@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 // Fetching data for editing
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -62,7 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $sql;
 
     if (mysqli_query($conn, $sql)) {
-        echo "Entry updated successfully.";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Entry updated successfully.";
     } else {
         echo "Error updating entry: " . mysqli_error($conn);
     }

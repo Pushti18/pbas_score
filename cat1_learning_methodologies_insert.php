@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category = $_SESSION['cat1'];
 $subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
@@ -35,7 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 VALUES ('$category','$subcategory_id','$employee_id', '$pbasYear', '$courseName', '$natureOfInnovation', '$hoursSpentInnovation', '$attachment', '$points')";
         echo $sql;
         if (mysqli_query($conn, $sql)) {
-            echo "Data inserted into learning_methodologies table successfully.";
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit();
+            // echo "Data inserted into learning_methodologies table successfully.";
         } else {
             echo "Error: " . mysqli_error($conn);
         }

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 // Fetching data for editing
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -33,13 +33,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($hoursSpentAnswerBook >= 10) {
         $points = floor($hoursSpentAnswerBook / 10);
     }
-    $sql = "UPDATE extension SET pbasYear='$pbasYear', mainActivity='$mainActivity', subActivity='$subActivity', activityTitle='$activityTitle', briefRole='$briefRole', semester='$semester', hoursSpentAnswerBook='$hoursSpentAnswerBook', description='$description', points='$points' WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
+    $existingFileName = $_POST['editAttachment'];
+    $newFileName = $_FILES['editAttachment']['name'];
 
+    // Check if a new file is uploaded
+    if ($newFileName) {
+        // New file has been uploaded; handle the file upload and store the new file name
+        $newFilePath = "uploads/" . $newFileName;
+        // Move the uploaded file to the target location
+        move_uploaded_file($_FILES['editAttachment']['tmp_name'], $newFilePath);
+        $attachment = $newFileName; // Use the new file name
+    } else {
+        // No new file has been uploaded; keep the existing file
+        $attachment = $existingFileName;
+    }
+    $sql = "UPDATE extension SET pbasYear='$pbasYear', mainActivity='$mainActivity', subActivity='$subActivity', activityTitle='$activityTitle', briefRole='$briefRole', semester='$semester', hoursSpentAnswerBook='$hoursSpentAnswerBook', description='$description', points='$points'";
 
-    echo $sql;
+    if ($newFileName) {
+        $sql .= ", attachment = '$attachment'";
+    }
+    $sql .= " WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
 
     if (mysqli_query($conn, $sql)) {
-        echo "Entry updated successfully.";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Entry updated successfully.";
     } else {
         echo "Error updating entry: " . mysqli_error($conn);
     }

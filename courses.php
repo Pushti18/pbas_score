@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 $category_id = $_SESSION["cat1"];
 $subcategory_id = isset($_GET['subcategory_id']) ? $_GET['subcategory_id'] : '';
@@ -338,7 +338,8 @@ $category = $_SESSION['cat1'];
                     url: "cat1_courses_insert.php",
                     data: formData,
                     success: function (response) {
-                        alert(response); // Show success message or handle response accordingly
+                        // alert(response); // Show success message or handle response accordingly
+                        location.reload();
                         $('#myModal').modal('hide'); // Close modal popup
                         refreshTable(); // Refresh table data
                     }
@@ -378,7 +379,8 @@ $category = $_SESSION['cat1'];
                             id: id
                         },
                         success: function (response) {
-                            alert(response);
+                            // alert(response);
+                            location.reload();
                         },
                         error: function (xhr, status, error) { }
                     });

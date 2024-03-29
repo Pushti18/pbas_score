@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 // Fetching data for editing
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -32,15 +32,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($research_type === "Consultancy") {
         $pbasScore += 5;
     }
+    $existingFileName = $_POST['editAttachment'];
+    $newFileName = $_FILES['editAttachment']['name'];
+
+    // Check if a new file is uploaded
+    if ($newFileName) {
+        // New file has been uploaded; handle the file upload and store the new file name
+        $newFilePath = "uploads/" . $newFileName;
+        // Move the uploaded file to the target location
+        move_uploaded_file($_FILES['editAttachment']['tmp_name'], $newFilePath);
+        $attachment = $newFileName; // Use the new file name
+    } else {
+        // No new file has been uploaded; keep the existing file
+        $attachment = $existingFileName;
+    }
+
+
+    $editexecutiveSummary = $_POST['editexecutiveSummary'];
+    $newFileName_1 = $_FILES['editexecutiveSummary']['name'];
+
+    // Check if a new file is uploaded
+    if ($newFileName_1) {
+        // New file has been uploaded; handle the file upload and store the new file name
+        $newFilePath = "uploads/" . $newFileName_1;
+        // Move the uploaded file to the target location
+        move_uploaded_file($_FILES['editexecutiveSummary']['tmp_name'], $newFilePath);
+        $attachment = $newFileName; // Use the new file name
+    } else {
+        // No new file has been uploaded; keep the existing file
+        $attachment = $editexecutiveSummary;
+    }
 
     // $sql = "UPDATE development SET  title='$title', research_type='$research_type', sponsor_type='$sponsor_type', remarks='$remarks', pbas_year='$pbas_year', pbas_score'$pbasScore'
     // WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
-    $sql = "UPDATE development SET  title='$title', research_type='$research_type', sponsor_type='$sponsor_type', remarks='$remarks', pbas_year='$pbas_year', pbas_score='$pbasScore' WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
+    $sql = "UPDATE development SET  title='$title', research_type='$research_type', sponsor_type='$sponsor_type', remarks='$remarks', pbas_year='$pbas_year', pbas_score='$pbasScore'";
 
-    echo $sql;
+    if ($newFileName) {
+        $sql .= ", upload_documents = '$attachment'";
+    } else if ($newFileName_1) {
+        $sql .= ", executive_summary = '$attachment'";
+    }
+    $sql .= " WHERE employee_id = '{$_SESSION['employee_id']}' AND id = '$entryId'";
 
     if (mysqli_query($conn, $sql)) {
-        echo "Entry updated successfully.";
+        header("Location: " . $_SERVER['HTTP_REFERER']);
+        exit();
+        // echo "Entry updated successfully.";
     } else {
         echo "Error updating entry: " . mysqli_error($conn);
     }
