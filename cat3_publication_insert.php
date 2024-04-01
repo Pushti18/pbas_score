@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 $category = $_SESSION['cat3'];
 $subcategory_id = isset($_POST['subcategory_id']) ? $_POST['subcategory_id'] : '';
 

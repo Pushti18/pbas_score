@@ -1,5 +1,5 @@
 <?php
-include("db_connection.php");
+include ("db_connection.php");
 $sql = "SELECT title, academic_year, status, type, region, approval_status, action FROM publication";
 $result = $conn->query($sql);
 

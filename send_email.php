@@ -1,43 +1,48 @@
 <?php
-// Include any necessary files or configurations
 
-// Fetch necessary data
-// You may need to adjust this based on your actual data retrieval method
-$target = "Sample Target"; // Example target value
-$cat1TotalPoints = 100; // Example total points for category 1
-$cat2TotalPoints = 150; // Example total points for category 2
-$cat3TotalPoints = 200; // Example total points for category 3
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-// Compose email body
-$emailBody = "
-<html>
-<head>
-  <title>Hourly Report</title>
-</head>
-<body>
-  <h2>Hourly Report</h2>
-  <p>Target: $target</p>
-  <p>Category 1 Total Points: $cat1TotalPoints</p>
-  <p>Category 2 Total Points: $cat2TotalPoints</p>
-  <p>Category 3 Total Points: $cat3TotalPoints</p>
-</body>
-</html>
-";
+require 'phpmailer/src/Exception.php';
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
 
-// Email headers
-$headers = "MIME-Version: 1.0" . "\r\n";
-$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-$headers .= "From: ict@gmail.com" . "\r\n"; // Replace with your email
+$mail = new PHPMailer(true);
 
-// Send email
-$to = "pushti18depani@gmail.com"; // Replace with recipient email address
-$subject = "Hourly Report";
-$mailSent = mail($to, $subject, $emailBody, $headers);
+$email = $_POST['email'];
+$subject = $_POST['subject'];
+$body = $_POST['body'];
 
-// Check if mail was sent successfully
-if ($mailSent) {
-    echo "Email sent successfully";
-} else {
-    echo "Email sending failed";
+try {
+  $mail->isSMTP();
+  $mail->Host = 'smtp.gmail.com';
+  $mail->SMTPAuth = true;
+  $mail->Username = "crackemail001@gmail.com";
+  $mail->Password = "edbw liug swdc xwdh";
+  $mail->SMTPSecure = 'ssl';
+  $mail->Port = 465;
+
+  $mail->setFrom("crackemail001@gmail.com");
+  $mail->addAddress($email);
+  $mail->isHTML(true);
+
+  $mail->Subject = 'Email subject';
+  $mail->Body = 'This is the email message.';
+  // $mail->Subject = $subject;
+  // $mail->Body = $body;
+  $mail->send();
+  if (!$mail->send()) {
+    echo 'Error sending email: ' . $mail->ErrorInfo;
+  } else {
+    echo 'Email sent successfully!';
+  }
+  ?>
+  <!-- <script>
+    alert("mail sended!");
+    window.location.href = "./index.php";
+  </script> -->
+  <?php
+} catch (Exception $e) {
+  echo $e;
+  echo "there will be problem of sending mail";
 }
-?>
