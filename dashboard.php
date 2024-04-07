@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 global $conn;
 
 $employee_id = $_SESSION['employee_id'];
