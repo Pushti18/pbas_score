@@ -29,7 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $target_file = $target_dir . basename($_FILES["attachment"]["name"]);
     $uploadOk = true;
     $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
+    if ($region == 'National & International' && $type == 'Book' && $role == 'Principal Author' && $publication_group == 'SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 40;
+    } else if ($region == 'International' && $type == 'Article' && $role == 'Corresponding Author' && $publication_group == 'SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 30;
+    } else if ($region == 'National' && $type == 'Journal/Magazine Article' && $role == 'Supervisor' && $publication_group == 'Non-SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 20;
+    } else if ($region == 'Local' && $type == 'Conference Paper Presentation' && $role == 'Mentor' && $publication_group == 'Non-SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 15;
+    } else {
+        $pbasScore = 15;
+    }
+    // echo ($pbasScore);
     if (move_uploaded_file($_FILES["attachment"]["tmp_name"], $target_file)) {
         // File uploaded successfully
 

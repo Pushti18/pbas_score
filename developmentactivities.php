@@ -41,7 +41,7 @@ if (mysqli_query($conn, $query)) {
     <?php require "./components/header.php" ?>
 
     <div class="main_div center">
-        <h4>Professional Development Detail</h4>
+        <h4>Professional Development Activities Detail</h4>
     </div>
 
     <div class="parent-container">
@@ -91,7 +91,7 @@ if (mysqli_query($conn, $query)) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Professional Development Detail</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Professional Development Activities Detail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -205,7 +205,7 @@ if (mysqli_query($conn, $query)) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Add Professional Development Detail</h5>
+                    <h5 class="modal-title" id="editModalLabel">Add Professional Development Activities Detail</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

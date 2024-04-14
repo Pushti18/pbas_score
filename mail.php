@@ -7,11 +7,33 @@ global $conn;
 
 $employee_id = $_SESSION['employee_id'];
 $employeeId = 1;
+
+$query = "SELECT email FROM employee";
+$result = mysqli_query($conn, $query);
+$emailAddresses = array();
+
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $emailAddresses[] = $row['email'];
+    }
+}
+
+// Print all email addresses that will receive the email
+echo "Emails that will receive the email:<br>";
+foreach ($emailAddresses as $email) {
+    echo $email . "<br>";
+}
+// $sql = "SELECT id, name FROM employee";
+
+// $result = $conn->query($sql);
+// // echo ($sql);
+// $data = array();
+// while ($row = $result->fetch_assoc()) {
+//     $data[] = $row;
 function getCat1TotalPoints()
 {
     global $conn;
-
-    $sql = "SELECT SUM(total_points) as total_points FROM (
+    $sql = "SELECT IFNULL(SUM(total_points), 0) as total_points FROM (
         SELECT SUM(points) as total_points FROM direct_teaching WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat1_id = 'cat1'
         UNION ALL
         SELECT SUM(points) as total_points FROM exam_duties WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat1_id = 'cat1'
@@ -22,24 +44,49 @@ function getCat1TotalPoints()
         UNION ALL
         SELECT SUM(points) as total_points FROM mentoring WHERE employee_id = " . $_SESSION['employee_id'] . "  AND cat1_id = 'cat1'
     ) as total_points_table";
+
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
     $jsonString = json_encode($row);
     return $jsonString;
 }
+// function getCat2TotalPoints()
+// {
+//     global $conn;
+
+//     $sql = "SELECT 
+//         (SELECT SUM(points) FROM discipline WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+//         (SELECT SUM(points) FROM othercocurricular WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+//         (SELECT SUM(points) FROM extension WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+//         (SELECT SUM(points) FROM administrative WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+//         (SELECT SUM(points) FROM others WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+//         (SELECT SUM(points) FROM development_activities WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+//         (SELECT SUM(points) FROM participation WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') as total_points";
+
+//     $result = $conn->query($sql);
+//     if (!$result) {
+//         die('Invalid query: ' . $conn->error);
+//     }
+//     $row = $result->fetch_assoc();
+//     if (!isset($row['total_points'])) {
+//         die('Unexpected query result format');
+//     }
+
+//     return $row['total_points'];
+// }
+
 function getCat2TotalPoints()
 {
     global $conn;
-
     $sql = "SELECT 
-        (SELECT SUM(points) FROM discipline WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
-        (SELECT SUM(points) FROM othercocurricular WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
-        (SELECT SUM(points) FROM extension WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
-        (SELECT SUM(points) FROM administrative WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
-        (SELECT SUM(points) FROM others WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
-        (SELECT SUM(points) FROM development_activities WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
-        (SELECT SUM(points) FROM participation WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') as total_points";
-
+        (SELECT IFNULL(SUM(points), 0) FROM discipline WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+        (SELECT IFNULL(SUM(points), 0) FROM othercocurricular WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+        (SELECT IFNULL(SUM(points), 0) FROM extension WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+        (SELECT IFNULL(SUM(points), 0) FROM administrative WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+        (SELECT IFNULL(SUM(points), 0) FROM others WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+        (SELECT IFNULL(SUM(points), 0) FROM development_activities WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') +
+        (SELECT IFNULL(SUM(points), 0) FROM participation WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat2_id = 'cat2') as total_points";
+    // echo ($sql);
     $result = $conn->query($sql);
     if (!$result) {
         die('Invalid query: ' . $conn->error);
@@ -50,21 +97,30 @@ function getCat2TotalPoints()
     }
 
     return $row['total_points'];
+    // $row = $result->fetch_assoc();
+    // $jsonString = json_encode($row);
+    // return $jsonString;
 }
-
-
 function getCat3TotalPoints()
 {
     global $conn;
 
-    $sql = "SELECT 
-        (SELECT SUM(pbas_score) FROM research WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
-        (SELECT SUM(pbas_score) FROM project_output WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
-        (SELECT SUM(pbas_score) FROM guidance WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
-        (SELECT SUM(pbas_score) FROM fellowship WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
-        (SELECT SUM(pbas_score) FROM expert WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
-        (SELECT SUM(pbas_score) FROM development WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') as total_points";
+    // $sql = "SELECT 
+    //     (SELECT SUM(pbas_score) FROM research WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+    //     (SELECT SUM(pbas_score) FROM project_output WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+    //     (SELECT SUM(pbas_score) FROM guidance WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+    //     (SELECT SUM(pbas_score) FROM fellowship WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+    //     (SELECT SUM(pbas_score) FROM expert WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+    //     (SELECT SUM(pbas_score) FROM development WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') as total_points";
     // echo ($sql);
+    $sql = "SELECT 
+        (SELECT IFNULL(SUM(pbas_score), 0) FROM research WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT IFNULL(SUM(pbas_score), 0) FROM project_output WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT IFNULL(SUM(pbas_score), 0) FROM guidance WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT IFNULL(SUM(pbas_score), 0) FROM fellowship WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT IFNULL(SUM(pbas_score), 0) FROM expert WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') +
+        (SELECT IFNULL(SUM(pbas_score), 0) FROM development WHERE employee_id = " . $_SESSION['employee_id'] . " AND cat3_id = 'cat3') as total_points";
+
     $result = $conn->query($sql);
     if (!$result) {
         die('Invalid query: ' . $conn->error);
@@ -135,6 +191,7 @@ if (isset($target)) {
 } else {
     echo "<p>No target found.</p>";
 }
+// }
 $mail = new PHPMailer\PHPMailer\PHPMailer();
 // $cat1TotalPoints = 50;
 // $cat2TotalPoints = 30;
@@ -209,7 +266,10 @@ $mail->Port = 587; // or 465
 
 // Email content
 $mail->setFrom('pushti.depani110402@marwadiuniversity.ac.in', 'ABC');
-$mail->addAddress('pushti18depani@gmail.com');
+// $mail->addAddress('pushti18depani@gmail.com');
+foreach ($emailAddresses as $email) {
+    $mail->addAddress($email);
+}
 $mail->Subject = $subject;
 
 $mail->Body = $message;

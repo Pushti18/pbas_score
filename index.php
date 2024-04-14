@@ -1,18 +1,24 @@
 <?php
+require "./db_connection.php";
 session_start();
 
 if (isset($_POST['login_enter'])) {
-    // Assuming admin123 is the correct ID for admin
-    $entered_id = $_POST['id'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    if ($entered_id === 'admin123') {
-        // Redirect to admin dashboard
-        header("Location: admin_dashboard.php");
-        exit();
+    $query = "SELECT * FROM employee Where email = '$email' AND password = '$password'";
+    $result = mysqli_query($conn, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['employee_id'] = $row['id'];
+
+        if ($row['is_admin'] == 1) {
+            header("Location: ./admin_dashboard.php");
+        } else {
+            header("Location: ./dashboard.php");
+        }
     } else {
-        // Redirect back to login page
-        header("Location: login.php");
-        exit();
+        echo "Invalid email or password";
     }
 }
 ?>
@@ -26,7 +32,8 @@ if (isset($_POST['login_enter'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
     <style>
-        <?php include "./css/index.css"; ?>
+        <?php include "./css/index.css";
+        ?>
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,12 +43,10 @@ if (isset($_POST['login_enter'])) {
 </head>
 
 <body>
-
     <header class="header_container">
         <img class="mulogo_header" src="./images/MU_Logo.png" alt="MU logo">
         <img class="ictlogo_header" src="./images/ICT_logo_text.png" alt="MU logo">
     </header>
-
     <div class="main_container">
         <div>
             <div class="container">
@@ -49,16 +54,20 @@ if (isset($_POST['login_enter'])) {
             </div>
             <form method="POST">
                 <div class="container">
+                    <!-- <label for="email" style="text-alignment:center;"><b>Enter Your Email</b></label>
+                    <input type="email" id="email" name="email" placeholder="write the email here"> -->
+
+                    <label for="uname" style="text-alignment:center;"><b>Enter Your Email</b></label>
+                    <input type="text" id="email" placeholder="write the email here" name="email" required>
+
                     <label for="uname" style="text-alignment:center;"><b>Enter your ID</b></label>
-                    <input type="text" placeholder="_ _ _ _ _ _" name="id" maxlength="8" required>
+                    <input type="text" placeholder="_ _ _ _ _ _" name="password" required>
 
                     <button type="submit" name="login_enter">Login</button>
-
                 </div>
             </form>
         </div>
     </div>
-
 </body>
 
 </html>

@@ -1,11 +1,12 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $year = $_POST['year'];
     $target = $_POST['target'];
-    $employeeId = 1;
+    // $employeeId = 1;
+    $employeeId = $_SESSION['employee_id'];
 
     // Check if a record already exists for the academic year and employee ID combination
     $sql_check = "SELECT COUNT(*) AS count FROM pbas_score WHERE year = ? AND employee_id = ?";

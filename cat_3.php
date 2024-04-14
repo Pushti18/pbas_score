@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("db_connection.php");
+include ("db_connection.php");
 global $conn;
 if (isset($_GET['employee_id']) && isset($_GET['category'])) {
     $employee_id = $_GET['employee_id'];
@@ -85,9 +85,9 @@ if (isset($_GET['employee_id']) && isset($_GET['category'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a href="publication.php?&subcategory_id=cat3_b3">
-                    Category III-B(c) - Subject Books, published by National level publishers, with ISBN/ISSN number or
-                    State/Central Govt. Publications as approved by the University and posted on its website. The List
-                    will be intimated to UGC.
+                    Category III-B(c) - Subject Books by Other local
+                    publishers with ISBN/ISSN
+                    numbers.
                 </a>
             </div>
 
@@ -119,7 +119,8 @@ if (isset($_GET['employee_id']) && isset($_GET['category'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a href="research.php?&subcategory_id=cat3_c1_2">
-                    Category III-C(i-b) - Sponsored Major project with grants above Rs. 30 lakhs ( For Faculty of
+                    Category III-C(i-b) - Sponsored Major project with grants above Rs.
+                    50,000 up to Rs. 5 lakhs ( For Faculty of
                     Technology and Engineering, Science, Architecture Planning)/ Major Projects with grants above Rs 5
                     lakhs (For Faculty of Law, Commerce, Management and Management & Humanities)
                 </a>
@@ -128,8 +129,9 @@ if (isset($_GET['employee_id']) && isset($_GET['category'])) {
             <div class="subcategory">
                 <div class="tick-circle-icon"></div>
                 <a href="research.php?&subcategory_id=cat3_c1_3">
-                    Category III-C(i-c) - Sponsored Major project with grants above Rs. 30 lakhs ( For Faculty of
-                    Technology and Engineering, Science, Architecture Planning)/ Major Projects with grants above Rs 5
+                    Category III-C(i-c) - Sponsored Major project with grants above 5 lakhs up to 30 lakhs ( For Faculty
+                    of Technology and Engineering, Science, Architecture Planning)/ Major Projects with grants above Rs
+                    5
                     lakhs (For Faculty of Law, Commerce, Management and Management & Humanities)
                 </a>
             </div>

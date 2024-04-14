@@ -38,7 +38,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $current_status_of_work = mysqli_real_escape_string($conn, $_POST["editcurrent_status_of_work"] ? $_POST["editcurrent_status_of_work"] : '');
     $existingFileName = $_POST['editAttachment'];
     $newFileName = $_FILES['editAttachment']['name'];
-
+    $pbasScore = 0;
+    if ($region == 'National & International' && $type == 'Book' && $role == 'Principal Author' && $publication_group == 'SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 40;
+    } else if ($region == 'International' && $type == 'Article' && $role == 'Corresponding Author' && $publication_group == 'SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 30;
+    } else if ($region == 'National' && $type == 'Journal/Magazine Article' && $role == 'Supervisor' && $publication_group == 'Non-SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 20;
+    } else if ($region == 'Local' && $type == 'Conference Paper Presentation' && $role == 'Mentor' && $publication_group == 'Non-SCI' && $current_status_of_work == 'Completed') {
+        $pbasScore = 15;
+    } else {
+        $pbasScore = 15;
+    }
+    // echo ($pbasScore);
     // Check if a new file is uploaded
     if ($newFileName) {
         // New file has been uploaded; handle the file upload and store the new file name
@@ -53,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $sql = "UPDATE publication SET  region='$region', type='$type', title='$title', author='$author', role='$role', publication_group='$publication_group', 
     journal_title='$journalTitle', co_author='$coAuthor', month_of_publication='$month', year_of_publication='$year', publisher='$publisher', publication_date='$pubDate', 
-    volume_no='$volume', page_no='$page',current_status_of_work='$current_status_of_work'";
+    volume_no='$volume', page_no='$page',current_status_of_work='$current_status_of_work', pbas_score = '$pbasScore'";
     if ($newFileName) {
         $sql .= ", attachment = '$attachment'";
     }
